@@ -211,26 +211,46 @@ export default function LKSportsPage() {
             <section className="division-hero sports-hero">
                 <div className="container">
                     <FadeInSection direction="up">
-                        <div className="division-hero-content">
-                            <span className="division-label">LK-Sports</span>
-                            <h1>Empowering the Future of Sports</h1>
-                            <p className="hero-subtitle">
-                                Specialized programs that develop the skills, mindset, and networks
-                                needed to thrive in the global sports industry.
-                            </p>
-                            <ul className="hero-bullets">
-                                <li>🎯 Industry-expert designed curricula</li>
-                                <li>🌍 Global perspectives with local relevance</li>
-                                <li>🤝 Direct pathways to sports careers</li>
-                            </ul>
-                            <div className="hero-ctas">
-                                <a href="#programs" className="btn btn-primary">Explore Programs</a>
-                                <button
-                                    className="btn btn-secondary"
-                                    onClick={() => document.getElementById('contact-modal')?.classList.remove('hidden')}
-                                >
-                                    Talk to Our Team
-                                </button>
+                        <div className="sports-hero-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 0.8fr)', gap: '2rem', alignItems: 'center' }}>
+                            <div className="hero-text-content">
+                                <span className="division-label">LK-Sports</span>
+                                <h1>Empowering the Future of Sports</h1>
+                                <p className="hero-subtitle">
+                                    Specialized programs that develop the skills, mindset, and networks
+                                    needed to thrive in the global sports industry.
+                                </p>
+                                <ul className="hero-bullets">
+                                    <li>🎯 Industry-expert designed curricula</li>
+                                    <li>🌍 Global perspectives with local relevance</li>
+                                    <li>🤝 Direct pathways to sports careers</li>
+                                </ul>
+                                <div className="hero-ctas">
+                                    <a href="#programs" className="btn btn-primary">Explore Programs</a>
+                                    <button
+                                        className="btn btn-secondary"
+                                        onClick={() => document.getElementById('contact-modal')?.classList.remove('hidden')}
+                                    >
+                                        Talk to Our Team
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Ball Frame Placeholder */}
+                            <div className="hero-visual-frame" style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+                                <div className="sports-ball-frame">
+                                    <Image
+                                        src="/assets/media/lk-sports/LK Sports Landing.jpg"
+                                        alt="LK Sports - Empowering Athletes"
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        priority
+                                    />
+                                </div>
+                                {/* Orbiting Animations */}
+                                <div className="orbit-ball orbit-1">🏀</div>
+                                <div className="orbit-ball orbit-2">⚽</div>
+                                <div className="orbit-ball orbit-3">🎾</div>
+                                <div className="orbit-ball orbit-4">🏐</div>
                             </div>
                         </div>
                     </FadeInSection>
@@ -238,7 +258,9 @@ export default function LKSportsPage() {
             </section>
 
             {/* About Section */}
-            <section className="section division-about">
+            <section className="section division-about" style={{ position: 'relative', overflow: 'hidden' }}>
+                <div className="sports-float-icon icon-pos-1">⏱️</div>
+                <div className="sports-float-icon icon-pos-2">📣</div>
                 <div className="container">
                     <div className="about-grid">
                         <FadeInSection direction="left">
@@ -283,7 +305,9 @@ export default function LKSportsPage() {
             </section>
 
             {/* Vision & Mission */}
-            <section className="section vision-mission bg-dark">
+            <section className="section vision-mission bg-dark" style={{ position: 'relative', overflow: 'hidden' }}>
+                <div className="sports-float-icon icon-pos-3">🏆</div>
+                <div className="sports-float-icon icon-pos-4">🥇</div>
                 <div className="container">
                     <div className="vm-grid">
                         <FadeInSection direction="left">
@@ -347,7 +371,8 @@ export default function LKSportsPage() {
             </section>
 
             {/* Detailed Programs */}
-            <section className="section programs-detailed">
+            <section className="section programs-detailed" style={{ position: 'relative', overflow: 'hidden' }}>
+                <div className="tactics-overlay"></div>
                 <div className="container">
                     {programs.map((program, index) => (
                         <FadeInSection key={program.id}>
@@ -390,7 +415,9 @@ export default function LKSportsPage() {
             </section>
 
             {/* Why Choose LK-Sports */}
-            <section className="section why-choose bg-light">
+            <section className="section why-choose bg-light" style={{ position: 'relative', overflow: 'hidden' }}>
+                <div className="sports-float-icon icon-pos-1">👟</div>
+                <div className="sports-float-icon icon-pos-2">🎯</div>
                 <div className="container">
                     <FadeInSection>
                         <div className="section-header text-center">
@@ -458,11 +485,7 @@ export default function LKSportsPage() {
                             <div className="contact-info">
                                 <div className="contact-item">
                                     <span>📧</span>
-                                    <a href="mailto:sports@lk-hub.com">sports@lk-hub.com</a>
-                                </div>
-                                <div className="contact-item">
-                                    <span>📞</span>
-                                    <a href="tel:+20123456789">+20 123 456 789</a>
+                                    <a href="mailto:info@liberating-knowledge.com">info@liberating-knowledge.com</a>
                                 </div>
                             </div>
                         </div>

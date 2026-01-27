@@ -267,46 +267,51 @@ export default function DivisionsWheel() {
                     position: relative;
                     width: 500px;
                     height: 500px;
+                    max-width: 100%;
+                    max-height: 100vw;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    margin: 0 auto;
                 }
                 .wheel-hub {
                     position: absolute;
-                    width: 310px; /* slightly smaller than 2*innerRadius (320) */
-                    height: 310px;
+                    width: 62%;
+                    height: 62%;
                     border-radius: 50%;
-                    background: #fff; /* White center */
+                    background: #fff;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     text-align: center;
-                    padding: 2rem;
+                    padding: 1rem;
                     box-shadow: 0 0 30px rgba(0,0,0,0.05);
-                    pointer-events: none; /* Let hover pass through if needed, though svg handles it */
+                    pointer-events: none;
                 }
                 .hub-title {
-                    font-size: 0.9rem;
+                    font-size: clamp(0.7rem, 2vw, 0.9rem);
                     font-weight: 800;
                     margin-bottom: 0.25rem;
                 }
                 .hub-desc {
-                    font-size: 0.75rem;
+                    font-size: clamp(0.6rem, 1.5vw, 0.75rem);
                     color: var(--color-text-main);
                     line-height: 1.2;
                 }
                 
+                svg {
+                    width: 100%;
+                    height: auto;
+                }
+
                 @media (max-width: 600px) {
                    .wheel-container {
-                       width: 350px;
-                       height: 350px;
-                   }
-                   svg {
-                       width: 350px;
-                       height: 350px;
+                       width: 100%;
+                       height: auto;
+                       aspect-ratio: 1/1;
                    }
                 }
             `}</style>
-        </div>
+        </div >
     );
 }

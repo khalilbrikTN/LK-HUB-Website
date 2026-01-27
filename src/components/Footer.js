@@ -19,14 +19,7 @@ export default function Footer() {
                         <li><Link href="/privacy-policy">Privacy Policy</Link></li>
                     </ul>
                 </div>
-                <div className="footer-links">
-                    <h4>Services</h4>
-                    <ul>
-                        <li><Link href="/services">Strategic Planning</Link></li>
-                        <li><Link href="/services">Training</Link></li>
-                        <li><Link href="/services">Consulting</Link></li>
-                    </ul>
-                </div>
+
                 <div className="footer-links">
                     <h4>Connect</h4>
                     <ul>

@@ -8,7 +8,7 @@ export const metadata = {
 export default function About() {
     return (
         <>
-            <header className="hero" style={{ padding: 'var(--spacing-lg) 0', background: 'var(--color-background)' }}>
+            <header style={{ paddingTop: '140px', paddingBottom: 'var(--spacing-lg)', background: 'var(--color-background)' }}>
                 <div className="container text-center">
                     <h1>Our Story & Mission</h1>
                     <p style={{ margin: '0 auto', maxWidth: '700px' }}>Pioneering capacity building and media literacy for over two decades.</p>

@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 
 const sponsors = [
     { name: "UNICEF", logo: "/assets/media/Sponsors/unicef.png" },
+    { name: "AUC", logo: "/assets/media/Sponsors/AUC.png" },
     { name: "UNESCO", logo: "/assets/media/Sponsors/UNESCO.svg" },
     { name: "Banque Misr", logo: "/assets/media/Sponsors/Banque Misr.png" },
     { name: "Egyptian Industries", logo: "/assets/media/Sponsors/Egyptian Industries.png" },

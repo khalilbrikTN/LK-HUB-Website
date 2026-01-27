@@ -12,13 +12,15 @@ export default function PillNav({
     baseColor = "rgba(250, 248, 245, 0.95)",
     pillColor = "#3d0000",
     pillTextColor = "#FFFFFF",
-    textColor = "#2d1a1a", // Default text color
-    hoveredPillTextColor = "#FFFFFF",
+    textColor = "#2d1a1a",
+    initialTextColor = "#FFFFFF", // Default to white for transparent headers
     className = ""
 }) {
     const pathname = usePathname();
     const [hoveredIndex, setHoveredIndex] = useState(null);
     const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [mobileExpandedIndex, setMobileExpandedIndex] = useState(null);
 
     // Handle scroll for sticky transparency effect
     useEffect(() => {
@@ -32,11 +34,10 @@ export default function PillNav({
     // Find active index based on pathname
     const activeIndex = items.findIndex(item => item.href === pathname);
 
-    // Default items matching the original Navbar structure
+    // Default items
     const navItems = items.length > 0 ? items : [
         { label: 'Home', href: '/' },
         { label: 'About Us', href: '/about' },
-        { label: 'Services', href: '/services' },
         {
             label: 'Divisions',
             href: '/divisions',
@@ -54,27 +55,35 @@ export default function PillNav({
         { label: 'Contact', href: '#', onClick: () => document.getElementById('contact-modal')?.classList.remove('hidden') }
     ];
 
-    // Effective active is either hovered or current route
-    // The user request implies a "pill" that moves.
-    // Usually "PillNav" has a pill for the ACTIVE state, and maybe a lighter one for HOVER?
-    // Or the pill moves on HOVER?
-    // "React Bits" PillNav usually moves the main pill on hover, and snaps back to active?
-    // Let's implement: Pill follows Hover. If not hovering, stays on Active.
-
     const currentPillIndex = hoveredIndex !== null ? hoveredIndex : activeIndex;
+
+    const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+
+    // Determine if the current page has a dark hero section
+    // Homepage and Division pages have dark/colored heros.
+    // Other pages (About, Projects, etc.) have light backgrounds.
+    const hasDarkHero = pathname === '/' || pathname.startsWith('/divisions');
+    const dynamicInitialColor = hasDarkHero ? '#FFFFFF' : textColor;
+
+    // Custom Logo Logic
+    const isKidsPage = pathname.startsWith('/divisions/lk-kids');
+    const displayLogo = isKidsPage ? '/assets/media/lk-kids/logo.png' : logo;
+
+    // Determine current text color
+    const currentTextColor = (scrolled || mobileMenuOpen) ? textColor : dynamicInitialColor;
 
     return (
         <nav
             className={`pill-nav ${className}`}
             style={{
-                backgroundColor: scrolled ? baseColor : 'transparent',
+                backgroundColor: scrolled || mobileMenuOpen ? baseColor : 'transparent',
                 transition: 'background-color 0.3s ease',
                 position: 'fixed',
                 top: 0,
                 left: 0,
                 right: 0,
                 zIndex: 1000,
-                padding: '0.8rem 0', // Reduced padding closer to original 70px height
+                padding: '0.8rem 0',
                 backdropFilter: scrolled ? 'blur(10px)' : 'none',
                 height: 'auto'
             }}
@@ -82,26 +91,31 @@ export default function PillNav({
             <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
                 {/* Logo */}
                 <Link href="/" className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-                    {logo ? (
-                        <Image src={logo} alt={logoAlt} width={70} height={70} style={{ objectFit: 'contain', width: 'auto', height: '80px' }} priority />
+                    {displayLogo ? (
+                        <Image
+                            src={displayLogo}
+                            alt={logoAlt}
+                            width={70}
+                            height={70}
+                            style={{
+                                objectFit: 'contain',
+                                width: 'auto',
+                                height: '60px',
+                                filter: (hasDarkHero && !scrolled && !mobileMenuOpen && !isKidsPage) ? 'brightness(0) invert(1)' : 'none',
+                                transition: 'filter 0.3s ease'
+                            }}
+                            priority
+                        />
                     ) : (
-                        <div style={{ fontSize: '1.5rem', fontWeight: '800', color: pillColor }}>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '800', color: currentTextColor }}>
                             LK<span style={{ color: '#a57c30' }}>HUB</span>
                         </div>
                     )}
                 </Link>
 
-                {/* Nav Items */}
+                {/* DESKTOP NAV ITEMS */}
                 <div
                     className="nav-items"
-                    style={{
-                        display: 'flex',
-                        position: 'relative',
-                        background: 'transparent',
-                        padding: '5px',
-                        borderRadius: '50px',
-                        gap: '2px'
-                    }}
                     onMouseLeave={() => setHoveredIndex(null)}
                 >
                     {navItems.map((item, index) => {
@@ -123,11 +137,12 @@ export default function PillNav({
                                             item.onClick();
                                         }
                                     }}
+                                    className="desktop-link"
                                     style={{
                                         position: 'relative',
-                                        padding: '0.6rem 1.2rem', // Adjusted sizing
+                                        padding: '0.6rem 1.2rem',
                                         borderRadius: '50px',
-                                        color: isSelected ? pillTextColor : textColor,
+                                        color: isSelected ? pillTextColor : currentTextColor,
                                         textDecoration: 'none',
                                         fontWeight: '600',
                                         fontSize: '0.95rem',
@@ -157,11 +172,11 @@ export default function PillNav({
                                     )}
                                     {item.label}
                                     {hasDropdown && (
-                                        <span style={{ fontSize: '0.8em', opacity: 0.8 }}>▼</span>
+                                        <span style={{ fontSize: '0.6em', opacity: 0.8 }}>▼</span>
                                     )}
                                 </Link>
 
-                                {/* Dropdown Menu */}
+                                {/* Dropdown Menu (Desktop) */}
                                 <AnimatePresence>
                                     {hasDropdown && isHovered && (
                                         <motion.div
@@ -173,13 +188,13 @@ export default function PillNav({
                                                 position: 'absolute',
                                                 top: '100%',
                                                 left: '50%',
-                                                transform: 'translateX(-50%)', // Center it
+                                                transform: 'translateX(-50%)',
                                                 marginTop: '10px',
                                                 backgroundColor: '#fff',
                                                 borderRadius: '8px',
                                                 boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
                                                 padding: '8px 0',
-                                                minWidth: '200px',
+                                                minWidth: '220px',
                                                 zIndex: 1001,
                                                 borderTop: `3px solid ${pillColor}`
                                             }}
@@ -210,31 +225,162 @@ export default function PillNav({
                     })}
                 </div>
 
-                <style jsx>{`
-    .dropdown-item:hover {
-        background-color: rgba(184, 147, 92, 0.1);
-        color: ${pillColor} !important;
-    }
-
-    @media (max-width: 768px) {
-        .nav-items {
-            display: none !important;
-        }
-        .mobile-menu-btn {
-            display: block !important;
-            cursor: pointer;
-            font-weight: bold;
-            color: ${pillColor};
-        }
-    }
-`}</style>
-
-
-                {/* Mobile Menu Placeholder (Hidden on desktop) */}
-                <div className="mobile-menu-btn hidden">
-                    Menu
-                </div>
+                {/* MOBILE MENU TOGGLE BUTTON */}
+                <button
+                    className="mobile-menu-btn hidden"
+                    onClick={toggleMobileMenu}
+                    aria-label="Toggle menu"
+                    style={{ background: 'none', border: 'none', marginLeft: 'auto' }}
+                >
+                    <div className={`hamburger ${mobileMenuOpen ? 'open' : ''}`}>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
             </div>
+
+            {/* MOBILE MENU OVEPLAY */}
+            <AnimatePresence>
+                {mobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: '100vh' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="mobile-menu-overlay"
+                        style={{
+                            position: 'fixed',
+                            top: '80px', // Below navbar
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: baseColor,
+                            zIndex: 999,
+                            padding: '2rem 1.5rem',
+                            overflowY: 'auto',
+                            borderTop: '1px solid rgba(0,0,0,0.05)'
+                        }}
+                    >
+                        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            {navItems.map((item, index) => (
+                                <li key={index} style={{ borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '0.5rem' }}>
+                                    <div
+                                        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                                        onClick={() => {
+                                            if (item.dropdown) {
+                                                setMobileExpandedIndex(mobileExpandedIndex === index ? null : index);
+                                            } else {
+                                                setMobileMenuOpen(false);
+                                                if (item.onClick) item.onClick();
+                                            }
+                                        }}
+                                    >
+                                        {item.dropdown ? (
+                                            <span style={{ fontSize: '1.25rem', fontWeight: '700', color: pillColor, cursor: 'pointer' }}>
+                                                {item.label}
+                                            </span>
+                                        ) : (
+                                            <Link
+                                                href={item.href}
+                                                style={{ fontSize: '1.25rem', fontWeight: '700', color: pillColor, textDecoration: 'none', display: 'block', width: '100%' }}
+                                                onClick={() => setMobileMenuOpen(false)}
+                                            >
+                                                {item.label}
+                                            </Link>
+                                        )}
+                                        {item.dropdown && (
+                                            <span style={{ transform: mobileExpandedIndex === index ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</span>
+                                        )}
+                                    </div>
+
+                                    {/* Mobile Dropdown */}
+                                    <AnimatePresence>
+                                        {item.dropdown && mobileExpandedIndex === index && (
+                                            <motion.ul
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                style={{ listStyle: 'none', padding: '1rem 0 0 1rem', overflow: 'hidden' }}
+                                            >
+                                                {item.dropdown.map((sub, i) => (
+                                                    <li key={i} style={{ marginBottom: '0.8rem' }}>
+                                                        <Link
+                                                            href={sub.href}
+                                                            style={{ fontSize: '1rem', color: textColor, textDecoration: 'none' }}
+                                                            onClick={() => setMobileMenuOpen(false)}
+                                                        >
+                                                            {sub.label}
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </motion.ul>
+                                        )}
+                                    </AnimatePresence>
+                                </li>
+                            ))}
+                        </ul>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <style jsx>{`
+                .nav-items {
+                    display: flex;
+                    position: relative;
+                    background: transparent;
+                    padding: 5px;
+                    border-radius: 50px;
+                    gap: 2px;
+                }
+                .dropdown-item:hover {
+                    background-color: rgba(184, 147, 92, 0.1);
+                    color: ${pillColor} !important;
+                }
+
+                .hamburger {
+                    width: 30px;
+                    height: 20px;
+                    position: relative;
+                    transform: rotate(0deg);
+                    transition: .5s ease-in-out;
+                    cursor: pointer;
+                }
+
+                .hamburger span {
+                    display: block;
+                    position: absolute;
+                    height: 3px;
+                    width: 100%;
+                    background: ${currentTextColor};
+                    border-radius: 9px;
+                    opacity: 1;
+                    left: 0;
+                    transform: rotate(0deg);
+                    transition: .25s ease-in-out;
+                }
+
+                .hamburger span:nth-child(1) { top: 0px; }
+                .hamburger span:nth-child(2) { top: 9px; }
+                .hamburger span:nth-child(3) { top: 18px; }
+
+                .hamburger.open span:nth-child(1) { top: 9px; transform: rotate(135deg); }
+                .hamburger.open span:nth-child(2) { opacity: 0; left: -60px; }
+                .hamburger.open span:nth-child(3) { top: 9px; transform: rotate(-135deg); }
+
+                @media (max-width: 900px) {
+                    .nav-items {
+                        display: none !important;
+                    }
+                    .mobile-menu-btn {
+                        display: block !important;
+                        cursor: pointer;
+                        font-weight: bold;
+                        color: ${currentTextColor};
+                    }
+                }
+            `}</style>
         </nav>
     );
 }
+

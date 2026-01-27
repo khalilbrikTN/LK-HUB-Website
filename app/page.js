@@ -21,7 +21,7 @@ export default function Home() {
                 <p>Pioneering media literacy and innovative solutions for a media-driven world. 20+ years of expertise
                   empowering individuals and organizations.</p>
                 <div className="hero-buttons">
-                  <Link href="/services" className="btn btn-primary">Our Services</Link>
+                  <Link href="/divisions" className="btn btn-primary">Explore Divisions</Link>
                   <button className="btn btn-secondary" onClick={() => document.getElementById('contact-modal').classList.remove('hidden')}>Contact Us</button>
                 </div>
               </div>
