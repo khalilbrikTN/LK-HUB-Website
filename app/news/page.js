@@ -11,12 +11,26 @@ export default function News() {
 
     return (
         <>
-            <header className="section bg-light" style={{ paddingTop: 'var(--spacing-xl)', paddingBottom: 'var(--spacing-lg)' }}>
-                <div className="container text-center">
-                    <h1>News & Updates</h1>
-                    <p>Stay informed about our latest initiatives, partnerships, and impact.</p>
+            {/* Premium News Hero with Newsletter Signup */}
+            <section className="news-hero">
+                <div className="container">
+                    <div className="news-hero-content">
+                        <div className="news-title-column">
+                            <h1 className="news-main-title">News</h1>
+                        </div>
+                        <div className="news-cta-column">
+                            <p className="news-cta-text">Keep up to date with what's happening at LK-HUB!</p>
+                            <button
+                                className="btn-newsletter"
+                                onClick={() => document.getElementById('contact-modal')?.classList.remove('hidden')}
+                            >
+                                <span className="icon">▶</span> Sign up to our newsletter
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </header>
+                {/* Abstract Waves/Particles decoration (optional, implemented via CSS background) */}
+            </section>
 
             <section className="section">
                 <div className="container">

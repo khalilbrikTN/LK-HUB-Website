@@ -8,6 +8,7 @@ import FadeInSection from '@/src/components/FadeInSection';
 import StatsSection from '@/src/components/StatsSection';
 import VisionMission from '@/src/components/VisionMission';
 import BusinessDivisions from '@/src/components/BusinessDivisions';
+import LatestNews from '@/src/components/LatestNews';
 
 export default function Home() {
   return (
@@ -41,6 +42,9 @@ export default function Home() {
 
       {/* Stats Section */}
       <StatsSection />
+
+      {/* Latest Updates Section */}
+      <LatestNews />
 
       {/* Sponsors Marquee */}
       <FadeInSection>
