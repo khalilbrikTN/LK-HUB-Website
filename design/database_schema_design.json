@@ -1,0 +1,482 @@
+{
+    "meta": {
+        "projectName": "LK-HUB",
+        "version": "1.1.0",
+        "description": "Abstract Database Schema definition for the LK-HUB website backend. Updated with News, Careers, and Partners."
+    },
+    "models": [
+        {
+            "name": "Division",
+            "description": "Represents the main business units (e.g., LK-Kids, LK-Sports). This is the core organizational unit of the site.",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "String (UUID)",
+                    "required": true,
+                    "unique": true,
+                    "notes": "Primary Key"
+                },
+                {
+                    "name": "slug",
+                    "type": "String",
+                    "required": true,
+                    "unique": true,
+                    "notes": "URL-friendly identifier, e.g., 'lk-kids'"
+                },
+                {
+                    "name": "name",
+                    "type": "String",
+                    "required": true,
+                    "notes": "Internal name, e.g., 'LK-KIDS'"
+                },
+                {
+                    "name": "title",
+                    "type": "String",
+                    "required": true,
+                    "notes": "Display title, e.g., 'Empowering Kids Through Media'"
+                },
+                {
+                    "name": "description",
+                    "type": "Text",
+                    "required": true,
+                    "notes": "Short description for cards and hero sections"
+                },
+                {
+                    "name": "vision",
+                    "type": "Text",
+                    "required": false
+                },
+                {
+                    "name": "mission",
+                    "type": "Text",
+                    "required": false
+                },
+                {
+                    "name": "heroImage",
+                    "type": "String (URL)",
+                    "required": false
+                },
+                {
+                    "name": "heroVisualType",
+                    "type": "Enum",
+                    "options": [
+                        "hexagon",
+                        "ball",
+                        "blob",
+                        "rings",
+                        "pulse"
+                    ],
+                    "required": true,
+                    "default": "hexagon"
+                },
+                {
+                    "name": "heroBullets",
+                    "type": "JSON Array",
+                    "required": false,
+                    "notes": "List of strings for hero bullet points"
+                },
+                {
+                    "name": "themeConfig",
+                    "type": "JSON Object",
+                    "required": true,
+                    "notes": "Stores CSS class mappings and color overrides"
+                },
+                {
+                    "name": "aboutConfig",
+                    "type": "JSON Object",
+                    "required": true,
+                    "notes": "Stores title and html/text for the About section"
+                },
+                {
+                    "name": "createdAt",
+                    "type": "DateTime",
+                    "required": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "updatedAt",
+                    "type": "DateTime",
+                    "required": true
+                }
+            ],
+            "relationships": [
+                {
+                    "target": "Program",
+                    "type": "One-To-Many",
+                    "field": "programs",
+                    "notes": "A division has many programs/pillars"
+                },
+                {
+                    "target": "Testimonial",
+                    "type": "One-To-Many",
+                    "field": "testimonials",
+                    "notes": "Testimonials can be linked to specific divisions"
+                }
+            ]
+        },
+        {
+            "name": "Program",
+            "description": "Specific offerings or pillars within a division (e.g., 'Young Entrepreneur', 'Sports Psychology').",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "String (UUID)",
+                    "required": true,
+                    "unique": true
+                },
+                {
+                    "name": "divisionId",
+                    "type": "String (UUID)",
+                    "required": true,
+                    "notes": "Foreign Key to Division"
+                },
+                {
+                    "name": "title",
+                    "type": "String",
+                    "required": true
+                },
+                {
+                    "name": "subtitle",
+                    "type": "String",
+                    "required": false
+                },
+                {
+                    "name": "tagline",
+                    "type": "String",
+                    "required": false
+                },
+                {
+                    "name": "icon",
+                    "type": "String",
+                    "required": false,
+                    "notes": "Emoji or icon class name"
+                },
+                {
+                    "name": "audience",
+                    "type": "JSON Array",
+                    "required": false,
+                    "notes": "List of target audiences"
+                },
+                {
+                    "name": "learnings",
+                    "type": "JSON Array",
+                    "required": false,
+                    "notes": "List of key takeaways"
+                },
+                {
+                    "name": "value",
+                    "type": "Text",
+                    "required": false,
+                    "notes": "The 'Outcome' or 'Value' text"
+                },
+                {
+                    "name": "order",
+                    "type": "Integer",
+                    "required": true,
+                    "default": 0,
+                    "notes": "For sorting display order"
+                }
+            ],
+            "relationships": [
+                {
+                    "target": "Division",
+                    "type": "Many-To-One",
+                    "field": "division"
+                }
+            ]
+        },
+        {
+            "name": "NewsPost",
+            "description": "News articles, press releases, and blog posts.",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "String (UUID)",
+                    "required": true,
+                    "unique": true
+                },
+                {
+                    "name": "slug",
+                    "type": "String",
+                    "required": true,
+                    "unique": true
+                },
+                {
+                    "name": "title",
+                    "type": "String",
+                    "required": true
+                },
+                {
+                    "name": "excerpt",
+                    "type": "Text",
+                    "required": true,
+                    "notes": "Short summary for the card view"
+                },
+                {
+                    "name": "content",
+                    "type": "Rich Text / HTML",
+                    "required": true,
+                    "notes": "Full content of the news post"
+                },
+                {
+                    "name": "coverImage",
+                    "type": "String (URL)",
+                    "required": false
+                },
+                {
+                    "name": "publishedAt",
+                    "type": "DateTime",
+                    "required": false,
+                    "notes": "Date of publication. If null, the post is a draft."
+                },
+                {
+                    "name": "authorName",
+                    "type": "String",
+                    "required": true,
+                    "default": "LK-HUB Team"
+                },
+                {
+                    "name": "category",
+                    "type": "String",
+                    "required": false,
+                    "notes": "e.g., 'Press Release', 'Event', 'Update'"
+                },
+                {
+                    "name": "isFeatured",
+                    "type": "Boolean",
+                    "default": false,
+                    "notes": "If true, pins to the top of the news section"
+                }
+            ]
+        },
+        {
+            "name": "CareerOpening",
+            "description": "Job vacancies and volunteering opportunities.",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "String (UUID)",
+                    "required": true,
+                    "unique": true
+                },
+                {
+                    "name": "title",
+                    "type": "String",
+                    "required": true,
+                    "notes": "Job Title, e.g., 'Senior Media Trainer'"
+                },
+                {
+                    "name": "department",
+                    "type": "String",
+                    "required": false,
+                    "notes": "e.g., 'LK-Kids', 'Operations'"
+                },
+                {
+                    "name": "location",
+                    "type": "String",
+                    "required": true,
+                    "default": "Remote / Hybrid",
+                    "notes": "City/Country or Remote"
+                },
+                {
+                    "name": "type",
+                    "type": "Enum",
+                    "options": [
+                        "Full-time",
+                        "Part-time",
+                        "Contract",
+                        "Internship",
+                        "Volunteer"
+                    ],
+                    "required": true
+                },
+                {
+                    "name": "description",
+                    "type": "Rich Text",
+                    "required": true,
+                    "notes": "Role overview and responsibilities"
+                },
+                {
+                    "name": "requirements",
+                    "type": "JSON Array",
+                    "required": true,
+                    "notes": "List of bullet points for requirements/skills"
+                },
+                {
+                    "name": "applicationLink",
+                    "type": "String (URL)",
+                    "required": false,
+                    "notes": "External link to apply (LinkedIn, etc.)"
+                },
+                {
+                    "name": "contactEmail",
+                    "type": "String",
+                    "required": false,
+                    "notes": "Email to send CVs to"
+                },
+                {
+                    "name": "postedAt",
+                    "type": "DateTime",
+                    "required": true,
+                    "default": "now()"
+                },
+                {
+                    "name": "closesAt",
+                    "type": "DateTime",
+                    "required": false,
+                    "notes": "Deadline for applications"
+                },
+                {
+                    "name": "isActive",
+                    "type": "Boolean",
+                    "default": true,
+                    "notes": "Whether the job is currently visible"
+                }
+            ]
+        },
+        {
+            "name": "TrustedPartner",
+            "description": "Sponsors, partners, and clients displayed in the marquee or partners section.",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "String (UUID)",
+                    "required": true,
+                    "unique": true
+                },
+                {
+                    "name": "name",
+                    "type": "String",
+                    "required": true,
+                    "notes": "Organization Name"
+                },
+                {
+                    "name": "logoUrl",
+                    "type": "String (URL)",
+                    "required": true,
+                    "notes": "Path to the logo image. Should be transparent PNG/SVG."
+                },
+                {
+                    "name": "websiteUrl",
+                    "type": "String (URL)",
+                    "required": false,
+                    "notes": "Link to their website"
+                },
+                {
+                    "name": "category",
+                    "type": "Enum",
+                    "options": [
+                        "Sponsor",
+                        "Strategic Partner",
+                        "Academic Partner",
+                        "Client"
+                    ],
+                    "default": "Partner"
+                },
+                {
+                    "name": "tier",
+                    "type": "String",
+                    "required": false,
+                    "notes": "For future sponsorship levels (Gold, Silver, etc.)"
+                },
+                {
+                    "name": "displayOrder",
+                    "type": "Integer",
+                    "default": 0,
+                    "notes": "Ascending order for display"
+                },
+                {
+                    "name": "isActive",
+                    "type": "Boolean",
+                    "default": true
+                }
+            ]
+        },
+        {
+            "name": "ContactSubmission",
+            "description": "Stores user submissions from the contact form.",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "String (UUID)",
+                    "required": true,
+                    "unique": true
+                },
+                {
+                    "name": "name",
+                    "type": "String",
+                    "required": true
+                },
+                {
+                    "name": "email",
+                    "type": "String",
+                    "required": true
+                },
+                {
+                    "name": "subject",
+                    "type": "String",
+                    "required": false
+                },
+                {
+                    "name": "message",
+                    "type": "Text",
+                    "required": true
+                },
+                {
+                    "name": "status",
+                    "type": "Enum",
+                    "options": [
+                        "new",
+                        "read",
+                        "replied",
+                        "archived"
+                    ],
+                    "default": "new"
+                },
+                {
+                    "name": "submittedAt",
+                    "type": "DateTime",
+                    "required": true,
+                    "default": "now()"
+                }
+            ]
+        },
+        {
+            "name": "AdminUser",
+            "description": "Users who can log in to the CMS to manage content.",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "String (UUID)",
+                    "required": true,
+                    "unique": true
+                },
+                {
+                    "name": "email",
+                    "type": "String",
+                    "required": true,
+                    "unique": true
+                },
+                {
+                    "name": "passwordHash",
+                    "type": "String",
+                    "required": true
+                },
+                {
+                    "name": "role",
+                    "type": "Enum",
+                    "options": [
+                        "super_admin",
+                        "editor"
+                    ],
+                    "default": "editor"
+                },
+                {
+                    "name": "name",
+                    "type": "String",
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

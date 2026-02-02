@@ -1,0 +1,131 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// --------------------------------------------------------
+// CORE ORGANIZATION
+// --------------------------------------------------------
+
+model Division {
+  id              String        @id @default(cuid())
+  slug            String        @unique // e.g., "lk-kids"
+  name            String // Internal name, e.g., "LK-KIDS"
+  title           String // Display title
+  description     String // Short description
+  vision          String?       @db.Text
+  mission         String?       @db.Text
+  heroImage       String?
+  heroVisualType  String        @default("hexagon") // 'hexagon', 'ball', 'blob', 'rings', 'pulse'
+  heroBullets     Json? // List of strings
+  themeConfig     Json // Stores CSS class mappings and colors
+  aboutConfig     Json // Stores about section configuration
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  programs        Program[]
+  testimonials    Testimonial[]
+}
+
+model Program {
+  id         String   @id @default(cuid())
+  divisionId String
+  division   Division @relation(fields: [divisionId], references: [id])
+  title      String
+  subtitle   String?
+  tagline    String?
+  icon       String? // Emoji or icon class name
+  audience   Json? // List of target audiences
+  learnings  Json? // List of key takeaways
+  value      String?  @db.Text
+  order      Int      @default(0)
+}
+
+model Testimonial {
+  id         String    @id @default(cuid())
+  divisionId String?
+  division   Division? @relation(fields: [divisionId], references: [id])
+  name       String
+  role       String?
+  content    String    @db.Text
+  avatarUrl  String?
+  rating     Int       @default(5)
+  createdAt  DateTime  @default(now())
+}
+
+// --------------------------------------------------------
+// CONTENT & UPDATES
+// --------------------------------------------------------
+
+model NewsPost {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  excerpt     String    @db.Text
+  content     String    @db.Text // Rich Text / HTML
+  coverImage  String?
+  publishedAt DateTime? // If null, it is a draft
+  authorName  String    @default("LK-HUB Team")
+  category    String? // 'Press Release', 'Event', 'Update'
+  isFeatured  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model CareerOpening {
+  id              String    @id @default(cuid())
+  title           String
+  department      String?
+  location        String    @default("Remote / Hybrid")
+  type            String // 'Full-time', 'Part-time', etc.
+  description     String    @db.Text
+  requirements    Json // List of bullet points
+  applicationLink String?
+  contactEmail    String?
+  postedAt        DateTime  @default(now())
+  closesAt        DateTime?
+  isActive        Boolean   @default(true)
+}
+
+model TrustedPartner {
+  id           String  @id @default(cuid())
+  name         String
+  logoUrl      String
+  websiteUrl   String?
+  category     String  @default("Partner") // 'Sponsor', 'Strategic Partner', etc.
+  tier         String?
+  displayOrder Int     @default(0)
+  isActive     Boolean @default(true)
+}
+
+// --------------------------------------------------------
+// OPERATIONS & ADMIN
+// --------------------------------------------------------
+
+model ContactSubmission {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  subject     String?
+  message     String   @db.Text
+  status      String   @default("new") // 'new', 'read', 'replied', 'archived'
+  submittedAt DateTime @default(now())
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  role         String   @default("editor") // 'super_admin', 'editor'
+  createdAt    DateTime @default(now())
+}
