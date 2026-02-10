@@ -108,7 +108,7 @@ export const divisionsData = {
                 { title: "AHK Accreditation", desc: "Signed protocol with the German-Arab Chamber (AHK) for student certification, a first for Year 1 students." },
                 { title: "Field Training", desc: "Launch of practical training at Family Corporation factory, prioritizing safety and real-world skills." },
                 { title: "EduTech Participation", desc: "Students engaged with industry leaders and the Ministry of Education at the EduTech exhibition." },
-                { title: "Governor's Visit", desc: "His Excellency the Governor of Gharbia visited the school, praising its advanced facilities and student discipline." },
+                { title: "Gharbia Governor visit", desc: "His Excellency the Governor of Gharbia visited the school, praising its advanced facilities and student discipline." },
                 { title: "Entrepreneurship Curriculum", desc: "Launched a specialized entrepreneurship curriculum tailored for the textile industry." },
                 { title: "Workshops Opening", desc: "Official opening of state-of-the-art internal training workshops equipped with modern machinery." },
                 { title: "'Ilham' Campaign", desc: "Participated in the 'Ilham' campaign to empower girls in technical education and breaking stereotypes." }

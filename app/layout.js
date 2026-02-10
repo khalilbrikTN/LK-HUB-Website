@@ -3,6 +3,7 @@ import PillNav from '@/src/components/PillNav';
 import Footer from '@/src/components/Footer';
 import ContactModal from '@/src/components/ContactModal';
 import NewsletterModal from '@/src/components/NewsletterModal';
+import BackToTop from '@/src/components/BackToTop';
 
 export const metadata = {
   title: 'LK-HUB | Liberating Knowledge',
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
         <Footer />
         <ContactModal />
         <NewsletterModal />
+        <BackToTop />
       </body>
     </html>
   );

@@ -6,22 +6,28 @@ import { login } from '@/app/actions/auth';
 export default function LoginPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [shake, setShake] = useState(false);
 
-    async function handleSubmit(formData) {
+    async function handleSubmit(event) {
+        event.preventDefault();
         setLoading(true);
         setError('');
+        setShake(false);
 
-        const result = await login(formData);
+        const formData = new FormData(event.target);
+        const result = await login(formData); // Assume login is imported from actions
 
         if (result?.error) {
             setError(result.error);
             setLoading(false);
+            setShake(true);
+            setTimeout(() => setShake(false), 500); // Reset shake after animation
         }
     }
 
     return (
         <div className="admin-login-container">
-            <div className="login-card">
+            <div className={`login-card ${shake ? 'shake' : ''}`}>
                 <div className="login-logo">
                     <Image
                         src="/assets/media/Logo-Photoroom.png"
@@ -34,7 +40,7 @@ export default function LoginPage() {
                 <h1>Admin Portal</h1>
                 <p className="subtitle">Please sign in to continue</p>
 
-                <form action={handleSubmit} className="login-form">
+                <form onSubmit={handleSubmit} className="login-form">
                     <div className="form-group">
                         <label htmlFor="email">Email Address</label>
                         <input
@@ -43,6 +49,7 @@ export default function LoginPage() {
                             name="email"
                             placeholder="admin@lk-hub.com"
                             required
+                            className={error ? 'input-error' : ''}
                         />
                     </div>
 
@@ -53,10 +60,16 @@ export default function LoginPage() {
                             id="password"
                             name="password"
                             required
+                            className={error ? 'input-error' : ''}
                         />
                     </div>
 
-                    {error && <div className="error-message">{error}</div>}
+                    {error && (
+                        <div className="error-message">
+                            <span style={{ marginRight: '8px' }}>⚠️</span>
+                            {error}
+                        </div>
+                    )}
 
                     <button type="submit" className="btn btn-primary full-width" disabled={loading}>
                         {loading ? 'Signing in...' : 'Sign In'}
@@ -144,6 +157,26 @@ export default function LoginPage() {
                     border-radius: 8px;
                     margin-bottom: 1.5rem;
                     font-size: 0.9rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: 1px solid #ffcdd2;
+                }
+
+                .input-error {
+                    border-color: #d32f2f !important;
+                    background-color: #fff8f8;
+                }
+
+                .shake {
+                    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+                }
+
+                @keyframes shake {
+                    10%, 90% { transform: translate3d(-1px, 0, 0); }
+                    20%, 80% { transform: translate3d(2px, 0, 0); }
+                    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+                    40%, 60% { transform: translate3d(4px, 0, 0); }
                 }
             `}</style>
         </div>

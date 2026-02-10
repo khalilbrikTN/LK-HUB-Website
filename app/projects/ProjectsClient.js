@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { divisionsData } from '@/src/data/divisionsContent';
 
-export default function ProjectsClient() {
+export default function ProjectsClient({ dbProjects = [] }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeFilter, setActiveFilter] = useState('all');
 
@@ -12,115 +12,24 @@ export default function ProjectsClient() {
     const allProjects = useMemo(() => {
         const projects = [];
 
-        // Helper to safely add projects
-        const addProjectsFromDivision = (divisionKey, sourceArray, idPrefix, getDesc) => {
-            if (divisionsData[divisionKey]?.[sourceArray]?.map) { // check if map exists to avoid errors
-                divisionsData[divisionKey][sourceArray].forEach((item, index) => {
-                    projects.push({
-                        id: `${idPrefix}-${item.id || index}`,
-                        title: item.title,
-                        category: divisionsData[divisionKey].label,
-                        divisionId: divisionKey,
-                        description: getDesc(item),
-                        link: '#', // Placeholder link
-                        image: null // Placeholder image
-                    });
-                });
-            }
-        };
-
-        // LK-EDUCATION (Media Section Tracks)
-        if (divisionsData['lk-education']?.mediaSection?.tracks) {
-            divisionsData['lk-education'].mediaSection.tracks.forEach((track, index) => {
+        // Only use Database Projects (from projects.json)
+        if (Array.isArray(dbProjects)) {
+            dbProjects.forEach(p => {
                 projects.push({
-                    id: `edu-${index}`,
-                    title: track.title,
-                    category: divisionsData['lk-education'].label,
-                    divisionId: 'lk-education',
-                    description: track.desc,
-                    link: '#',
-                    image: null
-                });
-            });
-        }
-
-        // LK-KIDS (Media Section Tracks)
-        if (divisionsData['lk-kids']?.mediaSection?.tracks) {
-            divisionsData['lk-kids'].mediaSection.tracks.forEach((track, index) => {
-                projects.push({
-                    id: `kids-${index}`,
-                    title: track.title,
-                    category: divisionsData['lk-kids'].label,
-                    divisionId: 'lk-kids',
-                    description: track.desc,
-                    link: '#',
-                    image: null
-                });
-            });
-        }
-
-        // LK-SPORTS (Pillars)
-        if (divisionsData['lk-sports']?.pillars) {
-            divisionsData['lk-sports'].pillars.forEach((pillar) => {
-                projects.push({
-                    id: `sports-${pillar.id}`,
-                    title: pillar.title,
-                    category: divisionsData['lk-sports'].label,
-                    divisionId: 'lk-sports',
-                    description: pillar.tagline,
-                    link: '#',
-                    image: null
-                });
-            });
-        }
-
-        // LK-SOLUTIONS (Pillars)
-        if (divisionsData['lk-solutions']?.pillars) {
-            divisionsData['lk-solutions'].pillars.forEach((pillar) => {
-                projects.push({
-                    id: `sol-${pillar.id}`,
-                    title: pillar.title,
-                    category: divisionsData['lk-solutions'].label,
-                    divisionId: 'lk-solutions',
-                    description: pillar.tagline,
-                    link: '#',
-                    image: null
-                });
-            });
-        }
-
-        // LK-DEVELOPMENT (Pillars)
-        if (divisionsData['lk-development']?.pillars) {
-            divisionsData['lk-development'].pillars.forEach((pillar) => {
-                projects.push({
-                    id: `dev-${pillar.id}`,
-                    title: pillar.title,
-                    category: divisionsData['lk-development'].label,
-                    divisionId: 'lk-development',
-                    description: pillar.tagline,
-                    link: '#',
-                    image: null
-                });
-            });
-        }
-
-        // LK-COMMUNICATION (Pillars)
-        if (divisionsData['lk-communication']?.pillars) {
-            divisionsData['lk-communication'].pillars.forEach((pillar) => {
-                projects.push({
-                    id: `comm-${pillar.id}`,
-                    title: pillar.title,
-                    category: divisionsData['lk-communication'].label,
-                    divisionId: 'lk-communication',
-                    description: pillar.tagline,
-                    link: '#',
-                    image: null
+                    id: p.id,
+                    title: p.title,
+                    category: divisionsData[p.division]?.label || p.division, // Fallback if division key matches
+                    divisionId: p.division,
+                    description: p.description, // Use short description for card
+                    link: p.link || `/projects/${p.id}`, // Generate link if not provided
+                    image: p.coverImage || null,
+                    tags: p.tags
                 });
             });
         }
 
         return projects;
-    }, []);
+    }, [dbProjects]);
 
     // 2. Filter Logic
     const filteredProjects = allProjects.filter(project => {
@@ -206,9 +115,18 @@ export default function ProjectsClient() {
                                 className="project-card"
                             >
                                 <div className="project-card-image">
-                                    <div className="placeholder-content">
-                                        <span>IMAGE</span>
-                                    </div>
+                                    {project.image ? (
+                                        <img
+                                            src={project.image}
+                                            alt={project.title}
+                                            className="card-img"
+                                            loading="lazy"
+                                        />
+                                    ) : (
+                                        <div className="placeholder-content">
+                                            {/* CSS Pattern Background */}
+                                        </div>
+                                    )}
                                     <div className={`project-badge ${getBadgeClass(project.divisionId)}`}>
                                         {project.category}
                                     </div>

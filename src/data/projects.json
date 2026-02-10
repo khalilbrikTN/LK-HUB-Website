@@ -1,47 +1,542 @@
 [
     {
-        "id": "lk-edu-p1",
+        "id": "lk-edu-first-student-training-launch-camp",
         "division": "lk-education",
-        "title": "Holistic Student Development",
-        "subtitle": "Beyond the Classroom",
-        "description": "Building character, leadership, and emotional intelligence.",
-        "content": "We cultivate well-rounded individuals who are not just technically proficient but also emotionally intelligent and socially responsible leaders.",
-        "icon": "🌱",
+        "title": "First Student Training",
+        "subtitle": "Building a New Generation",
+        "description": "First student camp for the inaugural cohort of Saleh Kamel Applied Technology School.",
+        "content": "Launch Camp: Building a New Generation at Saleh Kamel Applied Technology School\n\nAs part of LK Hub’s vision to advance technical education and elevate young talents’ skills, the first student camp for the inaugural cohort of Saleh Kamel Applied Technology School for Ready-Made Garments and Textiles was launched in Tanta, Gharbia Governorate, for the 2024–2025 academic year.\n\nGoals Beyond Traditional Education\nThe camp was not just an academic start, but a comprehensive educational experience aimed at strengthening students’ sense of belonging and developing their personal and leadership skills. Activities focused on positive interaction, emotional intelligence, creative problem-solving, and raising awareness of personal safety and protection policies.\n\nCharacter Building & Life Skills\nA group of experts and specialists participated, including:\n\nEmotional Intelligence & Self-Awareness: Dr. Sherine delivered interactive sessions on emotional intelligence, helping students assess themselves and identify strengths.\n\nFirst Aid: In cooperation with the Red Crescent, students received intensive practical training in emergency response and lifesaving skills.\n\nCreative Thinking & Communication: Dr. Mohamed Hamed, capacity-building consultant, conducted workshops on creative thinking and presentation skills.\n\nAcademic & Technical Preparation\nStudents attended preparatory sessions including:\n\nIntroduction to technical competencies and specialized garment and textile knowledge.\n\nOrientation to Arabic and German language curricula and cultural/scientific subjects such as mathematics and chemistry.\n\nPractical fashion design workshops.\n\nInspirational Visits & Institutional Support\nDr. Lobna Khairy, CEO of LK Hub, followed up on activities. Dr. Zahra El-Sherbiny, fashion business consultant, also met students.\n\nTeam Spirit & Official Launch\nSports and group activities strengthened bonds. The camp concluded successfully, marking the official start of studies.",
+        "icon": "👨‍🎓",
         "tags": [
-            "Soft Skills",
-            "Leadership",
-            "Character"
+            "Camp",
+            "Students",
+            "Launch"
         ],
-        "coverImage": "/assets/media/lk-education/landing_page.png"
+        "coverImage": "/assets/media/lk-education/projects/First Student Training/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/First Student Training/470157874_122125714832568718_8591469743071826314_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470174398_122125714772568718_4421521268835465612_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470183772_122125718900568718_8403568255114201021_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470187136_122125744694568718_2600542923510932600_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470192860_122127552074568718_2395389510499112173_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470201672_122127542090568718_3948388827356261333_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470201951_122127542204568718_9172920783255193293_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470214585_122125714766568718_7082977260437903366_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470217458_122125714754568718_4427556921509917987_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470219823_122125717724568718_4744210434886774413_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470224754_122127475892568718_1761024130277564529_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470235391_122127542078568718_4460713156459057308_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470550770_122127457886568718_6909845485779184405_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470590583_122127475916568718_2870489504743675141_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470595563_122127475400568718_519147422126607039_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470637038_122127488786568718_3759067477057055078_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470646002_122127475922568718_7046989729527033297_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470668918_122127457946568718_4397525880880474642_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470810626_122127713036568718_2720511109766611320_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/470878787_122127475904568718_904170888942370254_n.jpg",
+            "/assets/media/lk-education/projects/First Student Training/471158459_122127713018568718_6817406031227006930_n.jpg"
+        ],
+        "createdAt": "2024-09-01T00:00:00.000Z"
     },
     {
-        "id": "lk-edu-p2",
+        "id": "lk-edu-first-teachers-training",
         "division": "lk-education",
-        "title": "Academic & Staff Excellence",
-        "subtitle": "Empowering Educators",
-        "description": "Continuous professional development for academic and administrative staff.",
-        "content": "A dedicated, well-trained team is the cornerstone of our success, ensuring the delivery of high-quality education and mentorship.",
-        "icon": "👨‍🏫",
+        "title": "First Teachers Training",
+        "subtitle": "Professional Development",
+        "description": "Qualification camp for academic & administrative staff to prepare for the 24/25 academic year.",
+        "content": "First Qualification Camp for Academic & Administrative Staff\n\nHeld 15–17 October 2024 to prepare for the 2024–2025 academic year. Focused on school vision, psychological and educational support, and operational readiness.",
+        "icon": "🍎",
+        "tags": [
+            "Teachers",
+            "Training",
+            "Development"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/First Teachers Training/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/First Teachers Training/469672623_122124595574568718_8633607299366221435_n.jpg",
+            "/assets/media/lk-education/projects/First Teachers Training/469893717_122124595598568718_7235727373819503499_n.jpg"
+        ],
+        "createdAt": "2024-10-15T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-gov-visit",
+        "division": "lk-education",
+        "title": "Gharbia Governor visit",
+        "subtitle": "Official Visit",
+        "description": "Major General Ashraf El-Gendy visited the school, praising its advanced facilities.",
+        "content": "Visit of Gharbia Governor to the School\n\nMajor General Ashraf El-Gendy, Governor of Gharbia, and Mr. Nasser Hassan visited the school, praising it as the first of its kind nationwide in ready-made garments specialization.",
+        "icon": "🏛️",
+        "tags": [
+            "Governor",
+            "Visit",
+            "Official"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/Gharbia Governor visit/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/Gharbia Governor visit/470990524_122127923294568718_6712541018435368417_n (1).jpg",
+            "/assets/media/lk-education/projects/Gharbia Governor visit/471134432_122127923516568718_6045162850703517226_n.jpg"
+        ],
+        "createdAt": "2024-10-20T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-field-training",
+        "division": "lk-education",
+        "title": "Field training begins",
+        "subtitle": "Hands-on Experience",
+        "description": "Students began field training at Family Factory in El-Mahalla with strict safety procedures.",
+        "content": "Launch of Field Training for Students\n\nStudents began field training at Family Factory in El-Mahalla, with safe transportation and strict safety procedures.",
+        "icon": "🏭",
         "tags": [
             "Training",
-            "Education",
-            "Staff Development"
+            "Field Work",
+            "Industry"
         ],
-        "coverImage": "/assets/media/lk-education/landing_page.png"
+        "coverImage": "/assets/media/lk-education/projects/Field training begins/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/Field training begins/472917022_122134111166568718_4768541640520802439_n.jpg",
+            "/assets/media/lk-education/projects/Field training begins/473006559_122134110794568718_7901915467941721481_n.jpg",
+            "/assets/media/lk-education/projects/Field training begins/473064982_122134109720568718_7766187754317176243_n.jpg"
+        ],
+        "createdAt": "2024-11-01T00:00:00.000Z"
     },
     {
-        "id": "lk-sol-p1",
-        "division": "lk-solutions",
-        "title": "Media Management",
-        "subtitle": "Strategic Channel Excellence",
-        "description": "Achieving objectives through strategic channel supervision.",
-        "content": "Ensure message consistency and efficient budget utilization while aligning every media effort with your broader organizational goals.",
-        "icon": "📢",
+        "id": "lk-edu-teacher-training-competency",
+        "division": "lk-education",
+        "title": "Teacher Training at Saleh Kamel School",
+        "subtitle": "Competency Methodology",
+        "description": "Five-day training on professional competency methodology led by education experts.",
+        "content": "Teacher Training at Saleh Kamel School\n\nFive-day training on professional competency methodology led by Dr. Mohamed Osama and Dr. Gaber Galal under supervision of Dr. Mohamed Abdelmaksoud.",
+        "icon": "📚",
         "tags": [
-            "Media",
-            "Planning",
-            "Optimization"
+            "Teachers",
+            "Training",
+            "Competency"
         ],
-        "coverImage": "/assets/media/lk-solutions/landing_page.png"
+        "coverImage": null,
+        "createdAt": "2024-11-05T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-evacuation",
+        "division": "lk-education",
+        "title": "Evacuation Training",
+        "subtitle": "Safety First",
+        "description": "Practical emergency evacuation drills to ensure student safety.",
+        "content": "Evacuation Plan Drills\n\nPractical emergency evacuation drills to ensure student safety.",
+        "icon": "🚨",
+        "tags": [
+            "Safety",
+            "Drill",
+            "Emergency"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/Evacuation Training/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/Evacuation Training/475799302_122140355150568718_3809839185416803462_n.jpg",
+            "/assets/media/lk-education/projects/Evacuation Training/475801036_122140355030568718_3049705291342772427_n.jpg",
+            "/assets/media/lk-education/projects/Evacuation Training/475897490_122140356398568718_2394183701815181868_n.jpg"
+        ],
+        "createdAt": "2024-11-10T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-entrepreneurship",
+        "division": "lk-education",
+        "title": "Entrepreneurship - A curriculum designed for specialization",
+        "subtitle": "Innovation Curriculum",
+        "description": "Specialized entrepreneurship curriculum designed to prepare students for the labor market.",
+        "content": "Entrepreneurship Curriculum for Garments & Textiles\n\nA specialized entrepreneurship curriculum designed with leading experts to prepare students for the labor market.",
+        "icon": "🚀",
+        "tags": [
+            "Entrepreneurship",
+            "Curriculum",
+            "Innovation"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/Entrepreneurship - A curriculum designed for specialization/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/Entrepreneurship - A curriculum designed for specialization/472671321_122134140842568718_3982622456595849297_n.jpg",
+            "/assets/media/lk-education/projects/Entrepreneurship - A curriculum designed for specialization/472700903_122134140836568718_6400318064606539750_n.jpg",
+            "/assets/media/lk-education/projects/Entrepreneurship - A curriculum designed for specialization/472773314_122134141022568718_9132909903671970036_n.jpg"
+        ],
+        "createdAt": "2024-11-15T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-visit-arts",
+        "division": "lk-education",
+        "title": "A visit to the Faculty of Applied Arts Tanta University",
+        "subtitle": "Academic Tour",
+        "description": "Students toured the Ready-Made Garments Department and attended technical lectures.",
+        "content": "Students’ Visit to Faculty of Applied Arts – Tanta University\n\nStudents toured the Ready-Made Garments Department and attended lectures:\n\n“Smart Clothing and Innovations in Garment Industry” by Dr. Seham Dawoud\n\n“Pattern Magic” by Dr. Maha Ibrahim Araf\nIncluded practical pattern drawing and draping on mannequins.",
+        "icon": "🎨",
+        "tags": [
+            "University",
+            "Visit",
+            "Arts"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/A visit to the Faculty of Applied Arts Tanta University/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/A visit to the Faculty of Applied Arts Tanta University/473805267_122139064568568718_876041413818476706_n.jpg",
+            "/assets/media/lk-education/projects/A visit to the Faculty of Applied Arts Tanta University/474754072_122139387686568718_6403780088778626917_n.jpg",
+            "/assets/media/lk-education/projects/A visit to the Faculty of Applied Arts Tanta University/474765703_122139064628568718_8269357084961777208_n.jpg",
+            "/assets/media/lk-education/projects/A visit to the Faculty of Applied Arts Tanta University/474765910_122139064610568718_4817958069725182745_n.jpg",
+            "/assets/media/lk-education/projects/A visit to the Faculty of Applied Arts Tanta University/474993228_122139387662568718_3920667182966879393_n.jpg",
+            "/assets/media/lk-education/projects/A visit to the Faculty of Applied Arts Tanta University/475084231_122139387632568718_4740630093152985464_n.jpg",
+            "/assets/media/lk-education/projects/A visit to the Faculty of Applied Arts Tanta University/475138040_122139387680568718_359763816664481944_n.jpg"
+        ],
+        "createdAt": "2024-12-01T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-cairo-trip",
+        "division": "lk-education",
+        "title": "Cairo Trip",
+        "subtitle": "Cultural Excursion",
+        "description": "Visits to the Pyramids, Salah El-Din Citadel, and Safari Park.",
+        "content": "School Trip to Cairo Landmarks\n\nVisits to the Pyramids, Salah El-Din Citadel, and Safari Park.",
+        "icon": "🚌",
+        "tags": [
+            "Trip",
+            "Culture",
+            "Cairo"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/Cairo Trip/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/Cairo Trip/475153479_122139969344568718_797740012667703914_n.jpg",
+            "/assets/media/lk-education/projects/Cairo Trip/475799829_122139969404568718_252860170728264485_n.jpg"
+        ],
+        "createdAt": "2024-12-05T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-edutech",
+        "division": "lk-education",
+        "title": "Participation in EDUTech Exhibition",
+        "subtitle": "Exhibition",
+        "description": "Students visited the LK-Hub pavilion and met with industry leaders.",
+        "content": "Participation in EDUTech Exhibition\n\nStudents visited LK-Hub pavilion. Met Dr. Amr Basila and Dr. Rasha Fathy. Federation of Egyptian Industries also hosted them.",
+        "icon": "🤝",
+        "tags": [
+            "Exhibition",
+            "EduTech",
+            "Industry"
+        ],
+        "coverImage": null,
+        "createdAt": "2024-12-10T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-accreditation",
+        "division": "lk-education",
+        "title": "Accreditation of Salah Kamel School of Applied Technology by the German-Arab Chamber",
+        "subtitle": "International Recognition",
+        "description": "Students receive official German accreditation from year one via new protocol.",
+        "content": "German Arab Chamber Accreditation\n\nLK-Hub signed accreditation protocol with the German Arab Chamber of Industry and Commerce. Students receive official German accreditation from year one.",
+        "icon": "🇩🇪",
+        "tags": [
+            "Accreditation",
+            "German",
+            "Global"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/Accreditation of Salah Kamel School of Applied Technology by the German-Arab Chamber/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/Accreditation of Salah Kamel School of Applied Technology by the German-Arab Chamber/480748459_122147720858568718_8370931704732515789_n.jpg",
+            "/assets/media/lk-education/projects/Accreditation of Salah Kamel School of Applied Technology by the German-Arab Chamber/480997264_122147720330568718_7008965990384079250_n.jpg",
+            "/assets/media/lk-education/projects/Accreditation of Salah Kamel School of Applied Technology by the German-Arab Chamber/481174756_122147720270568718_4352366120805426272_n.jpg",
+            "/assets/media/lk-education/projects/Accreditation of Salah Kamel School of Applied Technology by the German-Arab Chamber/481337848_122147720822568718_5289682813199454825_n.jpg"
+        ],
+        "createdAt": "2024-12-15T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-saleh-kamel-visit",
+        "division": "lk-education",
+        "title": "Salah Kamel Visit",
+        "subtitle": "Foundation Visit",
+        "description": "Executive delegation visited workshops and viewed student projects.",
+        "content": "Visit of Saleh Kamel Humanitarian Foundation\n\nExecutive delegation visited workshops and classrooms, viewed student projects. Presentation covered achievements since early September last year.",
+        "icon": "🤝",
+        "tags": [
+            "Foundation",
+            "Visit",
+            "Support"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/Salah Kamel Visit/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/Salah Kamel Visit/482326536_122151929888568718_2319303521076210078_n.jpg",
+            "/assets/media/lk-education/projects/Salah Kamel Visit/482328381_122151930020568718_8637894070203467775_n.jpg",
+            "/assets/media/lk-education/projects/Salah Kamel Visit/482328603_122151929918568718_6809324109531725749_n (1).jpg",
+            "/assets/media/lk-education/projects/Salah Kamel Visit/483469468_122151929870568718_6985379942640735097_n.jpg",
+            "/assets/media/lk-education/projects/Salah Kamel Visit/483539119_122151929978568718_7842236159481445214_n.jpg",
+            "/assets/media/lk-education/projects/Salah Kamel Visit/483546615_122151929900568718_3588422559198237543_n.jpg",
+            "/assets/media/lk-education/projects/Salah Kamel Visit/483603897_122151929966568718_881548356489116687_n.jpg",
+            "/assets/media/lk-education/projects/Salah Kamel Visit/483912508_122151929858568718_5296927555797156043_n.jpg",
+            "/assets/media/lk-education/projects/Salah Kamel Visit/484106144_122151930008568718_3936380650963249682_n.jpg",
+            "/assets/media/lk-education/projects/Salah Kamel Visit/484122002_122151930482568718_1199797562501974838_n.jpg"
+        ],
+        "createdAt": "2025-01-10T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-mahfouz",
+        "division": "lk-education",
+        "title": "Participation in Ministry of Culture Event “Mahfouz in the Heart”",
+        "subtitle": "Cultural Event",
+        "description": "Students presented creative works reflecting Egyptian identity.",
+        "content": "Participation in Ministry of Culture Event “Mahfouz in the Heart”\n\nFirst applied technology school to participate. Students presented creative works reflecting Egyptian identity.",
+        "icon": "🎭",
+        "tags": [
+            "Culture",
+            "Event",
+            "Identity"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-02-01T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-workshops-opening",
+        "division": "lk-education",
+        "title": "Workshops opening",
+        "subtitle": "New Facilities",
+        "description": "Workshops officially operational with modern machinery.",
+        "content": "Opening of Training Workshops – March 2025\n\nWorkshops officially operational with modern machinery.",
+        "icon": "🎉",
+        "tags": [
+            "Opening",
+            "Workshops",
+            "Facilities"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/Workshops opening/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/Workshops opening/490795695_122161634138568718_2667075980796427657_n.jpg",
+            "/assets/media/lk-education/projects/Workshops opening/491419282_122161634042568718_6413481088844761664_n.jpg",
+            "/assets/media/lk-education/projects/Workshops opening/491933458_122161634012568718_1537111724004618533_n (1).jpg",
+            "/assets/media/lk-education/projects/Workshops opening/491935094_122161634126568718_6351124216585493919_n.jpg"
+        ],
+        "createdAt": "2025-03-01T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-ilhem",
+        "division": "lk-education",
+        "title": "Ilhem Campaign",
+        "subtitle": "Empowering Girls",
+        "description": "Initiative focused on empowering girls in technical education and entrepreneurship.",
+        "content": "Participation in “Elham” Campaign\n\nStudent initiative from October 6 University girls, sponsored by LK-Hub. Focused on empowering girls in technical education and entrepreneurship.",
+        "icon": "💡",
+        "tags": [
+            "Campaign",
+            "Girls",
+            "Empowerment"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/Ilhem Campaign/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/Ilhem Campaign/492002089_122163745856568718_6329804205589376068_n.jpg",
+            "/assets/media/lk-education/projects/Ilhem Campaign/492186365_122163745844568718_7673748463924923689_n.jpg",
+            "/assets/media/lk-education/projects/Ilhem Campaign/492229321_122163745874568718_1441483555152390184_n.jpg"
+        ],
+        "createdAt": "2025-03-10T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-practical-exams",
+        "division": "lk-education",
+        "title": "Practical Exams",
+        "subtitle": "Assessment",
+        "description": "Garments specialization students completed practical assessments in workshops.",
+        "content": "Practical Exams\n\nStudents in ready-made garments specialization completed practical assessments in workshops.",
+        "icon": "📝",
+        "tags": [
+            "Exams",
+            "Practical",
+            "Assessment"
+        ],
+        "coverImage": "/assets/media/lk-education/projects/Practical Exams/coverPicture.jpg",
+        "images": [
+            "/assets/media/lk-education/projects/Practical Exams/496065513_122168874284568718_6256892820312150831_n.jpg",
+            "/assets/media/lk-education/projects/Practical Exams/496297269_122168874494568718_2170220322133239286_n.jpg",
+            "/assets/media/lk-education/projects/Practical Exams/496393963_122168874302568718_8275423522835210242_n.jpg",
+            "/assets/media/lk-education/projects/Practical Exams/496824723_122168874338568718_7891108972746568903_n.jpg"
+        ],
+        "createdAt": "2025-04-01T00:00:00.000Z"
+    },
+    {
+        "id": "lk-edu-tribute-artwork",
+        "division": "lk-education",
+        "title": "Tribute Artwork to Sheikh Saleh Kamel",
+        "subtitle": "Art Project",
+        "description": "Art project initiated by first-year student Karim Osama.",
+        "content": "Tribute Artwork to Sheikh Saleh Kamel\n\nArt project initiated by first-year student Karim Osama.\nVideo: Saleh Kamel in Egyptian Eyes.mp4",
+        "icon": "🎨",
+        "tags": [
+            "Art",
+            "Tribute",
+            "Student Work"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-05-01T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-entrepreneurship-camp",
+        "division": "lk-education",
+        "title": "Entrepreneurship Camp",
+        "subtitle": "Summer Camp",
+        "description": "Covered strategic planning, management, and branding with market visits and pitching.",
+        "content": "Entrepreneurship Camp – Starting 15 June (Two Weeks)\n\nCovered strategic planning, financial/logistical management, branding, market visits, pitching, digital awareness, sports activities. Hosted Mr. Omar Khalifa (Shaghalni Center).",
+        "icon": "🏕️",
+        "tags": [
+            "Camp",
+            "Entrepreneurship",
+            "Summer"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-06-15T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-dethar-competition",
+        "division": "lk-education",
+        "title": "Dethar Competition – 2024–2025",
+        "subtitle": "Student Competition",
+        "description": "End-of-year event where 8 groups presented projects to industry jury.",
+        "content": "“Dethar” Competition – 2024–2025\n\nFinal event of first academic year. 8 groups presented projects. Jury included Dr. Zahra El-Sherbiny and industry founders. Winning teams listed (1st–4th places).",
+        "icon": "🏆",
+        "tags": [
+            "Competition",
+            "Students",
+            "Design"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-07-01T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-dethar-season-one",
+        "division": "lk-education",
+        "title": "Dethar I Season One",
+        "subtitle": "Summer 2025",
+        "description": "Student-designed competition narrated by Dr. Lobna Khairy.",
+        "content": "Dethar I Season One – Summer 2025\n\nStudent-designed competition narrated by Dr. Lobna Khairy.",
+        "icon": "👗",
+        "tags": [
+            "Design",
+            "Summer",
+            "Competition"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-07-15T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-cohort-prep",
+        "division": "lk-education",
+        "title": "Preparations for 2025–2026",
+        "subtitle": "New Cohort",
+        "description": "Interviews for second cohort; first-cohort students welcomed newcomers.",
+        "content": "Preparations for 2025–2026 – August 2025\n\nInterviews for second cohort. First-cohort students welcomed newcomers.",
+        "icon": "👋",
+        "tags": [
+            "Preparation",
+            "New Year",
+            "Students"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-08-01T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-second-year-launch",
+        "division": "lk-education",
+        "title": "Second Academic Year Launch Camp",
+        "subtitle": "Launch Camp",
+        "description": "Preparatory camp covering emotional intelligence, creativity, and dental health.",
+        "content": "Second Academic Year Launch Camp (2025–2026)\n\nFive-day preparatory camp covering emotional intelligence, creativity, communication, anti-bullying, dental health check with Ministry of Health.",
+        "icon": "⛺",
+        "tags": [
+            "Camp",
+            "Launch",
+            "Second Year"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-09-01T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-field-training-second-year",
+        "division": "lk-education",
+        "title": "Field Training – Second Year Students",
+        "subtitle": "Advanced Training",
+        "description": "Training at El-Sayad Factory involving production touring and supervision.",
+        "content": "Field Training – Second Year Students – October 2025\n\nTraining at El-Sayad Factory in El-Mahalla. Students toured production halls and practiced under supervision.",
+        "icon": "🏭",
+        "tags": [
+            "Training",
+            "Field Work",
+            "Second Year"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-10-01T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-field-training-first-year",
+        "division": "lk-education",
+        "title": "Field Training – First Year Students",
+        "subtitle": "Introductory Training",
+        "description": "Garments specialization training at El-Sayad Factory; Textiles at El-Sheikh Factory.",
+        "content": "Field Training – First Year Students\n\nGarments specialization at El-Sayad Factory. Textile specialization at El-Sheikh Factory.",
+        "icon": "🧵",
+        "tags": [
+            "Training",
+            "First Year",
+            "Factory"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-10-05T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-student-to-student",
+        "division": "lk-education",
+        "title": "From Student to Student Initiative",
+        "subtitle": "Peer Learning",
+        "description": "Second-year students trained first-years on industrial sewing machines.",
+        "content": "“From Student to Student” Initiative\n\nSecond-year students trained first-year students on industrial sewing and overlock machines.",
+        "icon": "🤝",
+        "tags": [
+            "Mentorship",
+            "Skills",
+            "Initiative"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-10-15T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-first-year-creations",
+        "division": "lk-education",
+        "title": "First-Year Student Creations",
+        "subtitle": "Student Work",
+        "description": "Early fashion designs demonstrating strong creativity.",
+        "content": "First-Year Student Creations\n\nEarly fashion designs demonstrating strong creativity.",
+        "icon": "🎨",
+        "tags": [
+            "Design",
+            "Creativity",
+            "First Year"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-11-01T00:00:00.000Z",
+        "images": []
+    },
+    {
+        "id": "lk-edu-transmea",
+        "division": "lk-education",
+        "title": "Visit to TransMEA 2025 Exhibition",
+        "subtitle": "Exhibition Visit",
+        "description": "Students visited LK-HUB and Ministry of Education pavilions.",
+        "content": "Visit to TransMEA 2025 Exhibition\n\nStudents visited LK-HUB and Ministry of Education pavilions. Met Dr. Lobna Khairy and Dr. Gehad Amer.",
+        "icon": "🚆",
+        "tags": [
+            "Exhibition",
+            "Visit",
+            "Industry"
+        ],
+        "coverImage": null,
+        "createdAt": "2025-11-15T00:00:00.000Z",
+        "images": []
     }
 ]
