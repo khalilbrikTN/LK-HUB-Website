@@ -1,129 +1,326 @@
 "use client";
-import { logout } from '@/app/actions/auth';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export default function AdminDashboard() {
-    return (
-        <div className="dashboard-container">
-            <header className="dashboard-header">
-                <h2>Admin Dashboard</h2>
-                <button onClick={() => logout()} className="btn btn-secondary btn-sm">Sign Out</button>
-            </header>
+// Mock data until endpoints exist
+const mockNews = [
+    { id: 1, title: 'LK-HUB Receives Award', date: '2025-02-01', status: 'Published' },
+    { id: 2, title: 'New Sports Program Launch', date: '2025-01-28', status: 'Draft' },
+    { id: 3, title: 'Kids Camp Success', date: '2025-01-15', status: 'Published' }
+];
 
-            <div className="dashboard-content">
-                <div className="welcome-card">
-                    <h3>Welcome back!</h3>
-                    <p>Select a section to manage content.</p>
+const mockCareers = [
+    { id: 1, title: 'Senior Media Trainer', type: 'Full-time', applicants: 12 },
+    { id: 2, title: 'Video Editor', type: 'Contract', applicants: 5 }
+];
+
+export default function AdminDashboard() {
+    const [projectsCount, setProjectsCount] = useState(0);
+    const [projectsLoading, setProjectsLoading] = useState(true);
+
+    useEffect(() => {
+        fetch('/api/projects')
+            .then(res => res.json())
+            .then(data => {
+                setProjectsCount(Array.isArray(data) ? data.length : 0);
+                setProjectsLoading(false);
+            })
+            .catch(() => setProjectsLoading(false));
+    }, []);
+
+    const statCards = [
+        { title: 'Total Projects', value: projectsLoading ? '...' : projectsCount, icon: '🚀', color: '#4a148c', bg: '#f3e5f5' },
+        { title: 'Published News', value: mockNews.length, icon: '📰', color: '#1565c0', bg: '#e3f2fd' },
+        { title: 'Active Jobs', value: mockCareers.length, icon: '💼', color: '#2e7d32', bg: '#e8f5e9' },
+        { title: 'Partners', value: '12', icon: '🤝', color: '#ef6c00', bg: '#fff3e0' },
+    ];
+
+    return (
+        <div className="dashboard-wrapper">
+
+            {/* Stats Grid */}
+            <div className="stats-grid">
+                {statCards.map((stat, i) => (
+                    <div key={i} className="stat-card" style={{ '--accent-color': stat.color, '--bg-color': stat.bg }}>
+                        <div className="stat-content">
+                            <span className="stat-label">{stat.title}</span>
+                            <span className="stat-value">{stat.value}</span>
+                        </div>
+                        <div className="stat-icon">{stat.icon}</div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Dashboard Row: Recent Activity & Quick Actions */}
+            <div className="dashboard-row">
+                {/* Recent News Card */}
+                <div className="dashboard-card wide">
+                    <div className="card-header">
+                        <h3>Recent News Posts</h3>
+                        <Link href="/admin/news" className="view-all">View All</Link>
+                    </div>
+                    <table className="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {mockNews.map(item => (
+                                <tr key={item.id}>
+                                    <td>{item.title}</td>
+                                    <td>{item.date}</td>
+                                    <td><span className={`status-pill ${item.status.toLowerCase()}`}>{item.status}</span></td>
+                                    <td>
+                                        <button className="icon-btn edit">✏️</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
 
-                <div className="grid grid-2">
-                    <Link href="/admin/news/new" className="action-card">
-                        <span className="icon">📝</span>
-                        <span className="label">Write New Post</span>
-                    </Link>
-
-                    <Link href="/admin/careers/new" className="action-card">
-                        <span className="icon">💼</span>
-                        <span className="label">Create Job Opening</span>
-                    </Link>
+                {/* Quick Actions / Careers Summary */}
+                <div className="dashboard-card narrow">
+                    <div className="card-header">
+                        <h3>Active Openings</h3>
+                        <Link href="/admin/careers" className="view-all">Manage</Link>
+                    </div>
+                    <div className="list-activity">
+                        {mockCareers.map(job => (
+                            <div key={job.id} className="activity-item">
+                                <div className="activity-icon">💼</div>
+                                <div className="activity-details">
+                                    <h4>{job.title}</h4>
+                                    <p>{job.type} • {job.applicants} Applicants</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="quick-actions">
+                        <Link href="/admin/projects/new" className="btn btn-primary full-width">
+                            + New Project
+                        </Link>
+                        <Link href="/admin/news/new" className="btn btn-secondary full-width">
+                            + Write News
+                        </Link>
+                    </div>
                 </div>
             </div>
 
             <style jsx>{`
-                .dashboard-container {
-                    padding: 2rem;
-                    background: #f4f6f8;
-                    min-height: 100vh;
-                    margin-top: 80px;
-                }
-
-                .dashboard-header {
+                .dashboard-wrapper {
                     display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 2rem;
+                    flex-direction: column;
+                    gap: 2rem;
+                    padding-top: 1rem;
                 }
 
-                .welcome-card {
-                    background: white;
-                    padding: 2rem;
-                    border-radius: 12px;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                    margin-bottom: 2rem;
-                }
-
-                .grid {
+                /* Stats Grid */
+                .stats-grid {
                     display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
                     gap: 1.5rem;
-                }
-                
-                .grid-2 {
-                    grid-template-columns: repeat(2, 1fr);
                 }
 
                 .stat-card {
                     background: white;
                     padding: 1.5rem;
-                    border-radius: 12px;
-                    text-align: center;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    border-radius: 16px;
                     display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                }
-
-                .action-card {
-                    background: #3d0000;
-                    color: white;
-                    padding: 1.5rem;
-                    border-radius: 12px;
-                    text-align: center;
-                    box-shadow: 0 4px 12px rgba(61, 0, 0, 0.2);
-                    display: flex;
-                    flex-direction: column;
+                    justify-content: space-between;
                     align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
                     transition: transform 0.2s;
-                    text-decoration: none;
                 }
 
-                .action-card:hover {
+                .stat-card:hover {
                     transform: translateY(-5px);
                 }
 
-                .action-card .icon {
-                    font-size: 2.5rem;
+                .stat-content {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .stat-label {
+                    font-size: 0.9rem;
+                    color: #666;
                     margin-bottom: 0.5rem;
                 }
 
-                .action-card .label {
+                .stat-value {
+                    font-size: 2rem;
                     font-weight: 700;
-                    font-size: 1.1rem;
+                    color: #333;
                 }
 
-                .count {
-                    display: block;
-                    font-size: 2.5rem;
-                    font-weight: 700;
-                    color: #3d0000;
+                .stat-icon {
+                    width: 60px;
+                    height: 60px;
+                    background: var(--bg-color);
+                    color: var(--accent-color);
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.8rem;
                 }
 
-                .label {
-                    color: #666;
+                /* Dashboard Row */
+                .dashboard-row {
+                    display: flex;
+                    gap: 1.5rem;
+                    flex-wrap: wrap;
+                }
+
+                .dashboard-card {
+                    background: white;
+                    border-radius: 16px;
+                    padding: 1.5rem;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .wide { flex: 2; min-width: 400px; }
+                .narrow { flex: 1; min-width: 300px; }
+
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1.5rem;
+                }
+
+                .card-header h3 {
+                    margin: 0;
+                    font-size: 1.25rem;
+                    color: #333;
+                }
+
+                .view-all {
                     font-size: 0.9rem;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
+                    color: #764ba2;
+                    text-decoration: none;
+                    font-weight: 600;
+                }
+
+                /* Table Styles */
+                .dashboard-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                .dashboard-table th {
+                    text-align: left;
+                    padding: 0.75rem 0;
+                    color: #999;
+                    font-weight: 600;
+                    border-bottom: 1px solid #eee;
+                    font-size: 0.9rem;
+                }
+
+                .dashboard-table td {
+                    padding: 1rem 0;
+                    border-bottom: 1px solid #f9f9f9;
+                    color: #444;
                 }
                 
-                .action-card .label {
-                    color: white;
+                .dashboard-table tr:last-child td {
+                     border-bottom: none;
                 }
 
-                @media (max-width: 900px) {
-                    .grid-2 {
-                        grid-template-columns: 1fr;
-                    }
+                .status-pill {
+                    padding: 0.25rem 0.75rem;
+                    border-radius: 20px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                }
+
+                .status-pill.published { background: #e8f5e9; color: #2e7d32; }
+                .status-pill.draft { background: #fff3e0; color: #ef6c00; }
+
+                .icon-btn.edit {
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    opacity: 0.6;
+                    transition: opacity 0.2s;
+                }
+                
+                .icon-btn.edit:hover { opacity: 1; }
+
+                /* Activity List */
+                .list-activity {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                    margin-bottom: 1.5rem;
+                }
+
+                .activity-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    padding: 0.75rem;
+                    background: #f9f9f9;
+                    border-radius: 12px;
+                }
+
+                .activity-icon {
+                    width: 40px;
+                    height: 40px;
+                    background: #e1f5fe;
+                    color: #0288d1;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .activity-details h4 {
+                    margin: 0 0 0.25rem 0;
+                    font-size: 1rem;
+                    color: #333;
+                }
+
+                .activity-details p {
+                    margin: 0;
+                    font-size: 0.85rem;
+                    color: #777;
+                }
+
+                .quick-actions {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.75rem;
+                    margin-top: auto;
+                }
+
+                .btn {
+                    text-align: center;
+                    padding: 0.8rem;
+                    border-radius: 8px;
+                    text-decoration: none;
+                    font-weight: 600;
+                    transition: all 0.2s;
+                    display: block; /* Ensure full width clickable */
+                }
+
+                .btn-primary { background: #3d0000; color: white; }
+                .btn-primary:hover { background: #5a1a1a; }
+
+                .btn-secondary { background: white; border: 1px solid #3d0000; color: #3d0000; }
+                .btn-secondary:hover { background: #fdfdfd; }
+                
+                @media (max-width: 768px) {
+                    .dashboard-row { flex-direction: column; }
+                    .wide, .narrow { width: 100%; }
                 }
             `}</style>
         </div>

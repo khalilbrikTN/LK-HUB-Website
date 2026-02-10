@@ -1,0 +1,10 @@
+[
+    {
+        "id": "user-1",
+        "username": "Super Admin",
+        "email": "admin@lk-hub.com",
+        "password": "admin123",
+        "role": "Super Admin",
+        "active": true
+    }
+]

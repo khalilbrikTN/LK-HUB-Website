@@ -22,7 +22,7 @@ export default function News() {
                             <p className="news-cta-text">Keep up to date with what's happening at LK-HUB!</p>
                             <button
                                 className="btn-newsletter"
-                                onClick={() => document.getElementById('contact-modal')?.classList.remove('hidden')}
+                                onClick={() => document.getElementById('newsletter-modal')?.classList.remove('hidden')}
                             >
                                 <span className="icon">▶</span> Sign up to our newsletter
                             </button>

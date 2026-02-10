@@ -1984,9 +1984,10 @@ textarea.form-control {
 }
 
 .program-value {
-    background: var(--color-white);
-    padding: 1.25rem;
-    border-radius: var(--border-radius-md);
+    background: transparent;
+    padding: 0;
+    margin-top: 1rem;
+    border-radius: 0;
     color: var(--color-text-main);
     line-height: 1.7;
 }
@@ -3188,10 +3189,10 @@ textarea.form-control {
 }
 
 .development-value {
-    background: #e8f5e9;
-    /* Light Green */
+    background: transparent;
     color: var(--dev-dark);
-    border-left: 4px solid var(--dev-accent);
+    border: none;
+    padding: 0;
 }
 
 .development-cta {
@@ -3438,10 +3439,10 @@ textarea.form-control {
 }
 
 .communication-value {
-    background: #f3e5f5;
-    /* Light Purple */
+    background: transparent;
     color: var(--comm-dark);
-    border-left: 4px solid var(--comm-accent);
+    border: none;
+    padding: 0;
 }
 
 .communication-cta {
@@ -3584,10 +3585,10 @@ textarea.form-control {
 }
 
 .solutions-value {
-    background: #e3f2fd;
-    /* Light Blue */
+    background: transparent;
     color: var(--sol-dark);
-    border-left: 4px solid var(--sol-accent);
+    border: none;
+    padding: 0;
 }
 
 .hero-bullets-center {
@@ -4458,4 +4459,569 @@ textarea.form-control {
 
 }
 
-/* Closing potential unclosed block if any */
+/* ========================================
+   NEWSLETTER SECTION
+   ======================================== */
+.newsletter-section {
+    background: linear-gradient(135deg, #4d0000 0%, #300000 100%);
+    /* Slightly lighter/different shade than footer */
+    color: var(--color-text-light);
+    /* Use site's light text */
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.newsletter-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.newsletter-text {
+    flex: 1;
+    min-width: 300px;
+}
+
+.newsletter-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-secondary);
+    /* Gold for title */
+}
+
+.newsletter-text p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.newsletter-form {
+    flex: 1;
+    min-width: 300px;
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    /* Removed border and dark bg properties */
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    /* Dark text for light bg */
+    /* Light gold label removed */
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    /* Increased weight for visibility */
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.8rem;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid #e0e0e0;
+    /* Visible border */
+    background: #f7f7f7;
+    /* Light grey input bg */
+    color: var(--color-text-main);
+    /* Dark text inside input */
+    font-size: 1rem;
+}
+
+.form-group input::placeholder {
+    color: #999;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 2px rgba(165, 124, 48, 0.1);
+}
+
+.form-checkbox {
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-main);
+    /* Dark text */
+    cursor: pointer;
+}
+
+.checkbox-container input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-secondary);
+}
+
+.checkbox-label a {
+    color: var(--color-secondary);
+    text-decoration: underline;
+}
+
+.newsletter-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: 2px solid var(--color-secondary);
+    background: var(--color-secondary);
+    color: var(--color-primary);
+    transition: all 0.3s;
+}
+
+.newsletter-btn:hover {
+    background: transparent;
+    color: var(--color-secondary);
+}
+
+@media (max-width: 768px) {
+    .newsletter-grid {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .newsletter-text h2 {
+        font-size: 2rem;
+    }
+}
+
+/* ========================================
+   LK-EDUCATION DIVISION PAGE
+   ======================================== */
+
+/* Education Color Palette (Navy/Tech Blue) */
+:root {
+    --edu-primary: #0D47A1;
+    /* Deep Blue */
+    --edu-accent: #29B6F6;
+    /* Light Blue/Cyan */
+    --edu-light: #E3F2FD;
+    /* Very Light Blue */
+    --edu-dark: #002171;
+    /* Dark Navy */
+}
+
+.education-hero {
+    background: linear-gradient(135deg, var(--edu-dark) 0%, var(--edu-primary) 100%);
+    color: var(--color-white);
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    padding-top: 120px;
+}
+
+.education-label {
+    background: var(--edu-accent);
+    color: var(--edu-dark);
+}
+
+.education-btn-primary {
+    background-color: var(--edu-accent);
+    border-color: var(--edu-accent);
+    color: var(--edu-dark);
+}
+
+.education-btn-primary:hover {
+    background-color: var(--edu-dark);
+    border-color: var(--edu-dark);
+    color: white;
+}
+
+.education-btn-secondary {
+    background-color: transparent;
+    border-color: var(--color-white);
+    color: var(--color-white);
+}
+
+.education-btn-secondary:hover {
+    background-color: var(--color-white);
+    color: var(--edu-primary);
+}
+
+/* Education Philosophy Header */
+.bg-education-gradient {
+    background: linear-gradient(135deg, var(--edu-primary) 0%, var(--edu-dark) 100%);
+    color: white;
+}
+
+.education-intro-block {
+    border-left: 4px solid var(--edu-accent);
+    padding-left: 2rem;
+}
+
+.education-vm-card h3 {
+    color: var(--edu-accent);
+}
+
+/* Education Pillars Styling */
+.education-block {
+    border-left: 5px solid var(--edu-accent);
+}
+
+.education-block:hover {
+    border-color: var(--edu-primary);
+}
+
+.education-icon {
+    background: var(--edu-light) !important;
+    color: var(--edu-primary) !important;
+    font-size: 2.5rem;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.education-subtitle {
+    color: var(--edu-accent) !important;
+}
+
+.education-value {
+    background: transparent;
+    color: var(--edu-dark);
+    border: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+.education-cta {
+    background: linear-gradient(135deg, var(--edu-accent) 0%, var(--edu-primary) 100%);
+    color: var(--color-white);
+}
+
+.education-cta h2 {
+    color: var(--color-white);
+}
+
+.education-media-section {
+    background: linear-gradient(135deg, var(--edu-dark) 0%, var(--edu-primary) 100%);
+    color: var(--color-white);
+}
+
+.education-media-section .umedia-title-group h2 {
+    color: var(--edu-accent);
+}
+
+.education-media-section .track-card h4 {
+    color: var(--edu-accent);
+}
+
+.education-hero .tech-node {
+    background: var(--edu-accent);
+    box-shadow: 0 0 15px var(--edu-accent);
+}
+
+/* ========================================
+   PROJECTS PAGE STYLES
+   ======================================== */
+
+.projects-page {
+    padding-top: 120px;
+    padding-bottom: 80px;
+    background-color: var(--color-background);
+    min-height: 100vh;
+}
+
+.projects-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.projects-header h1 {
+    font-size: 3rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.projects-header p {
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+/* Controls */
+.projects-controls {
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.search-container {
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s;
+    padding-right: 3rem;
+}
+
+.search-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(61, 0, 0, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    right: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+}
+
+.filter-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    border: 1px solid #ddd;
+    background: white;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.filter-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+}
+
+.filter-btn.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Division Specific Hover/Active colors */
+.filter-btn.active:hover {
+    background: var(--color-primary-light);
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--color-text-muted);
+}
+
+.reset-btn {
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px solid var(--color-secondary);
+    color: var(--color-secondary);
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.reset-btn:hover {
+    background: var(--color-secondary);
+    color: white;
+}
+
+.project-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.project-card-image {
+    position: relative;
+    height: 200px;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.placeholder-content {
+    background-color: #d6d6d6;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder-content span {
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.1);
+    letter-spacing: 2px;
+}
+
+/* Badges */
+.project-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.badge-education {
+    background-color: var(--edu-primary, #0D47A1);
+}
+
+.badge-kids {
+    background-color: #e76f51;
+    /* Kids Orange */
+}
+
+.badge-sports {
+    background-color: var(--color-success, #2E7A3E);
+}
+
+.badge-solutions {
+    background-color: var(--sol-primary, #0277bd);
+}
+
+.badge-development {
+    background-color: var(--dev-primary, #1b5e20);
+}
+
+.badge-communication {
+    background-color: var(--comm-primary, #6a1b9a);
+}
+
+.badge-default {
+    background-color: var(--color-text-muted);
+}
+
+/* Card Content */
+.project-card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card-content h3 {
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.project-card:hover .project-card-content h3 {
+    color: var(--color-secondary);
+}
+
+.project-card-content p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-link-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-secondary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: auto;
+}
+
+.project-link-action svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+}
+
+.project-card:hover .project-link-action svg {
+    transform: translateX(5px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .projects-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+}

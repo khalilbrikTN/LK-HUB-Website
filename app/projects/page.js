@@ -1,12 +1,13 @@
+
+import ProjectsClient from './ProjectsClient';
+
 export const metadata = {
     title: 'Projects | LK-HUB',
+    description: 'Explore our latest projects, programs, and initiatives across all our divisions.',
 };
 
-export default function Projects() {
+export default function ProjectsPage() {
     return (
-        <div className="container section text-center">
-            <h1>Our Projects</h1>
-            <p>Content coming soon...</p>
-        </div>
+        <ProjectsClient />
     );
 }

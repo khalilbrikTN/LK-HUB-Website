@@ -1,4 +1,121 @@
 export const divisionsData = {
+    "lk-education": {
+        id: "lk-education",
+        label: "LK-EDUCATION",
+        title: "Pioneering Technical Education",
+        description: "Transforming the future of the textile and garment industry through innovative applied technology education and holistic student development.",
+        heroImage: "/assets/media/lk-education/landing_page.png",
+        heroImageAlt: "Saleh Kamel Applied Technology School Innovation",
+        heroVisualType: "hexagon",
+        heroBullets: [
+            "🎓 Saleh Kamel Applied Technology School",
+            "🚀 Dual Education & Industry Integration",
+            "🌍 International Standards (AHK Accreditation)"
+        ],
+        theme: {
+            heroClass: "education-hero",
+            labelClass: "education-label",
+            btnPrimaryClass: "education-btn-primary",
+            btnSecondaryClass: "education-btn-secondary",
+            introBlockClass: "education-intro-block",
+            vmCardClass: "education-vm-card",
+            vmBgClass: "bg-education-gradient",
+            blockClass: "education-block",
+            iconClass: "education-icon",
+            subtitleClass: "education-subtitle",
+            valueClass: "education-value",
+            ctaClass: "education-cta",
+            mediaSectionClass: "education-media-section"
+        },
+        about: {
+            title: "Saleh Kamel Applied Tech School",
+            text: "The **Saleh Kamel Applied Technology School for Readymade Garments and Textiles** represents LK-HUB's commitment to developing technical education. Located in Tanta, Gharbia, it is the first simplified Applied Technology school in this specialization, partnering with the Ministry of Education and the Federation of Egyptian Industries to create a new generation of skilled professionals."
+        },
+        vision: "To lead the transformation of technical education in Egypt by building a creative, disciplined, and highly skilled generation capable of driving the future of the textile industry.",
+        mission: "To provide an integrated educational experience that combines technical mastery, personal growth, and industry-relevant skills within a safe and inspiring environment.",
+        pillarsTitle: "Core Strategic Pillars",
+        pillarsSubtitle: "Our educational model rests on four fundamental pillars ensuring excellence and comprehensive development.",
+        pillars: [
+            {
+                id: 1,
+                title: "Holistic Student Development",
+                subtitle: "Beyond the Classroom",
+                tagline: "Building character, leadership, and emotional intelligence.",
+                icon: "🌱",
+                audienceTitle: "Key Activities",
+                audience: ["Launch Camps for new students", "Soft Skills & Emotional Intelligence workshops", "Creative Thinking & Presentation Skills", "Arts, Sports, and Cultural trips"],
+                learningsTitle: "Impact",
+                learnings: ["Enhanced self-confidence and team spirit", "Development of critical life skills", "Foster a sense of belonging and responsibility"],
+                value: "We cultivate well-rounded individuals who are not just technically proficient but also emotionally intelligent and socially responsible leaders."
+            },
+            {
+                id: 2,
+                title: "Academic & Staff Excellence",
+                subtitle: "Empowering Educators",
+                tagline: "Continuous professional development for academic and administrative staff.",
+                icon: "👨‍🏫",
+                audienceTitle: "Training Areas",
+                audience: ["Competency-based education methodologies", "Psychological and educational support strategies", "Operational readiness and quality assurance"],
+                learningsTitle: "Outcomes",
+                learnings: ["Qualified staff aligned with global standards", "Supportive and motivating learning environment", "Effective implementation of modern curricula"],
+                value: "A dedicated, well-trained team is the cornerstone of our success, ensuring the delivery of high-quality education and mentorship."
+            },
+            {
+                id: 3,
+                title: "Industry Integration & Innovation",
+                subtitle: "Bridging School & Factory",
+                tagline: "Linking theoretical knowledge with practical, hands-on industry experience.",
+                icon: "⚙️",
+                audienceTitle: "Components",
+                audience: ["Field training in partner factories (Family Corp)", "Entrepreneurship curriculum tailored for textiles", "Workshops with industry experts (Smart Textiles, Pattern Magic)"],
+                learningsTitle: "Skills Gained",
+                learnings: ["Real-world manufacturing techniques", "Understanding of industry workflows and safety", " entrepreneurial mindset for future ventures"],
+                value: "Students graduate with direct industry experience, ready to innovate and lead in the ready-made garment sector."
+            },
+            {
+                id: 4,
+                title: "Strategic Partnerships & Standards",
+                subtitle: "Global Accreditation",
+                tagline: "Collaborating with local and international bodies for certified excellence.",
+                icon: "🤝",
+                audienceTitle: "Partners",
+                audience: ["Ministry of Education & Technical Education", "Federation of Egyptian Industries", "German-Arab Chamber (AHK) Accreditation"],
+                learningsTitle: "Achievements",
+                learnings: ["First students to receive AHK accreditation from Year 1", "Recognition at EduTech and local forums", "Support from the Saleh Kamel Humanitarian Foundation"],
+                value: "Our partnerships ensure that our curriculum and certifications meet the highest international standards, opening global career pathways."
+            }
+        ],
+        whyTitle: "Why Saleh Kamel School Stands Out",
+        whyCards: [
+            { icon: "🏆", title: "Pioneering Model", text: "The first Applied Technology school specializing in Garments & Textiles in the region." },
+            { icon: "🇩🇪", title: "Global Certification", text: "Accredited by the German-Arab Chamber of Industry and Commerce (AHK)." },
+            { icon: "🏭", title: "Dual Education", text: "Seamless integration of school-based learning and factory-based training." },
+            { icon: "🎨", title: "Creativity Focus", text: "Unique emphasis on arts, design, and innovation alongside technical skills." }
+        ],
+        cta: {
+            title: "Join the Future of Textiles",
+            text: "Whether you are a student aspiring to lead in the industry or a partner looking to support technical education excellence.",
+            primaryBtn: "Contact The School",
+            secondaryBtn: "Learn More About LK-Education"
+        },
+        mediaSection: {
+            title: "School Highlights & News",
+            subtitle: "Recent activities, achievements, and milestones.",
+            description: "From student camps to international accreditation, follow the journey of Saleh Kamel School.",
+            tracks: [
+                { title: "Student Launch Camp", desc: "A comprehensive start for the new academic year focusing on soft skills, first aid, and team building in Tanta." },
+                { title: "Staff Qualification Camp", desc: "Intensive training for academic and administrative staff on vision, psychology, and operational readiness." },
+                { title: "AHK Accreditation", desc: "Signed protocol with the German-Arab Chamber (AHK) for student certification, a first for Year 1 students." },
+                { title: "Field Training", desc: "Launch of practical training at Family Corporation factory, prioritizing safety and real-world skills." },
+                { title: "EduTech Participation", desc: "Students engaged with industry leaders and the Ministry of Education at the EduTech exhibition." },
+                { title: "Governor's Visit", desc: "His Excellency the Governor of Gharbia visited the school, praising its advanced facilities and student discipline." },
+                { title: "Entrepreneurship Curriculum", desc: "Launched a specialized entrepreneurship curriculum tailored for the textile industry." },
+                { title: "Workshops Opening", desc: "Official opening of state-of-the-art internal training workshops equipped with modern machinery." },
+                { title: "'Ilham' Campaign", desc: "Participated in the 'Ilham' campaign to empower girls in technical education and breaking stereotypes." }
+            ],
+            outcome: "A vibrant educational ecosystem that celebrates achievement, community engagement, and continuous improvement."
+        }
+    },
     "lk-solutions": {
         id: "lk-solutions",
         label: "LK-SOLUTIONS",

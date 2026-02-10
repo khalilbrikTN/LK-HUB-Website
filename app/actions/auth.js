@@ -1,29 +1,34 @@
 "use server";
 import { redirect } from 'next/navigation';
-import { createSession, deleteSession } from '@/src/lib/auth';
-// import prisma from '@/src/lib/prisma'; // We will set this up later
-// import bcrypt from 'bcryptjs'; 
+import { createSession, deleteSession } from '@/src/lib/auth'; // Existing session logic
+import fs from 'fs';
+import path from 'path';
+
+// Path to users file
+const USERS_FILE = path.join(process.cwd(), 'src', 'data', 'users.json');
+
+// Helper to get users safely
+async function getUsers() {
+    try {
+        if (!fs.existsSync(USERS_FILE)) return [];
+        const fileContent = fs.readFileSync(USERS_FILE, 'utf-8');
+        return JSON.parse(fileContent);
+    } catch (e) {
+        return [];
+    }
+}
 
 export async function login(formData) {
     const email = formData.get('email');
     const password = formData.get('password');
 
-    // TODO: Temporary HARDCODED check until Database is live
-    // This allows you to test the UI immediately without a running DB
-    if (email === 'admin@lk-hub.com' && password === 'admin123') {
-        await createSession('temp-admin-id');
+    const users = await getUsers();
+    const user = users.find(u => u.email === email && u.password === password); // Add hashing here later!
+
+    if (user) {
+        await createSession(user.id);
         redirect('/admin');
     }
-
-    /* 
-    // REAL IMPLEMENTATION (Uncomment when DB is ready)
-    const user = await prisma.adminUser.findUnique({ where: { email } });
-    if (!user || !await bcrypt.compare(password, user.passwordHash)) {
-        return { error: 'Invalid credentials' };
-    }
-    await createSession(user.id);
-    redirect('/admin');
-    */
 
     return { error: 'Invalid email or password' };
 }

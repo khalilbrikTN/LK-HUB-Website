@@ -10,6 +10,8 @@ import VisionMission from '@/src/components/VisionMission';
 import BusinessDivisions from '@/src/components/BusinessDivisions';
 import LatestNews from '@/src/components/LatestNews';
 
+import NewsletterSection from '@/src/components/NewsletterSection';
+
 export default function Home() {
   return (
     <>
@@ -49,6 +51,11 @@ export default function Home() {
       {/* Sponsors Marquee */}
       <FadeInSection>
         <LogoMarquee speed={35} />
+      </FadeInSection>
+
+      {/* Newsletter Section */}
+      <FadeInSection>
+        <NewsletterSection />
       </FadeInSection>
     </>
   );

@@ -1,14 +1,72 @@
+"use client";
+import AdminSidebar from '@/src/components/admin/AdminSidebar';
+import AdminHeader from '@/src/components/admin/AdminHeader';
+import { usePathname } from 'next/navigation';
+
 export default function AdminLayout({ children }) {
+    const pathname = usePathname();
+    const isLoginPage = pathname === '/admin/login';
+
+    if (isLoginPage) {
+        return <div className="admin-login-wrapper">{children}</div>;
+    }
+
     return (
         <div className="admin-root">
-            {children}
-            {/* 
-                GLOBAL ADMIN STYLES 
-                Prevents global site styles (navbar/footer) from leaking if we don't want them here.
-                Since this is a sub-layout, usually Next.js keeps root layout.
-                Ideally, Admin should be a separate Root Layout group if you want to completely hide site Navbar.
-                For now, the site Navbar will typically appear unless we create a (site) group route.
-            */}
+            <AdminSidebar />
+            <div className="admin-main">
+                <AdminHeader />
+                <main className="admin-content">
+                    {children}
+                </main>
+            </div>
+
+            <style jsx global>{`
+                /* Hide global site elements on admin routes */
+                .pill-nav-container,
+                nav.pill-nav, 
+                header.site-header,
+                footer.site-footer,
+                footer,
+                .contact-modal-overlay,
+                .newsletter-modal-overlay {
+                    display: none !important;
+                }
+
+                body {
+                    background: #f4f7f6 !important; 
+                    overflow-x: hidden;
+                }
+            `}</style>
+
+            <style jsx>{`
+                .admin-root {
+                    display: flex;
+                    min-height: 100vh;
+                }
+
+                .admin-main {
+                    flex: 1;
+                    padding-left: 260px; /* Sidebar width */
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
+                    transition: padding-left 0.3s;
+                }
+
+                .admin-content {
+                    padding: 2rem;
+                    flex: 1;
+                    background: #f4f7f6;
+                    overflow-y: auto;
+                }
+                
+                @media (max-width: 900px) {
+                    .admin-main {
+                         padding-left: 0;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

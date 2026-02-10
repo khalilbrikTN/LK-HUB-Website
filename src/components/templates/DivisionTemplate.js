@@ -331,13 +331,13 @@ export default function DivisionTemplate({ data }) {
                     {/* Optional Media Section (For LK-KIDS) */}
                     {data.mediaSection && (
                         <FadeInSection>
-                            <div className="umedia-section" style={{ marginTop: '4rem' }}>
+                            <div className={`umedia-section ${theme.mediaSectionClass || ''}`} style={{ marginTop: '4rem' }}>
                                 <div className="umedia-header">
                                     <div className="umedia-title-group">
                                         <span className="umedia-icon" style={{ fontSize: '3rem' }}>🎬</span>
                                         <div>
-                                            <h2 style={{ color: '#e9c46a' }}>{data.mediaSection.title}</h2>
-                                            <p style={{ color: 'white' }}>{data.mediaSection.subtitle}</p>
+                                            <h2>{data.mediaSection.title}</h2>
+                                            <p>{data.mediaSection.subtitle}</p>
                                         </div>
                                     </div>
                                     <div className="umedia-desc">

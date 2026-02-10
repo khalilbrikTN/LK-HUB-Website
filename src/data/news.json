@@ -1,0 +1,20 @@
+[
+    {
+        "id": "news-1",
+        "title": "LK-HUB Partners with Ministry of Education",
+        "date": "2025-02-15",
+        "category": "Partnership",
+        "status": "Published",
+        "content": "We are thrilled to announce a strategic partnership with the Ministry of Education to enhance media literacy curriculums across high schools.",
+        "image": "/assets/media/news/partnership.jpg"
+    },
+    {
+        "id": "news-2",
+        "title": "Annual Youth Leadership Summit Announced",
+        "date": "2025-03-10",
+        "category": "Events",
+        "status": "Draft",
+        "content": "Join us for our biggest event of the year where young leaders from across the region gather to solve tomorrow's challenges.",
+        "image": "/assets/media/news/summit.jpg"
+    }
+]

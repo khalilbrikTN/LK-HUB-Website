@@ -2,6 +2,7 @@ import './globals.css';
 import PillNav from '@/src/components/PillNav';
 import Footer from '@/src/components/Footer';
 import ContactModal from '@/src/components/ContactModal';
+import NewsletterModal from '@/src/components/NewsletterModal';
 
 export const metadata = {
   title: 'LK-HUB | Liberating Knowledge',
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
         {children}
         <Footer />
         <ContactModal />
+        <NewsletterModal />
       </body>
     </html>
   );

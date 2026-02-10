@@ -1,0 +1,47 @@
+[
+    {
+        "id": "lk-edu-p1",
+        "division": "lk-education",
+        "title": "Holistic Student Development",
+        "subtitle": "Beyond the Classroom",
+        "description": "Building character, leadership, and emotional intelligence.",
+        "content": "We cultivate well-rounded individuals who are not just technically proficient but also emotionally intelligent and socially responsible leaders.",
+        "icon": "🌱",
+        "tags": [
+            "Soft Skills",
+            "Leadership",
+            "Character"
+        ],
+        "coverImage": "/assets/media/lk-education/landing_page.png"
+    },
+    {
+        "id": "lk-edu-p2",
+        "division": "lk-education",
+        "title": "Academic & Staff Excellence",
+        "subtitle": "Empowering Educators",
+        "description": "Continuous professional development for academic and administrative staff.",
+        "content": "A dedicated, well-trained team is the cornerstone of our success, ensuring the delivery of high-quality education and mentorship.",
+        "icon": "👨‍🏫",
+        "tags": [
+            "Training",
+            "Education",
+            "Staff Development"
+        ],
+        "coverImage": "/assets/media/lk-education/landing_page.png"
+    },
+    {
+        "id": "lk-sol-p1",
+        "division": "lk-solutions",
+        "title": "Media Management",
+        "subtitle": "Strategic Channel Excellence",
+        "description": "Achieving objectives through strategic channel supervision.",
+        "content": "Ensure message consistency and efficient budget utilization while aligning every media effort with your broader organizational goals.",
+        "icon": "📢",
+        "tags": [
+            "Media",
+            "Planning",
+            "Optimization"
+        ],
+        "coverImage": "/assets/media/lk-solutions/landing_page.png"
+    }
+]
