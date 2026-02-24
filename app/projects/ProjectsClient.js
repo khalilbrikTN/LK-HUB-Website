@@ -15,6 +15,7 @@ export default function ProjectsClient({ dbProjects = [] }) {
         // Only use Database Projects (from projects.json)
         if (Array.isArray(dbProjects)) {
             dbProjects.forEach(p => {
+                if (p.hidden) return; // Skip hidden projects
                 projects.push({
                     id: p.id,
                     title: p.title,

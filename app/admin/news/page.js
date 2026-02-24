@@ -1,26 +1,30 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getNews, deleteNews } from '@/app/actions/news';
+import { getNews, toggleNewsVisibility } from '@/app/actions/news';
 
 export default function NewsDashboard() {
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        fetchNews();
+    }, []);
+
+    const fetchNews = () => {
         getNews().then(data => {
             setNews(data);
             setLoading(false);
         });
-    }, []);
+    };
 
-    const handleDelete = async (id) => {
-        if (!confirm("Delete this news post?")) return;
-        const res = await deleteNews(id);
+    const handleToggleVisibility = async (id, currentHidden) => {
+        const newHidden = !currentHidden;
+        const res = await toggleNewsVisibility(id, newHidden);
         if (res.success) {
-            setNews(news.filter(n => n.id !== id));
+            setNews(news.map(n => n.id === id ? { ...n, hidden: newHidden } : n));
         } else {
-            alert("Failed to delete.");
+            alert("Failed to update visibility.");
         }
     };
 
@@ -29,15 +33,15 @@ export default function NewsDashboard() {
             <header className="page-header">
                 <div>
                     <h1>News & Updates</h1>
-                    <p>Manage press releases, blog posts, and announcements.</p>
+                    <p>Manage press releases, articles, and public announcements.</p>
                 </div>
                 <Link href="/admin/news/new" className="btn btn-primary">
-                    + Create Post
+                    Create New Article
                 </Link>
             </header>
 
             <div className="content-card">
-                {loading ? <p>Loading news...</p> : (
+                {loading ? <p className="loading-text">Synchronizing news data...</p> : (
                     <table className="data-table">
                         <thead>
                             <tr>
@@ -45,27 +49,37 @@ export default function NewsDashboard() {
                                 <th>Category</th>
                                 <th>Date</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th style={{ textAlign: 'center' }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {news.length === 0 ? (
-                                <tr><td colSpan="5" style={{ textAlign: 'center' }}>No news found.</td></tr>
+                                <tr><td colSpan="5" style={{ textAlign: 'center' }}>No articles found.</td></tr>
                             ) : (
                                 news.map(item => (
-                                    <tr key={item.id}>
-                                        <td className="fw-bold">{item.title}</td>
-                                        <td><span className="badge category">{item.category || 'General'}</span></td>
-                                        <td>{item.date}</td>
+                                    <tr key={item.id} className={item.hidden ? 'row-hidden' : ''}>
+                                        <td className="fw-bold">
+                                            {item.title}
+                                            {item.hidden && <span className="mini-badge-hidden">Hidden</span>}
+                                        </td>
+                                        <td><span className="badge-category">{item.category || 'General'}</span></td>
+                                        <td className="date-cell">{item.date}</td>
                                         <td>
-                                            <span className={`badge status ${item.status?.toLowerCase()}`}>
+                                            <span className={`status-pill ${item.status?.toLowerCase()}`}>
                                                 {item.status || 'Draft'}
                                             </span>
                                         </td>
                                         <td>
                                             <div className="action-buttons">
-                                                <button className="icon-btn edit">✏️</button>
-                                                <button onClick={() => handleDelete(item.id)} className="icon-btn delete">🗑️</button>
+                                                <Link href={`/admin/news/edit/${item.id}`} className="btn-action edit">
+                                                    Edit
+                                                </Link>
+                                                <button
+                                                    onClick={() => handleToggleVisibility(item.id, item.hidden)}
+                                                    className={`btn-action visibility ${item.hidden ? 'unhide' : 'hide'}`}
+                                                >
+                                                    {item.hidden ? 'Unhide' : 'Hide'}
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -78,32 +92,43 @@ export default function NewsDashboard() {
 
             <style jsx>{`
                 .admin-container {
-                    padding: 1rem;
+                    padding: 2rem;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    margin-top: 80px;
                 }
 
                 .page-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 2rem;
+                    margin-bottom: 3rem;
+                    border-bottom: 2px solid #3d0000;
+                    padding-bottom: 1.5rem;
                 }
 
                 .page-header h1 {
                     margin: 0;
                     color: #3d0000;
+                    font-size: 2.2rem;
+                    font-weight: 800;
                 }
                 
                 .page-header p {
                     margin: 0.5rem 0 0 0;
                     color: #666;
+                    font-weight: 500;
+                    font-size: 0.95rem;
                 }
 
                 .content-card {
                     background: white;
-                    border-radius: 12px;
-                    padding: 1.5rem;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                    border-radius: 8px;
+                    padding: 2rem;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
                 }
+
+                .loading-text { text-align: center; color: #999; font-weight: 600; padding: 2rem; }
 
                 .data-table {
                     width: 100%;
@@ -111,60 +136,109 @@ export default function NewsDashboard() {
                 }
 
                 .data-table th, .data-table td {
-                    padding: 1rem;
+                    padding: 1.25rem 1rem;
                     text-align: left;
-                    border-bottom: 1px solid #f0f0f0;
+                    border-bottom: 1px solid #f5f5f5;
                 }
                 
                 .data-table th {
-                    font-weight: 600;
+                    font-weight: 800;
                     color: #999;
-                    font-size: 0.9rem;
+                    font-size: 0.75rem;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+
+                .fw-bold { font-weight: 700; color: #333; font-size: 1rem; }
+
+                .row-hidden { background: #fcfcfc; opacity: 0.7; }
+
+                .mini-badge-hidden {
+                    margin-left: 0.75rem;
+                    background: #333;
+                    color: white;
+                    font-size: 0.65rem;
+                    padding: 0.15rem 0.4rem;
+                    border-radius: 3px;
+                    text-transform: uppercase;
+                    font-weight: 800;
+                }
+
+                .badge-category {
+                    background: #f0f0f0;
+                    color: #666;
+                    padding: 0.25rem 0.6rem;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    font-weight: 700;
                     text-transform: uppercase;
                 }
 
-                .fw-bold { font-weight: 600; color: #333; }
+                .date-cell { color: #888; font-size: 0.9rem; font-weight: 500; }
 
-                .badge {
-                    padding: 0.25rem 0.75rem;
-                    border-radius: 20px;
-                    font-size: 0.8rem;
-                    font-weight: 600;
+                .status-pill {
+                    padding: 0.25rem 0.6rem;
+                    border-radius: 4px;
+                    font-size: 0.7rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
                 }
                 
-                .badge.category { background: #f0f0f0; color: #555; }
-                .badge.status.published { background: #e8f5e9; color: #2e7d32; }
-                .badge.status.draft { background: #fff3e0; color: #ef6c00; }
+                .status-pill.published { background: #e8f5e9; color: #2e7d32; }
+                .status-pill.draft { background: #fff3e0; color: #ef6c00; }
+                .status-pill.archived { background: #f5f5f5; color: #999; }
 
                 .action-buttons {
                     display: flex;
-                    gap: 0.5rem;
+                    gap: 0.75rem;
+                    justify-content: center;
                 }
 
-                .icon-btn {
-                    background: none;
-                    border: none;
+                .btn-action {
+                    padding: 0.5rem 1rem;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
                     cursor: pointer;
-                    font-size: 1rem;
-                    padding: 0.25rem;
-                    opacity: 0.7;
-                    transition: opacity 0.2s;
+                    text-decoration: none;
+                    text-align: center;
+                    transition: all 0.2s;
+                    min-width: 80px;
                 }
-                
-                .icon-btn:hover { opacity: 1; }
+
+                .btn-action.edit {
+                    background: white;
+                    color: #3d0000;
+                    border: 1px solid #3d0000;
+                }
+                .btn-action.edit:hover { background: #3d0000; color: white; }
+
+                .btn-action.visibility {
+                    background: #f9f9f9;
+                    color: #444;
+                    border: 1px solid #eee;
+                }
+                .btn-action.visibility:hover { border-color: #3d0000; color: #3d0000; }
+                .btn-action.visibility.unhide { color: #2e7d32; }
+                .btn-action.visibility.hide { color: #c62828; }
 
                 .btn-primary {
                     background: #3d0000;
                     color: white;
-                    padding: 0.75rem 1.5rem;
-                    border-radius: 8px;
+                    padding: 1rem 2rem;
+                    border-radius: 6px;
                     text-decoration: none;
-                    font-weight: 600;
-                    transition: background 0.2s;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    font-size: 0.9rem;
+                    transition: all 0.2s;
                 }
                 
                 .btn-primary:hover {
-                    background: #5a1a1a;
+                    background: #5c0000;
+                    box-shadow: 0 4px 12px rgba(92, 0, 0, 0.2);
                 }
             `}</style>
         </div>

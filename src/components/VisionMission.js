@@ -27,11 +27,11 @@ const itemVariants = {
 };
 
 const services = [
-    { name: "Strategic Planning", icon: "📊" },
-    { name: "Crisis Management", icon: "🛡️" },
-    { name: "Research", icon: "🔍" },
-    { name: "Training & Workshops", icon: "🎓" },
-    { name: "Interactive Initiatives aimed at Liberating Knowledge", icon: "💡", wide: true },
+    { name: "Strategic Planning" },
+    { name: "Crisis Management" },
+    { name: "Research" },
+    { name: "Training & Workshops" },
+    { name: "Liberating Knowledge Initiatives", wide: true },
 ];
 
 export default function VisionMission() {
@@ -47,7 +47,6 @@ export default function VisionMission() {
                             whileHover={{ scale: 1.02 }}
                             transition={{ duration: 0.5, ease: "easeOut" }}
                         >
-                            <div className="vision-icon-overlay">👁️</div>
                             <h2>Vision</h2>
                             <p>
                                 To become a leading global hub in the field of media and technology, by providing innovative services
@@ -80,7 +79,7 @@ export default function VisionMission() {
                                     className={`service-item-modern ${service.wide ? 'wide' : ''}`}
                                     variants={itemVariants}
                                 >
-                                    <span className="item-icon">{service.icon}</span>
+                                    <span className="dot-indicator"></span>
                                     <span>{service.name}</span>
                                 </motion.div>
                             ))}

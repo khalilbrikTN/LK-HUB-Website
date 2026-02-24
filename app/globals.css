@@ -3,39 +3,54 @@
    Design System & Global Styles
 */
 
+/* Custom Brand Fonts */
+@font-face {
+    font-family: 'MOKOTO';
+    src: url('/assets/fonts/Mokoto.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Avenir Next Arabic';
+    src: url('/assets/fonts/AvenirNextArabic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
     /* Brand Palette - Primary */
     --color-primary: #3d0000;
-    /* Deep Burgundy/Maroon */
     --color-primary-light: #5a1a1a;
-    /* Lighter burgundy for hover */
     --color-primary-dark: #2a0000;
-    /* Darker burgundy */
 
     /* Brand Palette - Secondary */
     --color-secondary: #a57c30;
-    /* Gold/Bronze */
     --color-secondary-light: #c9a050;
-    /* Light Gold for hover */
     --color-secondary-dark: #8a6525;
-    /* Darker Gold */
     --color-accent-light: #d4b87a;
-    /* Pale Gold */
+
+    /* Division Specific Colors */
+    --color-education: #034A8D;
+    --color-communication: #9A7531;
+    --color-solutions: #3D0000;
+    --color-development: #D4C0AC;
+    --color-sports-primary: #F6AE02;
+    --color-sports-secondary: #5C741D;
+    --color-kids: #F6AE02;
+    --color-kids-secondary: #5C741D;
 
     /* Backgrounds */
     --color-background: #FAF8F5;
-    /* Warm Off-White */
     --color-background-alt: #F0EDE8;
-    /* Slightly darker cream */
     --color-white: #FFFFFF;
 
     /* Text Colors */
     --color-text-main: #2d1a1a;
-    /* Dark Brown/Maroon */
     --color-text-muted: #6b5050;
-    /* Muted Brown */
     --color-text-light: #FAF8F5;
-    /* Light text for dark backgrounds */
 
     /* Functional Colors */
     --color-success: #2E7A3E;
@@ -43,8 +58,17 @@
     --color-border: #E8E2DA;
 
     /* Typography */
-    --font-heading: 'Outfit', 'Segoe UI', sans-serif;
-    --font-body: 'Inter', 'Segoe UI', sans-serif;
+    --font-heading: 'Playfair Display', serif;
+    --font-premium: 'Playfair Display', serif;
+    --font-body: 'Playfair Display', serif;
+
+    /* Division Specific Fonts */
+    --font-education: 'Playfair Display', serif;
+    --font-communication: 'Playfair Display', serif;
+    --font-solutions: 'Playfair Display', serif;
+    --font-development: 'Playfair Display', serif;
+    --font-sports: 'MOKOTO', 'Impact', sans-serif;
+    --font-kids: 'MOKOTO', 'Impact', sans-serif;
 
     /* Spacing */
     --spacing-xs: 0.5rem;
@@ -62,6 +86,7 @@
     --shadow-lg: 0 8px 24px rgba(61, 0, 0, 0.15);
     --transition-fast: 0.2s ease;
     --transition-standard: 0.3s ease;
+    --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Reset & Base Styles */
@@ -87,9 +112,9 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: var(--font-heading);
+    font-family: var(--font-premium);
     color: var(--color-primary);
-    line-height: 1.2;
+    line-height: 1.1;
     margin-bottom: var(--spacing-sm);
     font-weight: 700;
 }
@@ -163,6 +188,47 @@ ul {
 .btn-secondary:hover {
     background-color: var(--color-secondary);
     color: var(--color-white);
+}
+
+/* Splash Page Premium Buttons */
+.btn-primary-premium {
+    background-color: var(--btn-accent, var(--color-secondary)) !important;
+    color: white !important;
+    border: 2px solid white !important;
+    padding: 0.8rem 2.2rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    border-radius: 4px !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    font-size: 0.85rem !important;
+}
+
+.btn-primary-premium:hover {
+    transform: translateY(-5px) scale(1.03);
+    background-color: white !important;
+    color: #0d0404 !important;
+    box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15) !important;
+}
+
+.btn-outline-premium {
+    background-color: white !important;
+    color: #0d0404 !important;
+    border: 2px solid white !important;
+    padding: 0.8rem 2.2rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    border-radius: 4px !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    font-size: 0.85rem !important;
+}
+
+.btn-outline-premium:hover {
+    background-color: transparent !important;
+    color: white !important;
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 30px 60px rgba(255, 255, 255, 0.1) !important;
 }
 
 /* Layout Utilities */
@@ -1535,24 +1601,12 @@ textarea.form-control {
     padding-top: 1.5rem;
 }
 
-/* Alternating Layout Logic */
-/* Odd Cards (1, 3, 5): Info Left, Image Right. Text aligned Right (towards image). */
-.team-card-new:nth-child(odd) .team-header {
+/* Consistent Layout Logic - All cards: Info Left, Image Right, Icons Right */
+.team-card-new .team-header {
     flex-direction: row;
 }
 
-.team-card-new:nth-child(odd) .team-info-header {
-    text-align: right;
-}
-
-/* Even Cards (2, 4, 6): Image Left, Info Right (via row-reverse of HTML order or flex row with swapped visual order). 
-           We will use row-reverse to keep HTML consistent: [Info] [Image] -> Image | Info 
-        */
-.team-card-new:nth-child(even) .team-header {
-    flex-direction: row-reverse;
-}
-
-.team-card-new:nth-child(even) .team-info-header {
+.team-card-new .team-info-header {
     text-align: left;
 }
 
@@ -1564,15 +1618,9 @@ textarea.form-control {
     /* Align to Match bio alignment mostly */
 }
 
-/* Align contact button based on odd/even logic if needed, but flex-end works for standard read flow */
-.team-card-new:nth-child(odd) .team-contact {
+/* Consistent contact layout: Icons on the right */
+.team-card-new .team-contact {
     justify-content: flex-end;
-    /* Matches Right align of header */
-}
-
-.team-card-new:nth-child(even) .team-contact {
-    justify-content: flex-start;
-    /* Matches Left align of header */
 }
 
 .contact-trigger {

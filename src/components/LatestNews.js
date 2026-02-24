@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { newsData } from '@/src/data/news';
 
 export default function LatestNews() {
+    const sortedNews = [...newsData].sort((a, b) => new Date(b.date) - new Date(a.date));
     const [currentIndex, setCurrentIndex] = useState(0);
     const itemsPerPage = 3;
 
@@ -19,13 +20,13 @@ export default function LatestNews() {
             // If we have N items, valid indices are 0 to N-1.
             // But we want to show 3 items. If we are at index N-1, what do we show?
             // Simple logic: Wrap around.
-            (prevIndex + 1) % newsData.length
+            (prevIndex + 1) % sortedNews.length
         );
     };
 
     const prevSlide = () => {
         setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? newsData.length - 1 : prevIndex - 1
+            prevIndex === 0 ? sortedNews.length - 1 : prevIndex - 1
         );
     };
 
@@ -33,8 +34,8 @@ export default function LatestNews() {
     const getVisibleItems = () => {
         const items = [];
         for (let i = 0; i < itemsPerPage; i++) {
-            const index = (currentIndex + i) % newsData.length;
-            items.push(newsData[index]);
+            const index = (currentIndex + i) % sortedNews.length;
+            items.push(sortedNews[index]);
         }
         return items;
     };

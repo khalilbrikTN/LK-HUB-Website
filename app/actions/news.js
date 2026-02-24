@@ -32,12 +32,17 @@ export async function createNews(formData) {
     try {
         const news = await getNews();
         const newItem = {
-            id: crypto.randomUUID(),
+            id: `news-${Date.now()}`,
             title: formData.get('title'),
             date: formData.get('date'),
             category: formData.get('category'),
             status: formData.get('status') || 'Draft',
             content: formData.get('content'),
+            excerpt: formData.get('excerpt'),
+            author: formData.get('author'),
+            isFeatured: formData.get('isFeatured') === 'true',
+            image: formData.get('image'),
+            hidden: false,
             createdAt: new Date().toISOString()
         };
         news.push(newItem);
@@ -45,5 +50,46 @@ export async function createNews(formData) {
         return { success: true };
     } catch (e) {
         return { success: false, message: e.message };
+    }
+}
+
+export async function updateNews(id, formData) {
+    try {
+        const news = await getNews();
+        const index = news.findIndex(n => n.id === id);
+        if (index === -1) return { success: false, message: "News not found" };
+
+        news[index] = {
+            ...news[index],
+            title: formData.get('title'),
+            date: formData.get('date'),
+            category: formData.get('category'),
+            status: formData.get('status'),
+            content: formData.get('content'),
+            excerpt: formData.get('excerpt'),
+            author: formData.get('author'),
+            isFeatured: formData.get('isFeatured') === 'true',
+            image: formData.get('image'),
+            updatedAt: new Date().toISOString()
+        };
+
+        fs.writeFileSync(NEWS_FILE, JSON.stringify(news, null, 2), 'utf-8');
+        return { success: true };
+    } catch (e) {
+        return { success: false, message: e.message };
+    }
+}
+
+export async function toggleNewsVisibility(id, hidden) {
+    try {
+        const news = await getNews();
+        const index = news.findIndex(n => n.id === id);
+        if (index === -1) return { success: false };
+
+        news[index].hidden = hidden;
+        fs.writeFileSync(NEWS_FILE, JSON.stringify(news, null, 2), 'utf-8');
+        return { success: true };
+    } catch (e) {
+        return { success: false };
     }
 }

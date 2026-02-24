@@ -1,7 +1,6 @@
 import './globals.css';
 import PillNav from '@/src/components/PillNav';
 import Footer from '@/src/components/Footer';
-import ContactModal from '@/src/components/ContactModal';
 import NewsletterModal from '@/src/components/NewsletterModal';
 import BackToTop from '@/src/components/BackToTop';
 
@@ -17,7 +16,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/assets/media/Logo.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
       </head>
       <body>
         <PillNav
@@ -29,7 +28,6 @@ export default function RootLayout({ children }) {
         />
         {children}
         <Footer />
-        <ContactModal />
         <NewsletterModal />
         <BackToTop />
       </body>

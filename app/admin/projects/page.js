@@ -7,16 +7,10 @@ export default function ManageProjects() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Fetch projects from our new API route or directly call the server action if configured
-        // Since we created server actions, we should stick to using them or a simple fetch if exposed.
-        // For simplicity in client component, let's assume we fetch from an API route we'll create next.
-        // Or better yet, we can use the server action directly if we import it.
-        // But importing server actions in client components is tricky with data fetching.
-        // Let's create a simple API route for fetching to keep it clean.
+        fetchProjects();
+    }, []);
 
-        // Wait, I can just fetch from the JSON file if it's public? No, it's server-side.
-        // Let's create `app/api/projects/route.js` quickly.
-
+    const fetchProjects = () => {
         fetch('/api/projects')
             .then(res => res.json())
             .then(data => {
@@ -27,34 +21,37 @@ export default function ManageProjects() {
                 console.error("Failed to fetch projects", err);
                 setLoading(false);
             });
-    }, []);
+    };
 
-    const handleDelete = async (id) => {
-        if (!confirm("Are you sure you want to delete this project?")) return;
-
+    const toggleVisibility = async (id, currentHidden) => {
+        const newHidden = !currentHidden;
         try {
-            const res = await fetch(`/api/projects?id=${id}`, { method: 'DELETE' });
+            const res = await fetch('/api/projects', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, hidden: newHidden })
+            });
             if (res.ok) {
-                setProjects(projects.filter(p => p.id !== id));
+                setProjects(projects.map(p => p.id === id ? { ...p, hidden: newHidden } : p));
             } else {
-                alert("Failed to delete project.");
+                alert("Failed to update visibility.");
             }
         } catch (error) {
-            console.error("Error deleting project:", error);
+            console.error("Error updating project:", error);
         }
     };
 
-    if (loading) return <div className="p-8 text-center">Loading projects...</div>;
+    if (loading) return <div className="p-8 text-center text-muted">Loading Projects...</div>;
 
     return (
         <div className="admin-container">
             <header className="admin-header">
                 <div>
-                    <Link href="/admin" className="back-link">← Back to Dashboard</Link>
+                    <Link href="/admin" className="back-link">Back to Dashboard</Link>
                     <h1>Manage Projects</h1>
                 </div>
                 <Link href="/admin/projects/new" className="btn btn-primary">
-                    + New Project
+                    Create New Project
                 </Link>
             </header>
 
@@ -65,10 +62,12 @@ export default function ManageProjects() {
                     </div>
                 ) : (
                     projects.map(project => (
-                        <div key={project.id} className="project-card">
+                        <div key={project.id} className={`project-card ${project.hidden ? 'hidden-project' : ''}`}>
                             <div className="project-header">
-                                <span className="project-icon">{project.icon || '🚀'}</span>
-                                <span className={`status-badge ${project.division}`}>{project.division}</span>
+                                <div className="header-badges">
+                                    {project.hidden && <span className="badge hidden-badge">HIDDEN</span>}
+                                    <span className={`status-badge ${project.division}`}>{project.division.replace('lk-', '').toUpperCase()}</span>
+                                </div>
                             </div>
                             <h3>{project.title}</h3>
                             <p className="project-desc">{project.description}</p>
@@ -77,10 +76,13 @@ export default function ManageProjects() {
                             </div>
                             <div className="project-actions">
                                 <Link href={`/admin/projects/edit/${project.id}`} className="btn-icon edit">
-                                    ✏️ Edit
+                                    Edit
                                 </Link>
-                                <button onClick={() => handleDelete(project.id)} className="btn-icon delete">
-                                    🗑️ Delete
+                                <button
+                                    onClick={() => toggleVisibility(project.id, project.hidden)}
+                                    className={`btn-icon ${project.hidden ? 'unhide' : 'hide'}`}
+                                >
+                                    {project.hidden ? 'Unhide' : 'Hide'}
                                 </button>
                             </div>
                         </div>
@@ -100,7 +102,9 @@ export default function ManageProjects() {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 2rem;
+                    margin-bottom: 3rem;
+                    border-bottom: 2px solid #3d0000;
+                    padding-bottom: 1.5rem;
                 }
 
                 .back-link {
@@ -108,54 +112,81 @@ export default function ManageProjects() {
                     margin-bottom: 0.5rem;
                     color: #666;
                     text-decoration: none;
-                    font-size: 0.9rem;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
                 }
+                
+                .back-link:hover { color: #3d0000; }
 
                 h1 {
                     color: #3d0000;
                     margin: 0;
+                    font-size: 2.2rem;
+                    font-weight: 800;
                 }
 
                 .projects-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                    gap: 1.5rem;
+                    gap: 2rem;
                 }
 
                 .project-card {
                     background: white;
                     border: 1px solid #eee;
-                    border-radius: 12px;
-                    padding: 1.5rem;
-                    transition: transform 0.2s, box-shadow 0.2s;
+                    border-radius: 8px;
+                    padding: 1.75rem;
+                    transition: all 0.3s ease;
                     display: flex;
                     flex-direction: column;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+                }
+
+                .project-card.hidden-project {
+                    opacity: 0.7;
+                    background: #f9f9f9;
+                    border-style: dashed;
                 }
 
                 .project-card:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                    transform: translateY(-5px);
+                    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+                    border-color: #3d0000;
                 }
 
                 .project-header {
                     display: flex;
-                    justify-content: space-between;
+                    justify-content: flex-end;
                     align-items: center;
-                    margin-bottom: 1rem;
+                    margin-bottom: 1.25rem;
                 }
 
-                .project-icon {
-                    font-size: 1.5rem;
+                .header-badges {
+                    display: flex;
+                    gap: 0.5rem;
+                }
+
+                .badge {
+                    font-size: 0.7rem;
+                    padding: 0.25rem 0.6rem;
+                    border-radius: 4px;
+                    font-weight: 800;
+                }
+
+                .hidden-badge {
+                    background: #333;
+                    color: white;
                 }
 
                 .status-badge {
-                    font-size: 0.75rem;
-                    padding: 0.25rem 0.5rem;
+                    font-size: 0.7rem;
+                    padding: 0.25rem 0.6rem;
                     border-radius: 4px;
                     background: #eee;
                     color: #666;
-                    text-transform: uppercase;
-                    font-weight: 600;
+                    font-weight: 700;
                 }
                 
                 .status-badge.lk-education { background: #e3f2fd; color: #1565c0; }
@@ -164,18 +195,18 @@ export default function ManageProjects() {
                 .status-badge.lk-kids { background: #f3e5f5; color: #7b1fa2; }
 
                 h3 {
-                    margin: 0 0 0.5rem 0;
+                    margin: 0 0 0.75rem 0;
                     color: #333;
-                    font-size: 1.25rem;
+                    font-size: 1.3rem;
+                    font-weight: 700;
                 }
 
                 .project-desc {
                     color: #666;
-                    font-size: 0.95rem;
-                    line-height: 1.5;
-                    margin-bottom: 1rem;
+                    font-size: 0.9rem;
+                    line-height: 1.6;
+                    margin-bottom: 1.5rem;
                     flex-grow: 1;
-                    /* multiline truncation */
                     display: -webkit-box;
                     -webkit-line-clamp: 3;
                     -webkit-box-orient: vertical;
@@ -183,51 +214,74 @@ export default function ManageProjects() {
                 }
 
                 .project-meta {
-                    font-size: 0.85rem;
+                    font-size: 0.8rem;
                     color: #999;
                     margin-bottom: 1.5rem;
-                    border-top: 1px solid #f0f0f0;
-                    padding-top: 0.75rem;
+                    border-top: 1px solid #f5f5f5;
+                    padding-top: 1rem;
+                    font-weight: 500;
                 }
 
                 .project-actions {
                     display: flex;
-                    gap: 0.5rem;
+                    gap: 0.75rem;
                     margin-top: auto;
                 }
 
                 .btn-icon {
                     flex: 1;
-                    padding: 0.5rem;
+                    padding: 0.75rem;
                     border-radius: 6px;
-                    border: 1px solid #ddd;
+                    border: 1px solid #eee;
                     background: white;
                     cursor: pointer;
                     text-align: center;
-                    font-size: 0.9rem;
-                    color: #555;
+                    font-size: 0.85rem;
+                    color: #444;
                     transition: all 0.2s;
                     text-decoration: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
                 }
 
                 .btn-icon:hover {
-                    background: #f9f9f9;
-                    border-color: #ccc;
+                    background: #fcfcfc;
+                    border-color: #3d0000;
+                    color: #3d0000;
                 }
 
-                .btn-icon.delete:hover {
-                    background: #ffebee;
-                    border-color: #ffcdd2;
-                    color: #c62828;
-                }
+                .btn-icon.edit:hover { background: #3d0000; color: white; border-color: #3d0000; }
                 
                 .empty-state {
                     grid-column: 1 / -1;
                     text-align: center;
-                    padding: 4rem;
-                    background: #f9f9f9;
+                    padding: 5rem;
+                    background: #fff;
+                    border: 1px dashed #ddd;
                     border-radius: 12px;
-                    color: #666;
+                    color: #999;
+                }
+
+                .btn-primary {
+                    background: #3d0000;
+                    color: white;
+                    padding: 0.9rem 1.75rem;
+                    border-radius: 6px;
+                    text-decoration: none;
+                    font-weight: 700;
+                    transition: all 0.2s;
+                    font-size: 0.9rem;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+
+                .btn-primary:hover {
+                    background: #5c0000;
+                    box-shadow: 0 4px 12px rgba(92, 0, 0, 0.2);
                 }
             `}</style>
         </div>

@@ -52,7 +52,7 @@ export default function PillNav({
         },
         { label: 'Projects', href: '/projects' },
         { label: 'News', href: '/news' },
-        { label: 'Contact', href: '#', onClick: () => document.getElementById('contact-modal')?.classList.remove('hidden') }
+        { label: 'Contact', href: '/contact' }
     ];
 
     const currentPillIndex = hoveredIndex !== null ? hoveredIndex : activeIndex;
@@ -60,9 +60,9 @@ export default function PillNav({
     const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
     // Determine if the current page has a dark hero section
-    // Homepage and Division pages have dark/colored heros.
-    // Other pages (About, Projects, etc.) have light backgrounds.
-    const hasDarkHero = pathname === '/' || pathname.startsWith('/divisions');
+    // Only pages with a genuinely dark/coloured hero get white nav text.
+    const darkHeroPages = ['/', '/about'];
+    const hasDarkHero = darkHeroPages.includes(pathname) || pathname.startsWith('/divisions') || pathname.startsWith('/projects/');
     const dynamicInitialColor = hasDarkHero ? '#FFFFFF' : textColor;
 
     // Custom Logo Logic
@@ -144,8 +144,9 @@ export default function PillNav({
                                         borderRadius: '50px',
                                         color: isSelected ? pillTextColor : currentTextColor,
                                         textDecoration: 'none',
-                                        fontWeight: '600',
-                                        fontSize: '0.95rem',
+                                        fontWeight: '700',
+                                        fontFamily: 'var(--font-premium)',
+                                        fontSize: '1rem',
                                         zIndex: 2,
                                         transition: 'color 0.2s relative',
                                         whiteSpace: 'nowrap',

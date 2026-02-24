@@ -1,38 +1,83 @@
 "use client";
-import { useState, useRef } from 'react';
-import { createProject } from '@/app/actions/projects';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import RichTextEditor from '@/src/components/admin/RichTextEditor';
 
 export default function NewProject() {
-    const [status, setStatus] = useState("idle"); // idle, submitting, success, error
+    const router = useRouter();
+    const [status, setStatus] = useState("idle");
     const [message, setMessage] = useState("");
-    const [content, setContent] = useState("");
-    const [division, setDivision] = useState("");
-    const formRef = useRef(null);
+    const [uploading, setUploading] = useState(false);
+    const [project, setProject] = useState({
+        title: "",
+        subtitle: "",
+        description: "",
+        content: "",
+        division: "",
+        tags: [],
+        coverImage: "",
+        images: [],
+        hidden: false
+    });
+
+    const handleImageUpload = async (e, type = 'cover') => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('folder', project.division || 'general');
+
+        try {
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                if (type === 'cover') {
+                    setProject({ ...project, coverImage: data.url });
+                } else {
+                    setProject({ ...project, images: [...project.images, data.url] });
+                }
+            } else {
+                alert(data.error || "Upload failed");
+            }
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert("An error occurred during upload.");
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const removeGalleryImage = (idx) => {
+        setProject({ ...project, images: project.images.filter((_, i) => i !== idx) });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus("submitting");
-        const formData = new FormData(formRef.current);
-
-        // Append rich text content manually since it's not a native input
-        formData.set('content', content);
 
         try {
-            const result = await createProject(formData);
-            if (result.success) {
+            const res = await fetch('/api/projects', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(project)
+            });
+
+            if (res.ok) {
                 setStatus("success");
-                setMessage("Project created successfully!");
-                formRef.current.reset();
-                setContent("");
-                setDivision("");
+                setMessage("Project published successfully!");
+                setTimeout(() => router.push('/admin/projects'), 1500);
             } else {
+                const data = await res.json();
                 setStatus("error");
-                setMessage(result.message || "Failed to create project.");
+                setMessage(data.error || "Failed to create project.");
             }
         } catch (error) {
-            console.error(error);
             setStatus("error");
             setMessage("An unexpected error occurred.");
         }
@@ -40,78 +85,81 @@ export default function NewProject() {
 
     return (
         <div className="admin-page-container">
-            <form ref={formRef} onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <header className="page-header">
                     <div>
-                        <Link href="/admin/projects" className="back-link">← Back to Projects</Link>
+                        <Link href="/admin/projects" className="back-link">Back to Projects</Link>
                         <h1>Create New Project</h1>
                     </div>
                     <div className="actions">
-                        <button type="button" className="btn btn-secondary">Save Draft</button>
-                        <button type="submit" className="btn btn-primary" disabled={status === "submitting"}>
+                        <button type="submit" className="btn btn-primary" disabled={status === "submitting" || uploading}>
                             {status === "submitting" ? "Publishing..." : "Publish Project"}
                         </button>
                     </div>
                 </header>
 
-                {status === "success" && <div className="alert success">{message}</div>}
-                {status === "error" && <div className="alert error">{message}</div>}
-
                 <div className="editor-grid">
-                    {/* Main Column */}
                     <div className="main-col">
+                        {status === "success" && <div className="alert success">{message}</div>}
+                        {status === "error" && <div className="alert error">{message}</div>}
+
                         <div className="form-group">
                             <label>Project Title</label>
                             <input
-                                name="title"
                                 type="text"
                                 className="input-title"
-                                placeholder="e.g. Media Literacy Workshop 2025"
                                 required
+                                value={project.title}
+                                onChange={(e) => setProject({ ...project, title: e.target.value })}
+                                placeholder="Enter Project Name"
                             />
                         </div>
 
                         <div className="form-group">
                             <label>Subtitle / Tagline</label>
                             <input
-                                name="subtitle"
                                 type="text"
                                 className="input-field"
-                                placeholder="A short, catchy description..."
+                                value={project.subtitle}
+                                onChange={(e) => setProject({ ...project, subtitle: e.target.value })}
+                                placeholder="Catchy summary for the header"
                             />
                         </div>
 
                         <div className="form-group">
                             <label>Short Description (Bio)</label>
                             <textarea
-                                name="description"
                                 rows="3"
                                 className="input-textarea"
-                                placeholder="Brief summary displayed on project cards..."
                                 required
+                                value={project.description}
+                                onChange={(e) => setProject({ ...project, description: e.target.value })}
+                                placeholder="Summary displayed on project cards"
                             ></textarea>
-                            <small className="hint">Recommended: 20-40 words.</small>
                         </div>
 
                         <div className="form-group">
                             <label>Full Content</label>
-                            <RichTextEditor content={content} onChange={setContent} />
+                            <textarea
+                                rows="12"
+                                className="input-textarea"
+                                value={project.content}
+                                onChange={(e) => setProject({ ...project, content: e.target.value })}
+                                placeholder="Detailed project description and results"
+                            ></textarea>
                         </div>
                     </div>
 
-                    {/* Sidebar Column */}
                     <aside className="sidebar-col">
                         <div className="panel">
-                            <h3>Project Details</h3>
-
+                            <h3>Classification</h3>
                             <div className="meta-field">
                                 <label>Division</label>
                                 <select
-                                    name="division"
                                     className="input-select"
                                     required
-                                    value={division}
-                                    onChange={(e) => setDivision(e.target.value)}
+                                    value={project.division}
+                                    onChange={(e) => setProject({ ...project, division: e.target.value })}
                                 >
                                     <option value="">Select Division...</option>
                                     <option value="lk-education">LK-Education</option>
@@ -122,43 +170,50 @@ export default function NewProject() {
                                     <option value="lk-communication">LK-Communication</option>
                                 </select>
                             </div>
-
                             <div className="meta-field">
-                                <label>Status</label>
-                                <select name="status" className="input-select">
-                                    <option value="published">Published</option>
-                                    <option value="draft">Draft</option>
-                                    <option value="archived">Archived</option>
-                                </select>
-                            </div>
-
-                            <div className="meta-field">
-                                <label>Icon (Emoji)</label>
-                                <input name="icon" type="text" className="input-field" placeholder="e.g. 🚀" defaultValue="🚀" />
-                            </div>
-
-                            <div className="meta-field">
-                                <label>Start Date</label>
-                                <input name="date" type="date" className="input-field" />
-                            </div>
-                        </div>
-
-                        <div className="panel">
-                            <h3>Project Image</h3>
-                            <div className="image-uploader">
-                                <div className="placeholder">
-                                    <span>+ Upload Cover Image</span>
+                                <label>Visibility Status</label>
+                                <div className="toggle-group">
+                                    <label className="checkbox-container">
+                                        <input
+                                            type="checkbox"
+                                            checked={project.hidden}
+                                            onChange={(e) => setProject({ ...project, hidden: e.target.checked })}
+                                        />
+                                        <span className="checkmark"></span>
+                                        Hide from main gallery
+                                    </label>
                                 </div>
-                                <input type="hidden" name="coverImage" />
                             </div>
                         </div>
 
                         <div className="panel">
-                            <h3>Tags</h3>
-                            <div className="meta-field">
-                                <label>Keywords</label>
-                                <input name="tags" type="text" className="input-field" placeholder="Education, Youth..." />
-                                <small className="hint">Comma separated</small>
+                            <h3>Cover Image</h3>
+                            <div className="image-preview">
+                                {project.coverImage ? (
+                                    <img src={project.coverImage} alt="Cover" />
+                                ) : (
+                                    <div className="placeholder">No Image Selected</div>
+                                )}
+                            </div>
+                            <label className="upload-trigger">
+                                {uploading ? "Uploading..." : "Select Cover"}
+                                <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'cover')} disabled={uploading} />
+                            </label>
+                        </div>
+
+                        <div className="panel">
+                            <h3>Project Gallery</h3>
+                            <div className="gallery-mini">
+                                {project.images.map((img, idx) => (
+                                    <div key={idx} className="mini-item">
+                                        <img src={img} alt="Gallery" />
+                                        <button type="button" onClick={() => removeGalleryImage(idx)}>Remove</button>
+                                    </div>
+                                ))}
+                                <label className="add-mini">
+                                    Add Image
+                                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'gallery')} disabled={uploading} />
+                                </label>
                             </div>
                         </div>
                     </aside>
@@ -166,178 +221,44 @@ export default function NewProject() {
             </form>
 
             <style jsx>{`
-                .admin-page-container {
-                    padding: 2rem;
-                    background: #f4f6f8;
-                    min-height: 100vh;
-                    margin-top: 80px;
-                }
+                .admin-page-container { padding: 2rem; max-width: 1200px; margin: 0 auto; margin-top: 80px; background: #fdfdfd; }
+                .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; border-bottom: 2px solid #3d0000; padding-bottom: 1.5rem; }
+                .back-link { font-size: 0.85rem; color: #666; text-decoration: none; font-weight: 700; text-transform: uppercase; }
+                h1 { color: #3d0000; font-size: 2.2rem; font-weight: 800; margin: 0.5rem 0 0 0; }
+                
+                .editor-grid { display: grid; grid-template-columns: 1fr 340px; gap: 3rem; }
+                .main-col { background: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+                .sidebar-col { display: flex; flex-direction: column; gap: 2rem; }
+                .panel { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+                .panel h3 { margin-top: 0; font-size: 0.9rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 0.75rem; color: #3d0000; text-transform: uppercase; letter-spacing: 0.5px; }
 
-                .page-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 2rem;
-                }
+                .form-group { margin-bottom: 2.5rem; }
+                .input-title { width: 100%; font-size: 1.8rem; font-weight: 700; border: 1px solid #e0e0e0; padding: 1rem; border-radius: 4px; color: #333; }
+                .input-field, .input-select, .input-textarea { width: 100%; padding: 1rem; border: 1px solid #e0e0e0; border-radius: 4px; font-family: inherit; font-size: 1rem; }
+                
+                label { display: block; font-weight: 700; margin-bottom: 0.75rem; color: #333; font-size: 0.85rem; text-transform: uppercase; }
 
-                h1 {
-                    margin: 0.5rem 0 0 0;
-                    color: #1e293b;
-                    font-size: 1.8rem;
-                }
+                .image-preview { width: 100%; height: 180px; background: #f9f9f9; border-radius: 4px; overflow: hidden; margin-bottom: 1rem; border: 1px solid #eee; }
+                .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+                .placeholder { height: 100%; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 0.85rem; font-weight: 600; }
+                
+                .upload-trigger { display: block; text-align: center; background: #3d0000; color: white; padding: 1rem; border-radius: 4px; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; }
+                .upload-trigger input { display: none; }
 
-                .back-link {
-                    color: #64748b;
-                    font-size: 0.9rem;
-                    text-decoration: none;
-                    font-weight: 500;
-                }
+                .gallery-mini { display: flex; flex-direction: column; gap: 1rem; }
+                .mini-item { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 4px; overflow: hidden; }
+                .mini-item img { width: 100%; height: 100%; object-fit: cover; }
+                .mini-item button { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.9); color: #d32f2f; border: none; padding: 0.4rem; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
+                .add-mini { width: 100%; aspect-ratio: 16/9; border: 2px dashed #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #666; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+                .add-mini input { display: none; }
 
-                .back-link:hover { text-decoration: underline; }
-
-                .actions {
-                    display: flex;
-                    gap: 1rem;
-                }
-
-                .editor-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 320px;
-                    gap: 2rem;
-                }
-
-                .main-col {
-                    background: white;
-                    padding: 2.5rem;
-                    border-radius: 12px;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                }
-
-                .sidebar-col {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1.5rem;
-                }
-
-                .panel {
-                    background: white;
-                    padding: 1.5rem;
-                    border-radius: 12px;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                }
-
-                .panel h3 {
-                    font-size: 1rem;
-                    margin-bottom: 1rem;
-                    color: #0f172a;
-                    border-bottom: 1px solid #e2e8f0;
-                    padding-bottom: 0.5rem;
-                }
-
-                .form-group { margin-bottom: 2rem; }
-                .meta-field { margin-bottom: 1.25rem; }
-
-                label {
-                    display: block;
-                    font-weight: 600;
-                    margin-bottom: 0.5rem;
-                    color: #334155;
-                    font-size: 0.95rem;
-                }
-
-                .input-title {
-                    width: 100%;
-                    font-size: 1.5rem;
-                    padding: 0.75rem;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 8px;
-                    font-weight: 700;
-                    color: #1e293b;
-                }
-
-                .input-field, .input-select, .input-textarea {
-                    width: 100%;
-                    padding: 0.75rem;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 8px;
-                    font-size: 1rem;
-                    font-family: inherit;
-                    color: #334155;
-                }
-
-                .input-textarea { resize: vertical; }
-
-                .input-title:focus, .input-field:focus, .input-select:focus, .input-textarea:focus {
-                    outline: none;
-                    border-color: #3d0000;
-                    box-shadow: 0 0 0 3px rgba(61, 0, 0, 0.1);
-                }
-
-                .hint {
-                    display: block;
-                    margin-top: 0.5rem;
-                    color: #94a3b8;
-                    font-size: 0.85rem;
-                }
-
-                .image-uploader .placeholder {
-                    border: 2px dashed #cbd5e1;
-                    border-radius: 8px;
-                    height: 180px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #64748b;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                    background: #f8fafc;
-                    font-weight: 500;
-                }
-
-                .image-uploader .placeholder:hover {
-                    border-color: #94a3b8;
-                    color: #475569;
-                    background: #f1f5f9;
-                }
-
-                .btn {
-                    padding: 0.75rem 1.5rem;
-                    border-radius: 8px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    font-size: 0.95rem;
-                    transition: all 0.2s;
-                }
-
-                .btn-primary {
-                    background: #3d0000;
-                    color: white;
-                    border: 1px solid #3d0000;
-                }
-                .btn-primary:hover { background: #5a1a1a; }
-                .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
-
-                .btn-secondary {
-                    background: white;
-                    color: #334155;
-                    border: 1px solid #e2e8f0;
-                }
-                .btn-secondary:hover { background: #f1f5f9; }
-
-                .alert {
-                    padding: 1rem;
-                    margin-bottom: 2rem;
-                    border-radius: 8px;
-                    font-weight: 500;
-                }
-                .success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-                .error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-
-                @media (max-width: 1024px) {
-                    .editor-grid { grid-template-columns: 1fr; }
-                    .sidebar-col { flex-direction: row; flex-wrap: wrap; }
-                    .panel { flex: 1; min-width: 250px; }
-                }
+                .btn-primary { background: #3d0000; color: white; padding: 1rem 2rem; border: none; border-radius: 4px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+                .btn-primary:hover { background: #5c0000; }
+                
+                .checkbox-container { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: 600; text-transform: none; color: #444; }
+                .alert { padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem; font-weight: 700; }
+                .success { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+                .error { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
             `}</style>
         </div>
     );

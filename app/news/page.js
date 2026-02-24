@@ -35,7 +35,7 @@ export default function News() {
             <section className="section">
                 <div className="container">
                     <div className="grid grid-3" id="news-grid">
-                        {newsData.map(item => (
+                        {[...newsData].sort((a, b) => new Date(b.date) - new Date(a.date)).map(item => (
                             <div key={item.id} className="news-card" onClick={() => setSelectedNews(item)}>
                                 <div className="news-media">
                                     <span className="placeholder-media">News Image</span>

@@ -23,7 +23,56 @@ export async function GET() {
     return NextResponse.json(projects);
 }
 
-// DELETE Handler (for simplicity, we handle DELETE here directly)
+// POST Handler (Create/Update)
+export async function POST(request) {
+    try {
+        const body = await request.json();
+        const projects = getProjects();
+
+        if (body.id) {
+            // Update existing
+            const index = projects.findIndex(p => p.id === body.id);
+            if (index !== -1) {
+                projects[index] = { ...projects[index], ...body };
+                fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 4), 'utf-8');
+                return NextResponse.json(projects[index]);
+            }
+        }
+
+        // Create new
+        const newProject = {
+            id: `project-${Date.now()}`,
+            createdAt: new Date().toISOString(),
+            ...body
+        };
+        projects.push(newProject);
+        fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 4), 'utf-8');
+        return NextResponse.json(newProject);
+    } catch (error) {
+        return NextResponse.json({ error: 'Failed to save project' }, { status: 500 });
+    }
+}
+
+// PATCH Handler (for visibility toggle)
+export async function PATCH(request) {
+    try {
+        const { id, hidden } = await request.json();
+        const projects = getProjects();
+        const index = projects.findIndex(p => p.id === id);
+
+        if (index === -1) {
+            return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+        }
+
+        projects[index].hidden = hidden;
+        fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 4), 'utf-8');
+        return NextResponse.json(projects[index]);
+    } catch (error) {
+        return NextResponse.json({ error: 'Failed to update project' }, { status: 500 });
+    }
+}
+
+// DELETE Handler
 export async function DELETE(request) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -34,14 +83,8 @@ export async function DELETE(request) {
 
     try {
         const projects = getProjects();
-        const initialLength = projects.length;
         const newProjects = projects.filter(p => p.id !== id);
-
-        if (initialLength === newProjects.length) {
-            return NextResponse.json({ error: 'Project not found' }, { status: 404 });
-        }
-
-        fs.writeFileSync(PROJECTS_FILE, JSON.stringify(newProjects, null, 2), 'utf-8');
+        fs.writeFileSync(PROJECTS_FILE, JSON.stringify(newProjects, null, 4), 'utf-8');
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 });

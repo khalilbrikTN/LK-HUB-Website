@@ -5,9 +5,9 @@ export default function Footer() {
         <footer>
             <div className="container footer-content">
                 <div className="footer-brand">
-                    <h3>LK<span>HUB</span></h3>
-                    <p>Leading global hub in media and technology solutions.</p>
-                    <p>Email: info@liberating-knowledge.com</p>
+                    <h3 style={{ fontFamily: 'var(--font-premium)', fontSize: '2rem', letterSpacing: '-1px' }}><span style={{ color: 'white' }}>LK</span><span style={{ color: 'var(--color-secondary)' }}>-HUB</span></h3>
+                    <p style={{ opacity: 0.7, maxWidth: '300px' }}>Accelerating capacity building & liberating knowledge through innovative media and tech solutions.</p>
+                    <p style={{ fontWeight: '600', marginTop: '1rem' }}>info@liberating-knowledge.com</p>
                 </div>
                 <div className="footer-links">
                     <h4>Company</h4>

@@ -1,124 +1,151 @@
 "use client";
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import FadeInSection from '@/src/components/FadeInSection';
 
-// Helper component for Hero Visuals to keep the main template clean
-const HeroVisual = ({ type, image, alt }) => {
+// --- Parallax Image Component ---
+const ParallaxImage = ({ src, alt, className }) => {
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end start"]
+    });
+    const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+
+    if (!src) return null;
+
+    return (
+        <div ref={ref} className={`parallax-wrapper ${className}`} style={{ borderRadius: '0px', overflow: 'hidden', position: 'relative', boxShadow: '0 25px 60px rgba(0,0,0,0.4)' }}>
+            <motion.div style={{ y, height: '130%', width: '100%', position: 'absolute', top: '-15%' }}>
+                <Image src={src} alt={alt} fill style={{ objectFit: 'cover' }} />
+            </motion.div>
+        </div>
+    );
+};
+
+// --- Strategic Frame Component (The "Many Frames" Feature) ---
+const PortfolioFrame = ({ color, size, top, left, right, bottom, rotate, delay, label, opacity = 0.15 }) => (
+    <motion.div
+        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+        animate={{ opacity, scale: 1, y: 0 }}
+        transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
+        className="portfolio-frame-item"
+        style={{
+            position: 'absolute',
+            width: size,
+            height: `calc(${size} * 1.3)`,
+            top, left, right, bottom,
+            transform: `rotate(${rotate})`,
+            border: `1.5px solid ${color}`,
+            background: `${color}08`,
+            padding: '12px',
+            zIndex: 1,
+            pointerEvents: 'none',
+            borderRadius: '2px'
+        }}
+    >
+        <div style={{ border: `1px dashed ${color}44`, height: '100%', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '10px' }}>
+            <span style={{ fontSize: '0.65rem', color, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px', opacity: 0.8 }}>{label || 'LK-HUB Frame'}</span>
+        </div>
+    </motion.div>
+);
+
+const FrameMosaic = ({ color }) => (
+    <div className="frame-mosaic-overlay">
+        <PortfolioFrame color={color} size="240px" top="5%" left="2%" rotate="-5deg" delay={0.1} label="Knowledge Node 01" />
+        <PortfolioFrame color={color} size="190px" top="40%" left="10%" rotate="7deg" delay={0.3} label="Liberation Flow" />
+        <PortfolioFrame color={color} size="280px" bottom="10%" left="4%" rotate="-3deg" delay={0.5} label="Strategic Asset" />
+
+        <PortfolioFrame color={color} size="210px" top="10%" right="6%" rotate="4deg" delay={0.2} label="Network Hub" />
+        <PortfolioFrame color={color} size="260px" top="48%" right="2%" rotate="-6deg" delay={0.4} label="Global Vision" />
+        <PortfolioFrame color={color} size="230px" bottom="8%" right="8%" rotate="8deg" delay={0.6} label="Impact Point" />
+
+        <style jsx>{`
+            .frame-mosaic-overlay { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+            @media (max-width: 1000px) { .frame-mosaic-overlay { opacity: 0.5; } }
+        `}</style>
+    </div>
+);
+
+// --- Magazine Typography Quote ---
+const MagazineQuote = ({ text, author, color }) => (
+    <section className="magazine-quote-section">
+        <div className="container">
+            <FadeInSection>
+                <div className="quote-content" style={{ borderLeft: `10px solid ${color}` }}>
+                    <h2 className="quote-text">{text}</h2>
+                    {author && <p className="quote-author">/ {author}</p>}
+                </div>
+            </FadeInSection>
+        </div>
+        <style jsx>{`
+            .magazine-quote-section { padding: 12rem 0; background: var(--color-background-alt); position: relative; z-index: 5; }
+            .quote-content { padding-left: 5rem; max-width: 1100px; margin: 0 auto; }
+            .quote-text { 
+                font-family: var(--font-premium); 
+                font-size: clamp(2.5rem, 5vw, 4.5rem); 
+                font-style: italic; 
+                line-height: 1; 
+                color: var(--color-primary);
+                margin-bottom: 3rem;
+                letter-spacing: -2px;
+            }
+            .quote-author { font-weight: 800; text-transform: uppercase; letter-spacing: 4px; opacity: 0.4; font-size: 1rem; }
+        `}</style>
+    </section>
+);
+
+// --- Hero Visual Frame ---
+const HeroVisual = ({ type, image, alt, color }) => {
+    const FrameDecoration = () => (
+        <>
+            <div style={{ position: 'absolute', inset: '-30px', border: `1px solid ${color}15`, borderRadius: 'inherit', pointerEvents: 'none', zIndex: -1 }} />
+            <div style={{ position: 'absolute', inset: '-60px', border: `1px solid ${color}08`, borderRadius: 'inherit', pointerEvents: 'none', zIndex: -2 }} />
+        </>
+    );
+
     if (type === 'hexagon') {
         return (
-            <div className="hero-visual-frame" style={{ display: 'flex', justifyContent: 'center' }}>
-                <div className="solutions-tech-frame">
+            <div className="hero-visual-frame" style={{ position: 'relative', zIndex: 10 }}>
+                <div className="solutions-tech-frame" style={{ borderColor: color, boxShadow: `0 30px 100px ${color}22` }}>
                     <div className="tech-image-container">
-                        <div className="tech-placeholder-overlay"></div>
-                        <Image
-                            src={image}
-                            alt={alt}
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            priority
-                        />
+                        {image ? <Image src={image} alt={alt} fill style={{ objectFit: 'cover' }} priority /> : <div className="img-placeholder" />}
                     </div>
-                    {/* Tech Nodes/Orbits */}
-                    <div className="tech-node node-1"></div>
-                    <div className="tech-node node-2"></div>
-                    <div className="tech-node node-3"></div>
                 </div>
+                <FrameDecoration />
             </div>
         );
     }
     if (type === 'ball') {
         return (
-            <div className="hero-visual-frame" style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-                <div className="sports-ball-frame">
-                    <Image
-                        src={image}
-                        alt={alt}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        priority
-                    />
+            <div className="hero-visual-frame" style={{ position: 'relative', zIndex: 10 }}>
+                <div className="sports-ball-frame" style={{ boxShadow: `0 30px 100px ${color}33`, borderColor: color }}>
+                    {image ? <Image src={image} alt={alt} fill style={{ objectFit: 'cover' }} priority /> : <div className="img-placeholder" />}
                 </div>
-                {/* Orbiting Animations */}
-                <div className="orbit-ball orbit-1">🏀</div>
-                <div className="orbit-ball orbit-2">⚽</div>
-                <div className="orbit-ball orbit-3">🎾</div>
-                <div className="orbit-ball orbit-4">🏐</div>
+                <FrameDecoration />
             </div>
         );
     }
     if (type === 'blob') {
         return (
-            <div className="hero-visual-frame" style={{ display: 'flex', justifyContent: 'center' }}>
-                <div className="kids-blob-frame">
-                    <Image
-                        src={image}
-                        alt={alt}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        priority
-                    />
+            <div className="hero-visual-frame" style={{ position: 'relative', zIndex: 10 }}>
+                <div className="kids-blob-frame" style={{ boxShadow: `0 30px 100px ${color}22` }}>
+                    {image ? <Image src={image} alt={alt} fill style={{ objectFit: 'cover' }} priority /> : <div className="img-placeholder" />}
                 </div>
+                <FrameDecoration />
             </div>
         );
     }
-    if (type === 'rings') {
-        return (
-            <div className="hero-visual-frame" style={{ display: 'flex', justifyContent: 'center' }}>
-                <div className="development-visual-container">
-                    <div className="dev-image-wrapper">
-                        <div className="dev-placeholder-pattern"></div>
-                        <Image
-                            src={image}
-                            alt={alt}
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            priority
-                        />
-                    </div>
-                    {/* Growth Rings Animation */}
-                    <div className="growth-ring ring-1"></div>
-                    <div className="growth-ring ring-2"></div>
-                    <div className="growth-ring ring-3"></div>
-                </div>
+    return (
+        <div className="hero-visual-frame" style={{ position: 'relative', zIndex: 10 }}>
+            <div style={{ borderRadius: '2px', overflow: 'hidden', border: `1px solid ${color}33`, boxShadow: '0 40px 80px rgba(0,0,0,0.5)' }}>
+                {image ? <Image src={image} alt={alt} width={650} height={450} style={{ display: 'block' }} /> : <div className="img-placeholder" style={{ width: 650, height: 450, background: `${color}11` }} />}
             </div>
-        );
-    }
-    if (type === 'pulse') {
-        return (
-            <div className="hero-visual-frame" style={{ display: 'flex', justifyContent: 'center' }}>
-                <div className="communication-visual-container">
-                    {/* Placeholder for Communication Image */}
-                    {image && (
-                        <div className="comm-image-wrapper">
-                            {/* <div className="comm-placeholder-pattern"></div> */}
-                            <Image
-                                src={image}
-                                alt={alt}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                priority
-                            />
-                        </div>
-                    )}
-                    {!image && (
-                        <div className="comm-image-wrapper">
-                            <div className="comm-placeholder-pattern"></div>
-                        </div>
-                    )}
-                    {/* Pulse/Network Animation */}
-                    <div className="comm-pulse pulse-1"></div>
-                    <div className="comm-pulse pulse-2"></div>
-                    <div className="comm-dot dot-1"></div>
-                    <div className="comm-dot dot-2"></div>
-                    <div className="comm-dot dot-3"></div>
-                    <div className="comm-line line-1"></div>
-                    <div className="comm-line line-2"></div>
-                </div>
-            </div>
-        );
-    }
-    return null;
+            <FrameDecoration />
+        </div>
+    );
 };
 
 export default function DivisionTemplate({ data }) {
@@ -128,258 +155,159 @@ export default function DivisionTemplate({ data }) {
         whyTitle, whyCards, cta
     } = data;
 
+    // Correct color mapping
+    const getDivisionColor = (slug) => {
+        if (slug === 'lk-sports') return 'var(--color-sports-primary)';
+        return `var(--color-${slug.split('-')[1]})`;
+    };
+
+    // Correct secondary color mapping
+    const getSecondaryColor = (slug) => {
+        if (slug === 'lk-sports') return 'var(--color-sports-secondary)';
+        if (slug === 'lk-kids') return 'var(--color-kids-secondary)';
+        return getDivisionColor(slug);
+    };
+
+    const divisionColor = getDivisionColor(id);
+    const accentColor = getSecondaryColor(id);
+
+    const getDivisionFont = (slug) => {
+        if (slug === 'lk-sports' || slug === 'lk-kids') return 'var(--font-sports)';
+        return `var(--font-${slug.split('-')[1]})`;
+    };
+    const divisionFont = getDivisionFont(id);
+
     return (
-        <>
-            {/* Hero Section */}
-            <section className={`division-hero ${theme.heroClass}`}>
-                <div className="container">
-                    <FadeInSection direction="up">
-                        <div className="solutions-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center' }}>
-                            <div className="hero-text-content">
-                                <span className={`division-label ${theme.labelClass}`}>{label}</span>
-                                <h1>{title}</h1>
-                                <p className="hero-subtitle">{description}</p>
+        <div className="magazine-template">
+            {/* 1. Hero: Editorial High-End */}
+            <header className={`division-hero-magazine ${theme.heroClass}`} style={{ position: 'relative', overflow: 'hidden', background: '#080404' }}>
+                <FrameMosaic color={divisionColor} />
+
+                <div className="container hero-container" style={{ position: 'relative', zIndex: 10 }}>
+                    <div className="magazine-grid">
+                        <motion.div
+                            initial={{ opacity: 0, x: -80 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                            className="hero-content"
+                        >
+                            <span className="magazine-label" style={{ color: divisionColor, fontFamily: divisionFont, letterSpacing: '8px' }}>{label}</span>
+                            <h1 className="magazine-title" style={{ fontFamily: divisionFont }}>{title}</h1>
+                            <p className="magazine-subtitle">{description}</p>
+                            <div className="hero-actions">
+                                <Link href="/contact" className="magazine-btn-primary" style={{ backgroundColor: divisionColor, fontFamily: divisionFont, display: 'inline-block', textDecoration: 'none' }}>
+                                    Partner With Us
+                                </Link>
                                 {heroBullets && (
-                                    <ul className="hero-bullets">
-                                        {heroBullets.map((bullet, i) => <li key={i}>{bullet}</li>)}
-                                    </ul>
-                                )}
-                                <div className="hero-ctas">
-                                    <button
-                                        className={`btn btn-primary ${theme.btnPrimaryClass}`}
-                                        onClick={() => document.getElementById('contact-modal')?.classList.remove('hidden')}
-                                    >
-                                        Talk to Our Team
-                                    </button>
-                                    <a href="#pillars" className={`btn btn-secondary ${theme.btnSecondaryClass}`}>
-                                        Explore Our Solutions
-                                    </a>
-                                </div>
-                            </div>
-
-                            {/* Visual Frame */}
-                            <HeroVisual type={heroVisualType} image={heroImage} alt={heroImageAlt} />
-                        </div>
-                    </FadeInSection>
-                </div>
-            </section>
-
-            {/* About Section */}
-            <section className="section division-about">
-                <div className="container">
-                    <div className="about-grid">
-                        <FadeInSection direction="left">
-                            <div className="about-block">
-                                <h2>Our Foundation</h2>
-                                <p>
-                                    <strong>LK-HUB</strong> is a leading company focused on liberating knowledge
-                                    and accelerating growth for individuals and institutions through media,
-                                    education, technology, consulting, and training. We bring years of experience
-                                    working with major local and international partners—including universities,
-                                    international organizations, media councils, and NGOs.
-                                </p>
-                            </div>
-                        </FadeInSection>
-                        <FadeInSection direction="right">
-                            <div className={`about-block ${theme.introBlockClass}`}>
-                                <h2>{about.title}</h2>
-                                <p dangerouslySetInnerHTML={{ __html: about.text }} />
-                            </div>
-                        </FadeInSection>
-                    </div>
-                </div>
-            </section>
-
-            {/* Vision & Mission */}
-            <section className={`section vision-mission ${theme.vmBgClass}`}>
-                <div className="container">
-                    <div className="vm-grid">
-                        <FadeInSection direction="left">
-                            <div className={`vm-card ${theme.vmCardClass}`}>
-                                <div className="vm-icon">👁️</div>
-                                <h3>Our Vision</h3>
-                                <p>{vision}</p>
-                            </div>
-                        </FadeInSection>
-                        <FadeInSection direction="right">
-                            <div className={`vm-card ${theme.vmCardClass}`}>
-                                <div className="vm-icon">🚀</div>
-                                <h3>Our Mission</h3>
-                                <p>{mission}</p>
-                            </div>
-                        </FadeInSection>
-                    </div>
-                </div>
-            </section>
-
-            {/* Strategy / Approach Overview - Optional */}
-            {approach && (
-                <section className="section solutions-approach bg-light">
-                    <div className="container">
-                        <FadeInSection>
-                            <div className="section-header text-center">
-                                <h2>{approach.title}</h2>
-                                <p>{approach.description}</p>
-                            </div>
-                        </FadeInSection>
-
-                        <div className="grid grid-4 strategy-grid">
-                            {approach.steps.map((step, i) => (
-                                <FadeInSection key={i} delay={0.1 * (i + 1)}>
-                                    <div className="strategy-card">
-                                        <div className="strategy-icon">{step.icon}</div>
-                                        <h4>{step.title}</h4>
-                                        <p>{step.text}</p>
+                                    <div className="hero-bullets-magazine">
+                                        {heroBullets.map((bullet, i) => (
+                                            <div key={i} className="magazine-bullet">
+                                                <span className="bullet-dot" style={{ background: accentColor }}></span>
+                                                {bullet}
+                                            </div>
+                                        ))}
                                     </div>
-                                </FadeInSection>
-                            ))}
+                                )}
+                            </div>
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, x: 80 }}
+                            animate={{ opacity: 1, scale: 1, x: 0 }}
+                            transition={{ duration: 1.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                            className="hero-visual-magazine"
+                        >
+                            <HeroVisual type={heroVisualType} image={heroImage} alt={heroImageAlt} color={accentColor} />
+                        </motion.div>
+                    </div>
+                </div>
+
+                {/* Decorative Scroll Hint */}
+                <motion.div
+                    animate={{ y: [0, 10, 0] }}
+                    transition={{ repeat: Infinity, duration: 2 }}
+                    style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', opacity: 0.3 }}
+                >
+                    <div style={{ width: '1px', height: '60px', background: 'white' }} />
+                </motion.div>
+            </header>
+
+            {/* 2. Foundation: Side-by-Side Narrative */}
+            <section className="section division-narrative">
+                <div className="container">
+                    <div className="narrative-grid">
+                        <div className="narrative-main">
+                            <FadeInSection>
+                                <h2 className="section-title-editorial" style={{ color: divisionColor }}>The Strategic Vision</h2>
+                                <p className="narrative-lead" style={{ fontFamily: divisionFont }}>
+                                    Bridging the gap Between <br /> Concept & <span style={{ color: divisionColor }}>Market Leadership</span>.
+                                </p>
+                            </FadeInSection>
+                        </div>
+                        <div className="narrative-detail">
+                            <FadeInSection delay={0.2}>
+                                <div className="narrative-rich-text" dangerouslySetInnerHTML={{ __html: about.text.replace(/\*\*(.*?)\*\*/g, '<strong style="color:' + divisionColor + '; font-weight: 900;">$1</strong>') }} />
+                            </FadeInSection>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            {/* 3. Parallax Image Break: High Impact */}
+            {heroImage && (
+                <section className="parallax-break">
+                    <ParallaxImage src={heroImage} alt="Strategic Vision" className="break-image-h" />
                 </section>
             )}
 
-            {/* Pillars */}
-            <section className="section pillars-detailed" id="pillars">
+            {/* 4. Vision/Mission: Editorial Mosaic */}
+            <section className="section vm-magazine">
                 <div className="container">
-                    <FadeInSection>
-                        <div className="section-header text-center">
-                            <h2>{pillarsTitle}</h2>
-                            <p>{pillarsSubtitle}</p>
-                        </div>
-                    </FadeInSection>
-
-                    {data.pillarsLayout === 'grid' ? (
-                        <div className={theme.pillarsContainerClass || "grid-2"}>
-                            {pillars.map((pillar) => (
-                                <FadeInSection key={pillar.id}>
-                                    <div className={`program-block ${theme.blockClass}`}>
-                                        <div className={theme.headerClass || "program-header"}>
-                                            <div className={theme.iconClass || "program-icon"}>{pillar.icon}</div>
-                                            <div>
-                                                <h3>{pillar.title}</h3>
-                                                <span className={`program-subtitle ${theme.subtitleClass}`}>{pillar.subtitle}</span>
-                                            </div>
-                                        </div>
-                                        <p className="program-tagline">{pillar.tagline}</p>
-
-                                        <div className="program-content-grid" style={theme.blockClass === 'kids-program-card' ? { gridTemplateColumns: '1fr' } : {}}>
-                                            <div className="program-audience">
-                                                <h4>{pillar.audienceTitle || "Who It's For"}</h4>
-                                                <ul>
-                                                    {pillar.audience.map((item, i) => (
-                                                        <li key={i}>{item}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                            <div className="program-learnings">
-                                                <h4>{pillar.learningsTitle || "What We Do"}</h4>
-                                                <ul>
-                                                    {pillar.learnings.map((item, i) => (
-                                                        <li key={i}>{item}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        <div className={`program-value ${theme.valueClass}`}>
-                                            <strong>{theme.valueLabel || "Outcome"}:</strong> {pillar.value}
-                                        </div>
-                                    </div>
-                                </FadeInSection>
-                            ))}
-                        </div>
-                    ) : (
-                        pillars.map((pillar, index) => (
-                            <FadeInSection key={pillar.id}>
-                                <div className={`program-block ${theme.blockClass} ${index % 2 === 1 ? 'reverse' : ''}`}>
-                                    <div className="program-header">
-                                        <span className={`program-icon ${theme.iconClass}`}>{pillar.icon}</span>
-                                        <div>
-                                            <h3>{pillar.title}</h3>
-                                            <span className={`program-subtitle ${theme.subtitleClass}`}>{pillar.subtitle}</span>
-                                        </div>
-                                    </div>
-                                    <p className="program-tagline">{pillar.tagline}</p>
-
-                                    <div className="program-content-grid">
-                                        <div className="program-audience">
-                                            <h4>{pillar.audienceTitle || "Who It's For"}</h4>
-                                            <ul>
-                                                {pillar.audience.map((item, i) => (
-                                                    <li key={i}>{item}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                        <div className="program-learnings">
-                                            <h4>{pillar.learningsTitle || "What We Do"}</h4>
-                                            <ul>
-                                                {pillar.learnings.map((item, i) => (
-                                                    <li key={i}>{item}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div className={`program-value ${theme.valueClass}`}>
-                                        <strong>Value for Clients:</strong> {pillar.value}
-                                    </div>
-                                </div>
-                            </FadeInSection>
-                        ))
-                    )}
-
-                    {/* Optional Media Section (For LK-KIDS) */}
-                    {data.mediaSection && (
-                        <FadeInSection>
-                            <div className={`umedia-section ${theme.mediaSectionClass || ''}`} style={{ marginTop: '4rem' }}>
-                                <div className="umedia-header">
-                                    <div className="umedia-title-group">
-                                        <span className="umedia-icon" style={{ fontSize: '3rem' }}>🎬</span>
-                                        <div>
-                                            <h2>{data.mediaSection.title}</h2>
-                                            <p>{data.mediaSection.subtitle}</p>
-                                        </div>
-                                    </div>
-                                    <div className="umedia-desc">
-                                        <p>{data.mediaSection.description}</p>
-                                    </div>
-                                </div>
-
-                                <div className="media-tracks-grid">
-                                    {data.mediaSection.tracks.map((track, index) => (
-                                        <div key={index} className="track-card">
-                                            <h4>{track.title}</h4>
-                                            <p>{track.desc}</p>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="umedia-outcome text-center">
-                                    <p>
-                                        <strong>Outcome:</strong> {data.mediaSection.outcome}
-                                    </p>
-                                </div>
+                    <div className="vm-mosaic-grid">
+                        <FadeInSection direction="up">
+                            <div className="editorial-mosaic-card card-dark">
+                                <span className="mosaic-label">Strategic Target</span>
+                                <h3 style={{ fontFamily: divisionFont }}>Our Vision</h3>
+                                <p>{vision}</p>
+                                <div className="mosaic-accent" style={{ background: divisionColor }}></div>
                             </div>
                         </FadeInSection>
-                    )}
+                        <FadeInSection direction="up" delay={0.2}>
+                            <div className="editorial-mosaic-card">
+                                <span className="mosaic-label">Sustained Execution</span>
+                                <h3 style={{ fontFamily: divisionFont }}>Our Mission</h3>
+                                <p>{mission}</p>
+                                <div className="mosaic-accent" style={{ background: divisionColor }}></div>
+                            </div>
+                        </FadeInSection>
+                    </div>
                 </div>
             </section>
 
-            {/* Why Choose */}
-            <section className="section why-choose bg-light">
+            {/* 5. Typography Quote */}
+            <MagazineQuote
+                text={`"Success in ${label} is built on the liberation of specific, actionable results."`}
+                author="LK-HUB Executive Leadership"
+                color={divisionColor}
+            />
+
+            {/* 6. Pillars: Interactive Editorial Layout */}
+            <section className="section pillars-magazine" id="pillars" style={{ background: '#f8f8f8' }}>
                 <div className="container">
-                    <FadeInSection>
-                        <div className="section-header text-center">
-                            <h2>{whyTitle}</h2>
-                        </div>
-                    </FadeInSection>
-                    <div className="why-grid">
-                        {whyCards.map((card, i) => (
-                            <FadeInSection key={i} delay={0.1 + (i * 0.05)}>
-                                <div className="why-card">
-                                    <span className="why-icon">{card.icon}</span>
-                                    <h4>{card.title}</h4>
-                                    <p>{card.text}</p>
+                    <div className="magazine-section-header">
+                        <span style={{ color: divisionColor, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '5px', fontSize: '0.8rem' }}>Expertise Architecture</span>
+                        <h2 className="magazine-h2-large" style={{ fontFamily: divisionFont }}>{pillarsTitle}</h2>
+                    </div>
+                    <div className="pillars-masonry">
+                        {pillars.map((pillar, i) => (
+                            <FadeInSection key={pillar.id} delay={i * 0.1}>
+                                <div className="magazine-pillar-block">
+                                    <div className="pillar-index" style={{ color: `${divisionColor}15` }}>0{i + 1}</div>
+                                    <h3 style={{ fontFamily: divisionFont }}>{pillar.title}</h3>
+                                    <p className="pillar-tagline-editorial">{pillar.tagline}</p>
+                                    <div className="pillar-separator" style={{ background: divisionColor, width: '60px' }}></div>
+                                    <div className="pillar-outcome">
+                                        <p>{pillar.value}</p>
+                                    </div>
                                 </div>
                             </FadeInSection>
                         ))}
@@ -387,37 +315,100 @@ export default function DivisionTemplate({ data }) {
                 </div>
             </section>
 
-            {/* CTA */}
-            <section className={`section final-cta ${theme.ctaClass}`}>
-                <div className="container">
+            {/* 7. Final CTA: High Impact */}
+            <section className="magazine-cta" style={{ background: divisionColor }}>
+                <div className="container text-center">
                     <FadeInSection>
-                        <div className="cta-content text-center">
-                            <h2>{cta.title}</h2>
-                            <p>{cta.text}</p>
-                            <div className="cta-buttons">
-                                <button
-                                    className={`btn btn-primary ${theme.btnPrimaryClass} btn-lg`}
-                                    onClick={() => document.getElementById('contact-modal')?.classList.remove('hidden')}
-                                >
-                                    {cta.primaryBtn || "Start a Project"}
-                                </button>
-                                <button
-                                    className={`btn btn-secondary ${theme.btnSecondaryClass} btn-lg`}
-                                    onClick={() => document.getElementById('contact-modal')?.classList.remove('hidden')}
-                                >
-                                    {cta.secondaryBtn || "Contact Us"}
-                                </button>
-                            </div>
-                            <div className="contact-info">
-                                <div className="contact-item">
-                                    <span>📧</span>
-                                    <a href="mailto:info@liberating-knowledge.com">info@liberating-knowledge.com</a>
-                                </div>
-                            </div>
+                        <h2 className="cta-title-mag" style={{ fontFamily: divisionFont }}>{cta.title}</h2>
+                        <p className="cta-subtitle-mag">{cta.text}</p>
+                        <div className="magazine-cta-actions">
+                            <Link href="/contact" className="magazine-btn-glass" style={{ fontFamily: divisionFont, display: 'inline-block', textDecoration: 'none' }}>
+                                Get Started Now
+                            </Link>
                         </div>
                     </FadeInSection>
                 </div>
+
+                {/* Visual Accent */}
+                <div style={{ position: 'absolute', top: 0, right: 0, width: '30%', height: '100%', background: 'rgba(255,255,255,0.03)', clipPath: 'polygon(100% 0, 0% 0, 100% 100%)' }} />
             </section>
-        </>
+
+            <style jsx>{`
+                .magazine-template { background: white; color: var(--color-primary); }
+                .division-hero-magazine { min-height: 100vh; display: flex; align-items: center; padding: 90px 0 50px; background: #080404; color: white; position: relative; }
+                .magazine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+                .magazine-label { text-transform: uppercase; letter-spacing: 5px; font-weight: 900; font-size: 0.8rem; display: block; margin-bottom: 1rem; opacity: 0.8; }
+                .magazine-title { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 0.9; margin-bottom: 1.5rem; letter-spacing: -3px; color: white; }
+                .magazine-subtitle { font-size: 1.1rem; opacity: 0.6; max-width: 520px; margin-bottom: 2rem; line-height: 1.6; font-family: var(--font-body); }
+                .magazine-btn-primary { border: none; padding: 1rem 2.5rem; color: white; border-radius: 4px; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; font-size: 0.85rem; cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+                .magazine-btn-primary:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); filter: brightness(1.1); }
+                
+                .hero-bullets-magazine { display: grid; grid-template-columns: 1fr; gap: 0.8rem; margin-top: 1.5rem; }
+                .magazine-bullet { font-size: 0.95rem; opacity: 0.75; display: flex; align-items: center; gap: 1rem; font-family: var(--font-body); }
+                .bullet-dot { width: 8px; height: 8px; flex-shrink: 0; border-radius: 50%; }
+
+                .narrative-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 8rem; padding: 14rem 0; }
+                .section-title-editorial { font-size: 1rem; text-transform: uppercase; letter-spacing: 6px; font-weight: 900; margin-bottom: 3rem; opacity: 0.4; }
+                .narrative-lead { font-size: 3.5rem; line-height: 1; color: var(--color-primary); letter-spacing: -2px; }
+                .narrative-rich-text { font-size: 1.45rem; line-height: 1.9; color: var(--color-text-muted); }
+
+                .parallax-break { height: 85vh; width: 100%; position: relative; overflow: hidden; margin: 4rem 0; }
+                
+                .vm-mosaic-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2.5rem; padding: 4rem 0; }
+                .editorial-mosaic-card { padding: 7rem 5rem; position: relative; background: #fcfcfc; display: flex; flex-direction: column; overflow: hidden; border-radius: 2px; box-shadow: 0 40px 100px rgba(0,0,0,0.03); }
+                .card-dark { background: #0d0404; color: white; }
+                .mosaic-label { text-transform: uppercase; letter-spacing: 5px; font-weight: 900; font-size: 0.8rem; margin-bottom: 2.5rem; opacity: 0.5; }
+                .editorial-mosaic-card h3 { font-size: 3.8rem; margin: 0; line-height: 0.9; letter-spacing: -2px; }
+                .editorial-mosaic-card p { font-size: 1.35rem; line-height: 1.7; margin-top: 2.5rem; opacity: 0.75; }
+                .mosaic-accent { position: absolute; bottom: 0; left: 0; width: 100%; height: 12px; }
+
+                .magazine-section-header { margin-bottom: 10rem; }
+                .magazine-h2-large { font-size: 5.5rem; letter-spacing: -3px; margin-top: 1.5rem; line-height: 0.9; color: var(--color-primary); }
+                .pillars-masonry { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
+                .magazine-pillar-block { position: relative; padding: 6rem; background: white; border: 1px solid #eeeeee; transition: all 0.5s ease; cursor: default; overflow: hidden; }
+                .magazine-pillar-block:hover { transform: translateY(-15px); box-shadow: 0 50px 100px rgba(0,0,0,0.08); border-color: transparent; }
+                .pillar-index { position: absolute; top: 2rem; right: 2rem; font-size: 4.5rem; font-weight: 950; line-height: 1; letter-spacing: -3px; opacity: 0.08; pointer-events: none; }
+                .magazine-pillar-block h3 { font-size: 2rem; margin: 0; position: relative; z-index: 2; line-height: 1.1; letter-spacing: -1px; }
+                .pillar-tagline-editorial { margin: 2.5rem 0; font-size: 1.4rem; opacity: 0.5; line-height: 1.6; font-style: italic; font-family: var(--font-premium); }
+                .pillar-separator { height: 3px; margin-bottom: 2.5rem; }
+                .pillar-outcome p { font-weight: 800; font-size: 1.3rem; line-height: 1.4; color: var(--color-primary); }
+
+                .magazine-cta { padding: 8rem 0; color: white; position: relative; overflow: hidden; }
+                .cta-title-mag { font-size: clamp(3rem, 6vw, 6rem); line-height: 0.9; margin-bottom: 2rem; letter-spacing: -3px; }
+                .cta-subtitle-mag { font-size: 1.3rem; opacity: 0.85; margin-bottom: 4rem; max-width: 700px; margin-inline: auto; line-height: 1.6; }
+                .magazine-btn-glass {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    background: white;
+                    color: var(--color-primary);
+                    border: 3px solid white;
+                    padding: 1.1rem 3rem;
+                    border-radius: 6px;
+                    font-weight: 900;
+                    font-size: 0.9rem;
+                    text-transform: uppercase;
+                    letter-spacing: 3px;
+                    cursor: pointer;
+                    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+                    text-decoration: none !important;
+                }
+                .magazine-btn-glass::after { content: '→'; font-size: 1.1rem; transition: transform 0.3s ease; }
+                .magazine-btn-glass:hover { background: transparent; color: white; transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+                .magazine-btn-glass:hover::after { transform: translateX(5px); }
+
+                @media (max-width: 1200px) {
+                    .magazine-grid, .narrative-grid, .vm-mosaic-grid, .pillars-masonry { grid-template-columns: 1fr; gap: 5rem; }
+                    .cta-title-mag { font-size: 4.5rem; }
+                    .parallax-break { height: 60vh; }
+                    .narrative-lead { font-size: 2.8rem; }
+                    .magazine-h2-large { font-size: 4rem; }
+                    .magazine-pillar-block { padding: 4rem; }
+                    .magazine-title { font-size: 4.2rem; }
+                    .editorial-mosaic-card { padding: 4rem 3rem; }
+                    .editorial-mosaic-card h3 { font-size: 3rem; }
+                }
+            `}</style>
+        </div>
     );
 }

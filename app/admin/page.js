@@ -29,10 +29,9 @@ export default function AdminDashboard() {
     }, []);
 
     const statCards = [
-        { title: 'Total Projects', value: projectsLoading ? '...' : projectsCount, icon: '🚀', color: '#4a148c', bg: '#f3e5f5' },
-        { title: 'Published News', value: mockNews.length, icon: '📰', color: '#1565c0', bg: '#e3f2fd' },
-        { title: 'Active Jobs', value: mockCareers.length, icon: '💼', color: '#2e7d32', bg: '#e8f5e9' },
-        { title: 'Partners', value: '12', icon: '🤝', color: '#ef6c00', bg: '#fff3e0' },
+        { title: 'Total Projects', value: projectsLoading ? '...' : projectsCount, color: '#3d0000', bg: '#f8f5f2' },
+        { title: 'Published News', value: mockNews.length, color: '#3d0000', bg: '#f8f5f2' },
+        { title: 'Active Jobs', value: mockCareers.length, color: '#3d0000', bg: '#f8f5f2' },
     ];
 
     return (
@@ -46,7 +45,6 @@ export default function AdminDashboard() {
                             <span className="stat-label">{stat.title}</span>
                             <span className="stat-value">{stat.value}</span>
                         </div>
-                        <div className="stat-icon">{stat.icon}</div>
                     </div>
                 ))}
             </div>
@@ -75,7 +73,7 @@ export default function AdminDashboard() {
                                     <td>{item.date}</td>
                                     <td><span className={`status-pill ${item.status.toLowerCase()}`}>{item.status}</span></td>
                                     <td>
-                                        <button className="icon-btn edit">✏️</button>
+                                        <Link href={`/admin/news/edit/${item.id}`} className="edit-link">Edit</Link>
                                     </td>
                                 </tr>
                             ))}
@@ -92,7 +90,6 @@ export default function AdminDashboard() {
                     <div className="list-activity">
                         {mockCareers.map(job => (
                             <div key={job.id} className="activity-item">
-                                <div className="activity-icon">💼</div>
                                 <div className="activity-details">
                                     <h4>{job.title}</h4>
                                     <p>{job.type} • {job.applicants} Applicants</p>
@@ -102,10 +99,10 @@ export default function AdminDashboard() {
                     </div>
                     <div className="quick-actions">
                         <Link href="/admin/projects/new" className="btn btn-primary full-width">
-                            + New Project
+                            New Project
                         </Link>
                         <Link href="/admin/news/new" className="btn btn-secondary full-width">
-                            + Write News
+                            Write News
                         </Link>
                     </div>
                 </div>
@@ -128,17 +125,18 @@ export default function AdminDashboard() {
 
                 .stat-card {
                     background: white;
-                    padding: 1.5rem;
-                    border-radius: 16px;
+                    padding: 2rem;
+                    border-radius: 12px;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                    border-left: 4px solid var(--accent-color);
                     transition: transform 0.2s;
                 }
 
                 .stat-card:hover {
-                    transform: translateY(-5px);
+                    transform: translateY(-3px);
                 }
 
                 .stat-content {
@@ -147,27 +145,18 @@ export default function AdminDashboard() {
                 }
 
                 .stat-label {
-                    font-size: 0.9rem;
+                    font-size: 0.85rem;
                     color: #666;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    font-weight: 600;
                     margin-bottom: 0.5rem;
                 }
 
                 .stat-value {
-                    font-size: 2rem;
+                    font-size: 2.5rem;
                     font-weight: 700;
-                    color: #333;
-                }
-
-                .stat-icon {
-                    width: 60px;
-                    height: 60px;
-                    background: var(--bg-color);
-                    color: var(--accent-color);
-                    border-radius: 12px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 1.8rem;
+                    color: #3d0000;
                 }
 
                 /* Dashboard Row */
@@ -179,9 +168,9 @@ export default function AdminDashboard() {
 
                 .dashboard-card {
                     background: white;
-                    border-radius: 16px;
-                    padding: 1.5rem;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+                    border-radius: 12px;
+                    padding: 2rem;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
                     display: flex;
                     flex-direction: column;
                 }
@@ -193,18 +182,21 @@ export default function AdminDashboard() {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 1.5rem;
+                    margin-bottom: 2rem;
+                    border-bottom: 1px solid #f0f0f0;
+                    padding-bottom: 1rem;
                 }
 
                 .card-header h3 {
                     margin: 0;
-                    font-size: 1.25rem;
+                    font-size: 1.1rem;
                     color: #333;
+                    font-weight: 700;
                 }
 
                 .view-all {
-                    font-size: 0.9rem;
-                    color: #764ba2;
+                    font-size: 0.85rem;
+                    color: #3d0000;
                     text-decoration: none;
                     font-weight: 600;
                 }
@@ -221,13 +213,15 @@ export default function AdminDashboard() {
                     color: #999;
                     font-weight: 600;
                     border-bottom: 1px solid #eee;
-                    font-size: 0.9rem;
+                    font-size: 0.8rem;
+                    text-transform: uppercase;
                 }
 
                 .dashboard-table td {
-                    padding: 1rem 0;
+                    padding: 1.25rem 0;
                     border-bottom: 1px solid #f9f9f9;
                     color: #444;
+                    font-size: 0.95rem;
                 }
                 
                 .dashboard-table tr:last-child td {
@@ -235,63 +229,53 @@ export default function AdminDashboard() {
                 }
 
                 .status-pill {
-                    padding: 0.25rem 0.75rem;
-                    border-radius: 20px;
-                    font-size: 0.8rem;
-                    font-weight: 600;
+                    padding: 0.25rem 0.6rem;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    font-weight: 700;
                     text-transform: uppercase;
                 }
 
                 .status-pill.published { background: #e8f5e9; color: #2e7d32; }
                 .status-pill.draft { background: #fff3e0; color: #ef6c00; }
 
-                .icon-btn.edit {
-                    background: none;
-                    border: none;
-                    cursor: pointer;
-                    opacity: 0.6;
-                    transition: opacity 0.2s;
+                .edit-link {
+                    color: #3d0000;
+                    text-decoration: none;
+                    font-weight: 600;
+                    font-size: 0.9rem;
                 }
                 
-                .icon-btn.edit:hover { opacity: 1; }
+                .edit-link:hover { text-decoration: underline; }
 
                 /* Activity List */
                 .list-activity {
                     display: flex;
                     flex-direction: column;
-                    gap: 1rem;
-                    margin-bottom: 1.5rem;
+                    gap: 1.25rem;
+                    margin-bottom: 2rem;
                 }
 
                 .activity-item {
                     display: flex;
                     align-items: center;
                     gap: 1rem;
-                    padding: 0.75rem;
-                    background: #f9f9f9;
-                    border-radius: 12px;
-                }
-
-                .activity-icon {
-                    width: 40px;
-                    height: 40px;
-                    background: #e1f5fe;
-                    color: #0288d1;
+                    padding: 1rem;
+                    background: #fcfcfc;
+                    border: 1px solid #f0f0f0;
                     border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
                 }
 
                 .activity-details h4 {
                     margin: 0 0 0.25rem 0;
-                    font-size: 1rem;
+                    font-size: 0.95rem;
                     color: #333;
+                    font-weight: 600;
                 }
 
                 .activity-details p {
                     margin: 0;
-                    font-size: 0.85rem;
+                    font-size: 0.8rem;
                     color: #777;
                 }
 
@@ -304,19 +288,20 @@ export default function AdminDashboard() {
 
                 .btn {
                     text-align: center;
-                    padding: 0.8rem;
+                    padding: 0.85rem;
                     border-radius: 8px;
                     text-decoration: none;
                     font-weight: 600;
                     transition: all 0.2s;
-                    display: block; /* Ensure full width clickable */
+                    display: block;
+                    font-size: 0.9rem;
                 }
 
-                .btn-primary { background: #3d0000; color: white; }
+                .btn-primary { background: #3d0000; color: white; border: 1px solid #3d0000; }
                 .btn-primary:hover { background: #5a1a1a; }
 
-                .btn-secondary { background: white; border: 1px solid #3d0000; color: #3d0000; }
-                .btn-secondary:hover { background: #fdfdfd; }
+                .btn-secondary { background: white; border: 1px solid #ddd; color: #444; }
+                .btn-secondary:hover { background: #f9f9f9; border-color: #3d0000; color: #3d0000; }
                 
                 @media (max-width: 768px) {
                     .dashboard-row { flex-direction: column; }

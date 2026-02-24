@@ -7,44 +7,44 @@ const divisions = [
     {
         title: "LK-Communication",
         description: "Connecting ideas through consulting, media campaigns, and communication for development.",
-        icon: "📢",
-        link: "/divisions/lk-communication", // Assuming routes, or just # for now if not ready
-        color: "#e74c3c"
+        link: "/divisions/lk-communication",
+        color: "var(--color-communication)",
+        font: "var(--font-communication)"
     },
     {
         title: "LK-Solutions",
         description: "Integrated technological and media solutions, content creation, and digital platforms.",
-        icon: "💻",
         link: "/divisions/lk-solutions",
-        color: "#3498db"
+        color: "var(--color-solutions)",
+        font: "var(--font-solutions)"
     },
     {
         title: "LK-Sports",
         description: "Preparing sports professionals with psychology, marketing, and sponsorship management programs.",
-        icon: "⚽",
         link: "/divisions/lk-sports",
-        color: "#2ecc71"
+        color: "var(--color-sports-primary)",
+        font: "var(--font-sports)"
     },
     {
         title: "LK-Development",
         description: "Supporting continuous development through research, training, and strategic workshops.",
-        icon: "📈",
         link: "/divisions/lk-development",
-        color: "#f1c40f"
+        color: "var(--color-development)",
+        font: "var(--font-development)"
     },
     {
         title: "LK-Education",
         description: "Managing Applied Technology Schools to meet labor market needs with strategic planning.",
-        icon: "🎓",
         link: "/divisions/lk-education",
-        color: "#9b59b6"
+        color: "var(--color-education)",
+        font: "var(--font-education)"
     },
     {
         title: "LK-Kids",
         description: "Educational programs, books, and interactive games for children aged 4-17.",
-        icon: "🎨",
         link: "/divisions/lk-kids",
-        color: "#e67e22"
+        color: "var(--color-kids)",
+        font: "var(--font-kids)"
     }
 ];
 
@@ -91,16 +91,14 @@ export default function BusinessDivisions() {
                             className="division-card-premium"
                             variants={cardVariants}
                             whileHover={{ y: -10 }}
+                            style={{ borderTop: `4px solid ${div.color}` }}
                         >
                             <Link href={div.link} className="division-card-link">
-                                <div className="card-icon-wrapper">
-                                    <span className="card-icon">{div.icon}</span>
-                                </div>
                                 <div className="card-content">
-                                    <h3>{div.title}</h3>
+                                    <h3 style={{ fontFamily: div.font }}>{div.title}</h3>
                                     <p>{div.description}</p>
                                 </div>
-                                <div className="card-arrow">→</div>
+                                <div className="card-arrow" style={{ color: div.color }}>→</div>
                             </Link>
                         </motion.div>
                     ))}

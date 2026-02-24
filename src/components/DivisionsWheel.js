@@ -2,18 +2,33 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 const divisions = [
-    { id: 1, title: 'COMMUNICATION', color: '#E63946', description: 'Connecting ideas through consulting, media campaigns, and communication for development.' },
-    { id: 2, title: 'SOLUTIONS', color: '#457B9D', description: 'Integrated technological and media solutions, content creation, and digital platforms.' },
-    { id: 3, title: 'SPORTS', color: '#1D3557', description: 'Preparing sports professionals with psychology, marketing, and sponsorship management programs.' },
-    { id: 4, title: 'DEVELOPMENT', color: '#2A9D8F', description: 'Supporting continuous development through research, training, and strategic workshops.' },
-    { id: 5, title: 'EDUCATION', color: '#F4A261', description: 'Managing Applied Technology Schools to meet labor market needs with strategic planning.' },
-    { id: 6, title: 'KIDS', color: '#E76F51', description: 'Educational programs, books, and interactive games for children aged 4-17.' },
+    { id: 1, title: 'COMMUNICATION', slug: 'lk-communication', color: 'var(--color-communication)', font: 'var(--font-communication)', description: 'Connecting ideas through consulting, media campaigns, and communication for development.' },
+    { id: 2, title: 'SOLUTIONS', slug: 'lk-solutions', color: 'var(--color-solutions)', font: 'var(--font-solutions)', description: 'Integrated technological and media solutions, content creation, and digital platforms.' },
+    { id: 3, title: 'SPORTS', slug: 'lk-sports', color: 'var(--color-sports-primary)', font: 'var(--font-sports)', description: 'Preparing sports professionals with psychology, marketing, and sponsorship management programs.' },
+    { id: 4, title: 'DEVELOPMENT', slug: 'lk-development', color: 'var(--color-development)', font: 'var(--font-development)', description: 'Supporting continuous development through research, training, and strategic workshops.' },
+    { id: 5, title: 'EDUCATION', slug: 'lk-education', color: 'var(--color-education)', font: 'var(--font-education)', description: 'Managing Applied Technology Schools to meet labor market needs with strategic planning.' },
+    { id: 6, title: 'KIDS', slug: 'lk-kids', color: 'var(--color-kids)', font: 'var(--font-kids)', description: 'Educational programs, books, and interactive games for children aged 4-17.' },
 ];
 
-export default function DivisionsWheel() {
+export default function DivisionsWheel({ onHover }) {
+    const router = useRouter();
     const [activeId, setActiveId] = useState(null);
+
+    const handleMouseEnter = (id) => {
+        setActiveId(id);
+        if (onHover) {
+            const div = divisions.find(d => d.id === id);
+            onHover(div);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        setActiveId(null);
+        if (onHover) onHover(null);
+    };
     const radius = 220;
     const innerRadius = 160; // Much larger hub
     const center = 250;
@@ -201,12 +216,13 @@ export default function DivisionsWheel() {
                     return (
                         <motion.g
                             key={division.id}
-                            onMouseEnter={() => setActiveId(division.id)}
-                            onMouseLeave={() => setActiveId(null)}
+                            onMouseEnter={() => handleMouseEnter(division.id)}
+                            onMouseLeave={handleMouseLeave}
+                            onClick={() => router.push(`/divisions/${division.slug}`)}
                             initial={false}
                             animate={{
                                 scale: isActive ? 1.05 : 1,
-                                filter: isActive ? 'drop-shadow(0px 5px 10px rgba(0,0,0,0.2))' : 'none'
+                                filter: isActive ? 'drop-shadow(0px 5px 15px rgba(0,0,0,0.3))' : 'none'
                             }}
                             style={{ transformOrigin: '250px 250px', cursor: 'pointer' }}
                         >
@@ -215,7 +231,7 @@ export default function DivisionsWheel() {
                                 fill={division.color}
                             />
 
-                            <text dy="5" fontSize="13" fontWeight="bold" fill="white" style={{ fontFamily: 'var(--font-heading)', pointerEvents: 'none' }}>
+                            <text dy="5" fontSize="13" fontWeight="bold" fill="white" style={{ fontFamily: division.font, pointerEvents: 'none', textTransform: 'uppercase' }}>
                                 <textPath href={`#textPath-${index}`} startOffset="50%" textAnchor="middle">
                                     {division.title}
                                 </textPath>

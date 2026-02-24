@@ -1,24 +1,50 @@
 "use client";
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import RichTextEditor from '@/src/components/admin/RichTextEditor';
-import { createNews } from '@/app/actions/news';
+import { getNews, updateNews } from '@/app/actions/news';
 
-export default function CreateNewsPost() {
+export default function EditNews({ params }) {
     const router = useRouter();
-    const [status, setStatus] = useState("idle");
+    const { id } = params;
+
+    const [status, setStatus] = useState("loading");
     const [message, setMessage] = useState("");
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
     const [excerpt, setExcerpt] = useState('');
     const [isFeatured, setIsFeatured] = useState(false);
-    const [author, setAuthor] = useState('LK-HUB Team');
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+    const [author, setAuthor] = useState('');
+    const [date, setDate] = useState('');
     const [category, setCategory] = useState('News');
     const [postStatus, setPostStatus] = useState('Draft');
     const [featuredImage, setFeaturedImage] = useState('');
     const [uploading, setUploading] = useState(false);
+
+    useEffect(() => {
+        fetchNews();
+    }, [id]);
+
+    const fetchNews = async () => {
+        const newsList = await getNews();
+        const found = newsList.find(n => n.id === id);
+        if (found) {
+            setTitle(found.title);
+            setExcerpt(found.excerpt || '');
+            setContent(found.content || '');
+            setIsFeatured(found.isFeatured || false);
+            setAuthor(found.author || 'LK-HUB Team');
+            setDate(found.date || '');
+            setCategory(found.category || 'News');
+            setPostStatus(found.status || 'Draft');
+            setFeaturedImage(found.image || '');
+            setStatus("idle");
+        } else {
+            setStatus("error");
+            setMessage("News post not found.");
+        }
+    };
 
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
@@ -65,15 +91,15 @@ export default function CreateNewsPost() {
         formData.append('image', featuredImage);
 
         try {
-            const result = await createNews(formData);
+            const result = await updateNews(id, formData);
 
             if (result.success) {
                 setStatus("success");
-                setMessage("News post published successfully!");
+                setMessage("News post updated successfully!");
                 setTimeout(() => router.push('/admin/news'), 1500);
             } else {
                 setStatus("error");
-                setMessage(result.message || "Failed to create post.");
+                setMessage(result.message || "Failed to update post.");
             }
         } catch (error) {
             setStatus("error");
@@ -81,17 +107,20 @@ export default function CreateNewsPost() {
         }
     };
 
+    if (status === "loading") return <div className="p-8 text-center text-muted">Loading Post Details...</div>;
+    if (status === "error" && !title) return <div className="p-8 text-center text-red-600 font-bold">{message}</div>;
+
     return (
         <div className="admin-page-container">
             <form onSubmit={handleSubmit}>
                 <header className="page-header">
                     <div>
                         <Link href="/admin/news" className="back-link">Back to News</Link>
-                        <h1>Create News Post</h1>
+                        <h1>Edit News Post</h1>
                     </div>
                     <div className="actions">
                         <button type="submit" className="btn btn-primary" disabled={status === "submitting" || uploading}>
-                            {status === "submitting" ? "Publishing..." : "Publish Article"}
+                            {status === "submitting" ? "Saving..." : "Update Post"}
                         </button>
                     </div>
                 </header>
@@ -102,30 +131,28 @@ export default function CreateNewsPost() {
                 <div className="editor-grid">
                     <div className="main-col">
                         <div className="form-group">
-                            <label>Article Title</label>
+                            <label>Post Title</label>
                             <input
                                 type="text"
                                 className="input-title"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                placeholder="Enter a professional headline..."
                                 required
                             />
                         </div>
 
                         <div className="form-group">
-                            <label>Short Excerpt (Bio)</label>
+                            <label>Excerpt (Short Summary)</label>
                             <textarea
                                 className="input-excerpt"
                                 rows="3"
                                 value={excerpt}
                                 onChange={(e) => setExcerpt(e.target.value)}
-                                placeholder="Brief summary for list previews..."
                             />
                         </div>
 
                         <div className="form-group">
-                            <label>Full Content</label>
+                            <label>Content</label>
                             <RichTextEditor content={content} onChange={setContent} />
                         </div>
                     </div>
@@ -134,7 +161,7 @@ export default function CreateNewsPost() {
                         <div className="panel">
                             <h3>Publishing</h3>
                             <div className="meta-field">
-                                <label>Initial Status</label>
+                                <label>Visibility Status</label>
                                 <select
                                     value={postStatus}
                                     onChange={(e) => setPostStatus(e.target.value)}
@@ -142,16 +169,17 @@ export default function CreateNewsPost() {
                                 >
                                     <option value="Draft">Draft</option>
                                     <option value="Published">Published</option>
+                                    <option value="Archived">Archived</option>
                                 </select>
                             </div>
-                            <div className="meta-field">
+                            <div className="meta-field checkbox-field">
                                 <label className="pseudo-checkbox">
                                     <input
                                         type="checkbox"
                                         checked={isFeatured}
                                         onChange={(e) => setIsFeatured(e.target.checked)}
                                     />
-                                    Featured Article
+                                    Featured Post
                                 </label>
                             </div>
                             <div className="meta-field">
@@ -164,7 +192,7 @@ export default function CreateNewsPost() {
                                 />
                             </div>
                             <div className="meta-field">
-                                <label>Publish Date</label>
+                                <label>Release Date</label>
                                 <input
                                     type="date"
                                     className="input-field"
@@ -175,22 +203,22 @@ export default function CreateNewsPost() {
                         </div>
 
                         <div className="panel">
-                            <h3>Lead Image</h3>
+                            <h3>Featured Image</h3>
                             <div className="image-preview-box">
                                 {featuredImage ? (
                                     <img src={featuredImage} alt="Featured" />
                                 ) : (
-                                    <div className="placeholder">No Image Selected</div>
+                                    <div className="placeholder">No Image</div>
                                 )}
                             </div>
                             <label className="professional-upload">
-                                {uploading ? "Uploading..." : "Upload Image"}
+                                {uploading ? "Uploading..." : "Replace Image"}
                                 <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
                             </label>
                         </div>
 
                         <div className="panel">
-                            <h3>Article Type</h3>
+                            <h3>Classification</h3>
                             <div className="radio-group">
                                 {['News', 'Press Release', 'Event'].map(cat => (
                                     <label key={cat} className="radio-label">
@@ -244,6 +272,8 @@ export default function CreateNewsPost() {
                 }
 
                 .back-link:hover { color: #3d0000; }
+
+                .actions { display: flex; gap: 1rem; }
 
                 .editor-grid {
                     display: grid;

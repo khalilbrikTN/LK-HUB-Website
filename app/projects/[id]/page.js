@@ -14,7 +14,11 @@ export default function ProjectDetail({ params }) {
         const fetchProject = async () => {
             const projects = await getProjects();
             const found = projects.find(p => p.id === resolvedParams.id);
-            setProject(found);
+            if (found && found.hidden) {
+                setProject(null);
+            } else {
+                setProject(found);
+            }
             setLoading(false);
         };
         fetchProject();
