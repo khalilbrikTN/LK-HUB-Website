@@ -12,6 +12,7 @@ const prisma = new PrismaClient();
 
 async function main() {
     console.log('🌱 Starting database seed...');
+    console.log('📡 Connecting to:', process.env.DATABASE_URL?.split('@')[1] || 'URL NOT FOUND');
 
     // ─── PROJECTS ───────────────────────────────────────────────────────────
     const projectsFile = path.join(__dirname, '../src/data/projects.json');
