@@ -1,0 +1,83 @@
+// LK-HUB Prisma Schema — MySQL (Hostinger)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+// ─────────────────────────────────────────────
+//  PROJECTS
+// ─────────────────────────────────────────────
+model Project {
+  id          String   @id @default(cuid())
+  division    String
+  title       String
+  subtitle    String?
+  description String   @db.Text
+  content     String   @db.LongText
+  icon        String?
+  tags        String   @db.Text   // stored as JSON string
+  coverImage  String?
+  images      String   @db.LongText // stored as JSON string
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("projects")
+}
+
+// ─────────────────────────────────────────────
+//  NEWS
+// ─────────────────────────────────────────────
+model News {
+  id        String   @id @default(cuid())
+  title     String
+  date      String
+  category  String
+  status    String   @default("Draft")
+  content   String   @db.LongText
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("news")
+}
+
+// ─────────────────────────────────────────────
+//  CAREERS
+// ─────────────────────────────────────────────
+model Career {
+  id          String   @id @default(cuid())
+  title       String
+  location    String
+  type        String
+  department  String
+  applicants  Int      @default(0)
+  status      String   @default("Active")
+  date_posted String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("careers")
+}
+
+// ─────────────────────────────────────────────
+//  USERS (Admin)
+// ─────────────────────────────────────────────
+model User {
+  id        String   @id @default(cuid())
+  username  String
+  email     String   @unique
+  password  String
+  role      String   @default("Admin")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}

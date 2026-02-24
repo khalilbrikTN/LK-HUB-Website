@@ -1,14 +1,10 @@
 "use server";
-import fs from 'fs';
-import path from 'path';
-
-const CAREERS_FILE = path.join(process.cwd(), 'src', 'data', 'careers.json');
+import prisma from '@/src/lib/db';
 
 export async function getCareers() {
     try {
-        if (!fs.existsSync(CAREERS_FILE)) return [];
-        const fileContent = fs.readFileSync(CAREERS_FILE, 'utf-8');
-        return JSON.parse(fileContent);
+        const careers = await prisma.career.findMany({ orderBy: { createdAt: 'desc' } });
+        return careers;
     } catch (error) {
         console.error("Error reading careers:", error);
         return [];
@@ -17,10 +13,7 @@ export async function getCareers() {
 
 export async function deleteCareer(id) {
     try {
-        const careers = await getCareers();
-        const filtered = careers.filter(c => c.id !== id);
-
-        fs.writeFileSync(CAREERS_FILE, JSON.stringify(filtered, null, 2), 'utf-8');
+        await prisma.career.delete({ where: { id } });
         return { success: true, message: "Career deleted successfully!" };
     } catch (error) {
         return { success: false, message: "Failed to delete career." };
@@ -29,18 +22,35 @@ export async function deleteCareer(id) {
 
 export async function createCareer(formData) {
     try {
-        const careers = await getCareers();
-        const newItem = {
-            id: crypto.randomUUID(),
-            title: formData.get('title'),
-            location: formData.get('location'),
-            type: formData.get('type'),
-            applicants: 0,
-            status: formData.get('status') || 'Active',
-            date_posted: new Date().toISOString().split('T')[0]
-        };
-        careers.push(newItem);
-        fs.writeFileSync(CAREERS_FILE, JSON.stringify(careers, null, 2), 'utf-8');
+        await prisma.career.create({
+            data: {
+                title: formData.get('title'),
+                location: formData.get('location') || 'Cairo, Egypt',
+                type: formData.get('type') || 'Full-time',
+                department: formData.get('department') || 'General',
+                applicants: 0,
+                status: formData.get('status') || 'Active',
+                date_posted: new Date().toISOString().split('T')[0],
+            }
+        });
+        return { success: true };
+    } catch (e) {
+        return { success: false, message: e.message };
+    }
+}
+
+export async function updateCareer(id, formData) {
+    try {
+        await prisma.career.update({
+            where: { id },
+            data: {
+                title: formData.get('title'),
+                location: formData.get('location'),
+                type: formData.get('type'),
+                department: formData.get('department'),
+                status: formData.get('status'),
+            }
+        });
         return { success: true };
     } catch (e) {
         return { success: false, message: e.message };

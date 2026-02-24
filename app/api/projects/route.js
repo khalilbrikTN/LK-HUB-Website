@@ -1,90 +1,70 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import prisma from '@/src/lib/db';
 
-// Define the path to the data file
-const PROJECTS_FILE = path.join(process.cwd(), 'src', 'data', 'projects.json');
-
-// Helper to Read
-const getProjects = () => {
-    if (!fs.existsSync(PROJECTS_FILE)) return [];
-    const fileContent = fs.readFileSync(PROJECTS_FILE, 'utf-8');
-    try {
-        return JSON.parse(fileContent);
-    } catch (e) {
-        console.error("JSON parse error", e);
-        return [];
-    }
-};
-
-// GET Handler
+// GET all projects
 export async function GET() {
-    const projects = getProjects();
-    return NextResponse.json(projects);
+    try {
+        const projects = await prisma.project.findMany({ orderBy: { createdAt: 'desc' } });
+        const parsed = projects.map(p => ({
+            ...p,
+            tags: JSON.parse(p.tags || '[]'),
+            images: JSON.parse(p.images || '[]'),
+        }));
+        return NextResponse.json(parsed);
+    } catch (error) {
+        console.error('GET /api/projects error:', error);
+        return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 });
+    }
 }
 
-// POST Handler (Create/Update)
+// POST create new project
 export async function POST(request) {
     try {
         const body = await request.json();
-        const projects = getProjects();
-
-        if (body.id) {
-            // Update existing
-            const index = projects.findIndex(p => p.id === body.id);
-            if (index !== -1) {
-                projects[index] = { ...projects[index], ...body };
-                fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 4), 'utf-8');
-                return NextResponse.json(projects[index]);
+        const project = await prisma.project.create({
+            data: {
+                division: body.division || 'General',
+                title: body.title,
+                subtitle: body.subtitle || '',
+                description: body.description || '',
+                content: body.content || '',
+                icon: body.icon || '🚀',
+                tags: JSON.stringify(Array.isArray(body.tags) ? body.tags : []),
+                coverImage: body.coverImage || '',
+                images: JSON.stringify(Array.isArray(body.images) ? body.images : []),
             }
-        }
-
-        // Create new
-        const newProject = {
-            id: `project-${Date.now()}`,
-            createdAt: new Date().toISOString(),
-            ...body
-        };
-        projects.push(newProject);
-        fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 4), 'utf-8');
-        return NextResponse.json(newProject);
+        });
+        return NextResponse.json({ ...project, tags: body.tags, images: body.images });
     } catch (error) {
-        return NextResponse.json({ error: 'Failed to save project' }, { status: 500 });
+        console.error('POST /api/projects error:', error);
+        return NextResponse.json({ error: 'Failed to create project' }, { status: 500 });
     }
 }
 
-// PATCH Handler (for visibility toggle)
+// PATCH update hidden/visibility
 export async function PATCH(request) {
     try {
-        const { id, hidden } = await request.json();
-        const projects = getProjects();
-        const index = projects.findIndex(p => p.id === id);
+        const { id, ...updates } = await request.json();
+        if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
 
-        if (index === -1) {
-            return NextResponse.json({ error: 'Project not found' }, { status: 404 });
-        }
-
-        projects[index].hidden = hidden;
-        fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 4), 'utf-8');
-        return NextResponse.json(projects[index]);
+        const project = await prisma.project.update({
+            where: { id },
+            data: updates,
+        });
+        return NextResponse.json(project);
     } catch (error) {
         return NextResponse.json({ error: 'Failed to update project' }, { status: 500 });
     }
 }
 
-// DELETE Handler
+// DELETE project
 export async function DELETE(request) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
-
-    if (!id) {
-        return NextResponse.json({ error: 'ID is required' }, { status: 400 });
-    }
+    if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
 
     try {
-        const projects = getProjects();
-        const newProjects = projects.filter(p => p.id !== id);
-        fs.writeFileSync(PROJECTS_FILE, JSON.stringify(newProjects, null, 4), 'utf-8');
+        await prisma.project.delete({ where: { id } });
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 });
