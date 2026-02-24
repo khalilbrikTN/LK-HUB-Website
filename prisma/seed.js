@@ -95,28 +95,39 @@ async function main() {
     }
 
     // ─── USERS ───────────────────────────────────────────────────────────────
+    console.log('👥 Checking for Admin users...');
     const usersFile = path.join(__dirname, '../src/data/users.json');
+    let usersToSeed = [];
+
     if (fs.existsSync(usersFile)) {
-        const users = JSON.parse(fs.readFileSync(usersFile, 'utf-8'));
-        let created = 0;
-        for (const u of users) {
-            const existing = await prisma.user.findUnique({ where: { email: u.email } });
-            if (!existing) {
-                await prisma.user.create({
-                    data: {
-                        id: u.id,
-                        username: u.username,
-                        email: u.email,
-                        password: u.password,
-                        role: u.role || 'Admin',
-                        active: u.active !== false,
-                    }
-                });
-                created++;
-            }
-        }
-        console.log(`✅ Users: ${created} seeded`);
+        usersToSeed = JSON.parse(fs.readFileSync(usersFile, 'utf-8'));
+    } else {
+        // Fallback user if JSON doesn't exist
+        usersToSeed = [{
+            username: "Super Admin",
+            email: "admin@lk-hub.com",
+            password: "admin123",
+            role: "Super Admin"
+        }];
     }
+
+    let usersCreated = 0;
+    for (const u of usersToSeed) {
+        const existing = await prisma.user.findUnique({ where: { email: u.email } });
+        if (!existing) {
+            await prisma.user.create({
+                data: {
+                    username: u.username,
+                    email: u.email,
+                    password: u.password,
+                    role: u.role || 'Admin',
+                    active: true,
+                }
+            });
+            usersCreated++;
+        }
+    }
+    console.log(`✅ Users: ${usersCreated} seeded (${usersToSeed.length - usersCreated} already existed)`);
 
     console.log('🎉 Seed complete!');
 }
