@@ -14,7 +14,7 @@ export default function ManageProjects() {
         fetch('/api/projects')
             .then(res => res.json())
             .then(data => {
-                setProjects(data);
+                setProjects(data.data || []);
                 setLoading(false);
             })
             .catch(err => {
@@ -55,10 +55,10 @@ export default function ManageProjects() {
         <div className="admin-container">
             <header className="admin-header">
                 <div>
-                    <Link href="/admin" className="back-link">Back to Dashboard</Link>
+                    <Link href="/adminLK/dashboard" className="back-link">Back to Dashboard</Link>
                     <h1>Manage Projects</h1>
                 </div>
-                <Link href="/admin/projects/new" className="btn btn-primary">
+                <Link href="/adminLK/dashboard/projects/new" className="btn btn-primary">
                     Create New Project
                 </Link>
             </header>
@@ -83,7 +83,7 @@ export default function ManageProjects() {
                                 <span>{project.subtitle}</span>
                             </div>
                             <div className="project-actions">
-                                <Link href={`/admin/projects/edit/${project.id}`} className="btn-icon edit">
+                                <Link href={`/adminLK/dashboard/projects/edit/${project.id}`} className="btn-icon edit">
                                     Edit
                                 </Link>
                                 <button

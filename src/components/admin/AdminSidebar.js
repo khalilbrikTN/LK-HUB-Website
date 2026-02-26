@@ -28,27 +28,27 @@ export default function AdminSidebar() {
             <nav className="sidebar-menu">
                 <div className="menu-category">Overview</div>
 
-                <Link href="/admin" className={`menu-item ${pathname === '/admin' ? 'active' : ''}`}>
+                <Link href="/adminLK/dashboard" className={`menu-item ${pathname === '/adminLK/dashboard' ? 'active' : ''}`}>
                     <span className="label">Dashboard</span>
                 </Link>
 
                 <div className="menu-category">Management</div>
 
-                <Link href="/admin/projects" className={`menu-item ${isActive('/admin/projects') ? 'active' : ''}`}>
+                <Link href="/adminLK/dashboard/projects" className={`menu-item ${isActive('/adminLK/dashboard/projects') ? 'active' : ''}`}>
                     <span className="label">Projects</span>
                 </Link>
 
-                <Link href="/admin/news" className={`menu-item ${isActive('/admin/news') ? 'active' : ''}`}>
+                <Link href="/adminLK/dashboard/news" className={`menu-item ${isActive('/adminLK/dashboard/news') ? 'active' : ''}`}>
                     <span className="label">News & Articles</span>
                 </Link>
 
-                <Link href="/admin/careers" className={`menu-item ${isActive('/admin/careers') ? 'active' : ''}`}>
+                <Link href="/adminLK/dashboard/careers" className={`menu-item ${isActive('/adminLK/dashboard/careers') ? 'active' : ''}`}>
                     <span className="label">Job Openings</span>
                 </Link>
 
                 <div className="menu-category">Administration</div>
 
-                <Link href="/admin/settings" className={`menu-item ${isActive('/admin/settings') ? 'active' : ''}`}>
+                <Link href="/adminLK/dashboard/settings" className={`menu-item ${isActive('/adminLK/dashboard/settings') ? 'active' : ''}`}>
                     <span className="label">System Settings</span>
                 </Link>
             </nav>

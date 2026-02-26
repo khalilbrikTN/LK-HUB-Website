@@ -52,7 +52,7 @@ export default function NewsDashboard() {
                     <h1>News & Updates</h1>
                     <p>Manage press releases, articles, and public announcements.</p>
                 </div>
-                <Link href="/admin/news/new" className="btn btn-primary">
+                <Link href="/adminLK/dashboard/news/new" className="btn btn-primary">
                     Create New Article
                 </Link>
             </header>
@@ -88,7 +88,7 @@ export default function NewsDashboard() {
                                         </td>
                                         <td>
                                             <div className="action-buttons">
-                                                <Link href={`/admin/news/edit/${item.id}`} className="btn-action edit">
+                                                <Link href={`/adminLK/dashboard/news/edit/${item.id}`} className="btn-action edit">
                                                     Edit
                                                 </Link>
                                                 <button

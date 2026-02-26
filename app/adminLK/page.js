@@ -26,7 +26,7 @@ export default function AdminLKLogin() {
             if (data.success) {
                 // Store JWT token locally
                 localStorage.setItem('token', data.token);
-                router.push('/admin'); // Redirecting to standard admin dashboard instead of /adminLK/ok 
+                router.push('/adminLK/dashboard'); // Redirecting to standard admin dashboard instead of /adminLK/ok 
             } else {
                 setError(data.message || 'Login failed');
             }

@@ -19,8 +19,8 @@ export default function EditProject({ params }) {
     const fetchProjects = () => {
         fetch(`/api/projects`)
             .then(res => res.json())
-            .then(data => {
-                const found = data.find(p => p.id === id);
+            .then(json => {
+                const found = Array.isArray(json.data) ? json.data.find(p => p.id === id) : null;
                 if (found) {
                     setProject(found);
                     setStatus("idle");
@@ -108,7 +108,7 @@ export default function EditProject({ params }) {
             if (res.ok) {
                 setStatus("success");
                 setMessage("Project updated successfully!");
-                setTimeout(() => router.push('/admin/projects'), 1500);
+                setTimeout(() => router.push('/adminLK/dashboard/projects'), 1500);
             } else {
                 const errorData = await res.json();
                 setStatus("error");
@@ -128,7 +128,7 @@ export default function EditProject({ params }) {
         <div className="admin-container">
             <header className="admin-header">
                 <div>
-                    <Link href="/admin/projects" className="back-link">Back to Projects</Link>
+                    <Link href="/adminLK/dashboard/projects" className="back-link">Back to Projects</Link>
                     <h1>Edit Project</h1>
                 </div>
             </header>

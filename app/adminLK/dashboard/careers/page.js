@@ -46,7 +46,7 @@ export default function CareersDashboard() {
                     <h1>Careers</h1>
                     <p>Manage job openings, applications, and requirements.</p>
                 </div>
-                <Link href="/admin/careers/new" className="btn btn-primary">
+                <Link href="/adminLK/dashboard/careers/new" className="btn btn-primary">
                     + Post Job
                 </Link>
             </header>
@@ -81,7 +81,7 @@ export default function CareersDashboard() {
                                         </td>
                                         <td>
                                             <div className="action-buttons">
-                                                <Link href={`/admin/careers/edit/${job.id}`} className="icon-btn edit">✏️</Link>
+                                                <Link href={`/adminLK/dashboard/careers/edit/${job.id}`} className="icon-btn edit">✏️</Link>
                                                 <button onClick={() => handleDelete(job.id)} className="icon-btn delete">🗑️</button>
                                             </div>
                                         </td>

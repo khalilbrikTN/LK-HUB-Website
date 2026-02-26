@@ -33,7 +33,7 @@ export default function AdminDashboard() {
                 <div className="dashboard-card wide">
                     <div className="card-header">
                         <h3>Recent News Posts</h3>
-                        <Link href="/admin/news" className="view-all">View All</Link>
+                        <Link href="/adminLK/dashboard/news" className="view-all">View All</Link>
                     </div>
                     <table className="dashboard-table">
                         <thead>
@@ -55,7 +55,7 @@ export default function AdminDashboard() {
                                     <td>{item.date}</td>
                                     <td><span className={`status-pill ${item.status.toLowerCase()}`}>{item.status}</span></td>
                                     <td>
-                                        <Link href={`/admin/news/edit/${item.id}`} className="edit-link">Edit</Link>
+                                        <Link href={`/adminLK/dashboard/news/edit/${item.id}`} className="edit-link">Edit</Link>
                                     </td>
                                 </tr>
                             ))}
@@ -67,7 +67,7 @@ export default function AdminDashboard() {
                 <div className="dashboard-card narrow">
                     <div className="card-header">
                         <h3>Active Openings</h3>
-                        <Link href="/admin/careers" className="view-all">Manage</Link>
+                        <Link href="/adminLK/dashboard/careers" className="view-all">Manage</Link>
                     </div>
                     <div className="list-activity">
                         {loading ? (
@@ -84,10 +84,10 @@ export default function AdminDashboard() {
                         ))}
                     </div>
                     <div className="quick-actions">
-                        <Link href="/admin/projects/new" className="btn btn-primary full-width">
+                        <Link href="/adminLK/dashboard/projects/new" className="btn btn-primary full-width">
                             New Project
                         </Link>
-                        <Link href="/admin/news/new" className="btn btn-secondary full-width">
+                        <Link href="/adminLK/dashboard/news/new" className="btn btn-secondary full-width">
                             Write News
                         </Link>
                     </div>

@@ -79,7 +79,7 @@ export default function NewProject() {
             if (res.ok) {
                 setStatus("success");
                 setMessage("Project published successfully!");
-                setTimeout(() => router.push('/admin/projects'), 1500);
+                setTimeout(() => router.push('/adminLK/dashboard/projects'), 1500);
             } else {
                 const data = await res.json();
                 setStatus("error");
@@ -96,7 +96,7 @@ export default function NewProject() {
             <form onSubmit={handleSubmit}>
                 <header className="page-header">
                     <div>
-                        <Link href="/admin/projects" className="back-link">Back to Projects</Link>
+                        <Link href="/adminLK/dashboard/projects" className="back-link">Back to Projects</Link>
                         <h1>Create New Project</h1>
                     </div>
                     <div className="actions">
