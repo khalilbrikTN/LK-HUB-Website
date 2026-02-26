@@ -6,6 +6,7 @@ import prisma from '@/src/lib/db';
 export async function login(formData) {
     const email = formData.get('email');
     const password = formData.get('password');
+    let isSuccess = false;
 
     try {
         const user = await prisma.user.findFirst({
@@ -14,10 +15,15 @@ export async function login(formData) {
 
         if (user) {
             await createSession(user.id);
-            redirect('/admin');
+            isSuccess = true;
         }
     } catch (e) {
         console.error('Login error:', e);
+        return { error: 'An error occurred during login. Please try again.' };
+    }
+
+    if (isSuccess) {
+        redirect('/admin');
     }
 
     return { error: 'Invalid email or password' };
