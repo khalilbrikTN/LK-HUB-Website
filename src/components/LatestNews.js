@@ -1,13 +1,31 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { newsData } from '@/src/data/news';
+import { getNews } from '@/app/actions/news';
+
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+        const [year, month, day] = dateStr.split('-').map(Number);
+        return new Date(year, month - 1, day).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        });
+    }
+    return dateStr;
+}
 
 export default function LatestNews() {
-    const sortedNews = [...newsData].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const [sortedNews, setSortedNews] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        getNews().then(all => {
+            const published = all.filter(n => n.status === 'Published');
+            setSortedNews([...published].sort((a, b) => new Date(b.date) - new Date(a.date)));
+        });
+    }, []);
     const itemsPerPage = 3;
 
     const nextSlide = () => {
@@ -72,7 +90,7 @@ export default function LatestNews() {
                             </div>
                             <div className="latest-card-body">
                                 <h3 className="latest-title">{item.title}</h3>
-                                <p className="latest-meta">on {item.date}</p>
+                                <p className="latest-meta">on {formatDate(item.date)}</p>
                                 <div className="latest-excerpt" dangerouslySetInnerHTML={{ __html: item.content.substring(0, 100) + '...' }}></div>
                                 <div className="latest-footer">
                                     <Link href="/news" className="btn-blog-tag">BLOG</Link>
