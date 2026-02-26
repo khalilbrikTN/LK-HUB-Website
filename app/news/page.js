@@ -14,6 +14,11 @@ export default async function NewsPage() {
         where: { status: 'Published' }
     });
 
-    // We can just pass the raw data directly down assuming we didn't parse any JSON.
-    return <NewsClient newsItems={dbNewsRaw} />;
+    const parsedNews = dbNewsRaw.map(n => ({
+        ...n,
+        createdAt: n.createdAt ? n.createdAt.toISOString() : null,
+        updatedAt: n.updatedAt ? n.updatedAt.toISOString() : null,
+    }));
+
+    return <NewsClient newsItems={parsedNews} />;
 }

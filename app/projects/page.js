@@ -19,6 +19,8 @@ export default async function ProjectsPage() {
         ...p,
         tags: JSON.parse(p.tags || '[]'),
         images: JSON.parse(p.images || '[]'),
+        createdAt: p.createdAt ? p.createdAt.toISOString() : null,
+        updatedAt: p.updatedAt ? p.updatedAt.toISOString() : null,
     }));
 
     return (
