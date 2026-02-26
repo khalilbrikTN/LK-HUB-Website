@@ -4,6 +4,8 @@ import Link from 'next/link';
 
 export default function AdminDashboard() {
     const [projectsCount, setProjectsCount] = useState(0);
+    const [newsCount, setNewsCount] = useState(0);
+    const [careersCount, setCareersCount] = useState(0);
     const [news, setNews] = useState([]);
     const [careers, setCareers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,16 +17,23 @@ export default function AdminDashboard() {
             fetch('/api/careers').then(r => r.json()).catch(() => []),
         ]).then(([projects, newsData, careersData]) => {
             setProjectsCount(Array.isArray(projects) ? projects.length : 0);
-            setNews(Array.isArray(newsData) ? newsData.slice(0, 5) : []);
-            setCareers(Array.isArray(careersData) ? careersData : []);
+
+            const newsArray = Array.isArray(newsData) ? newsData : [];
+            setNewsCount(newsArray.length);
+            setNews(newsArray.slice(0, 5));
+
+            const careersArray = Array.isArray(careersData) ? careersData : [];
+            setCareersCount(careersArray.length);
+            setCareers(careersArray);
+
             setLoading(false);
         });
     }, []);
 
     const statCards = [
         { title: 'Total Projects', value: loading ? '...' : projectsCount },
-        { title: 'Published News', value: loading ? '...' : news.length },
-        { title: 'Active Jobs', value: loading ? '...' : careers.length },
+        { title: 'Published News', value: loading ? '...' : newsCount },
+        { title: 'Active Jobs', value: loading ? '...' : careersCount },
     ];
 
     return (
