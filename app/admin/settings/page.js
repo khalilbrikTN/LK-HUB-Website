@@ -1,6 +1,5 @@
 "use client";
 import { useState, useRef, useEffect } from 'react';
-import { getUsers, createUser, deleteUser } from '@/app/actions/settings';
 
 export default function SettingsPage() {
     const [users, setUsers] = useState([]);
@@ -16,8 +15,16 @@ export default function SettingsPage() {
 
     const loadUsers = async () => {
         setLoading(true);
-        const data = await getUsers();
-        setUsers(data);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/settings/users', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            setUsers(data.data || []);
+        } catch (error) {
+            console.error(error);
+        }
         setLoading(false);
     };
 
@@ -25,30 +32,56 @@ export default function SettingsPage() {
         e.preventDefault();
         setStatus("submitting");
         const formData = new FormData(formRef.current);
+        const bodyObj = Object.fromEntries(formData.entries());
 
-        const res = await createUser(formData);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/settings/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(bodyObj)
+            });
+            const result = await res.json();
 
-        if (res.success) {
-            setStatus("success");
-            setMsg(res.message);
-            formRef.current.reset();
-            loadUsers(); // Refresh list
-        } else {
+            if (res.ok) {
+                setStatus("success");
+                setMsg(result.message);
+                formRef.current.reset();
+                loadUsers(); // Refresh list
+            } else {
+                setStatus("error");
+                setMsg(result.message || "Failed to create user.");
+            }
+        } catch (error) {
             setStatus("error");
-            setMsg(res.message);
+            setMsg("Network error creating user.");
         }
     };
 
     const handleDeleteUser = async (id) => {
         if (!confirm("Are you sure you want to delete this user?")) return;
 
-        const res = await deleteUser(id);
-        if (res.success) {
-            setUsers(users.filter(u => u.id !== id));
-            setMsg("User deleted.");
-            setStatus("success");
-        } else {
-            setMsg("Failed to delete user.");
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/settings/users/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (res.ok) {
+                setUsers(users.filter(u => u.id !== id));
+                setMsg("User deleted.");
+                setStatus("success");
+            } else {
+                const result = await res.json();
+                setMsg(result.message || "Failed to delete user.");
+                setStatus("error");
+            }
+        } catch (error) {
+            setMsg("Error deleting user.");
             setStatus("error");
         }
     };

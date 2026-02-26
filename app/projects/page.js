@@ -1,6 +1,8 @@
 
 import ProjectsClient from './ProjectsClient';
-import { getProjects } from '@/app/actions/projects';
+import prisma from '@/src/lib/db';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
     title: 'Projects | LK-HUB',
@@ -8,7 +10,16 @@ export const metadata = {
 };
 
 export default async function ProjectsPage() {
-    const dbProjects = await getProjects();
+    const dbProjectsRaw = await prisma.project.findMany({
+        orderBy: { createdAt: 'desc' },
+        where: { title: { not: '' } } // Safety
+    });
+
+    const dbProjects = dbProjectsRaw.map(p => ({
+        ...p,
+        tags: JSON.parse(p.tags || '[]'),
+        images: JSON.parse(p.images || '[]'),
+    }));
 
     return (
         <ProjectsClient dbProjects={dbProjects} />

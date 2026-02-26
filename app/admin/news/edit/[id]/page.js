@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import RichTextEditor from '@/src/components/admin/RichTextEditor';
-import { getNews, updateNews } from '@/app/actions/news';
 
 export default function EditNews({ params }) {
     const router = useRouter();
@@ -27,22 +26,29 @@ export default function EditNews({ params }) {
     }, [id]);
 
     const fetchNews = async () => {
-        const newsList = await getNews();
-        const found = newsList.find(n => n.id === id);
-        if (found) {
-            setTitle(found.title);
-            setExcerpt(found.excerpt || '');
-            setContent(found.content || '');
-            setIsFeatured(found.isFeatured || false);
-            setAuthor(found.author || 'LK-HUB Team');
-            setDate(found.date || '');
-            setCategory(found.category || 'News');
-            setPostStatus(found.status || 'Draft');
-            setFeaturedImage(found.image || '');
-            setStatus("idle");
-        } else {
+        try {
+            const res = await fetch('/api/news');
+            const data = await res.json();
+            const newsList = data.data || [];
+            const found = newsList.find(n => n.id === id);
+            if (found) {
+                setTitle(found.title);
+                setExcerpt(found.excerpt || '');
+                setContent(found.content || '');
+                setIsFeatured(found.isFeatured || false);
+                setAuthor(found.author || 'LK-HUB Team');
+                setDate(found.date || '');
+                setCategory(found.category || 'News');
+                setPostStatus(found.status || 'Draft');
+                setFeaturedImage(found.image || '');
+                setStatus("idle");
+            } else {
+                setStatus("error");
+                setMessage("News post not found.");
+            }
+        } catch {
             setStatus("error");
-            setMessage("News post not found.");
+            setMessage("Failed to load news data.");
         }
     };
 
@@ -56,8 +62,12 @@ export default function EditNews({ params }) {
         formData.append('folder', 'news');
 
         try {
+            const token = localStorage.getItem('token');
             const res = await fetch('/api/upload', {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formData
             });
             const data = await res.json();
@@ -79,21 +89,31 @@ export default function EditNews({ params }) {
         e.preventDefault();
         setStatus("submitting");
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('excerpt', excerpt);
-        formData.append('content', content);
-        formData.append('isFeatured', isFeatured);
-        formData.append('status', postStatus);
-        formData.append('author', author);
-        formData.append('date', date);
-        formData.append('category', category);
-        formData.append('image', featuredImage);
+        const newsData = {
+            title,
+            excerpt,
+            content,
+            isFeatured,
+            status: postStatus,
+            author,
+            date,
+            category,
+            image: featuredImage
+        };
 
         try {
-            const result = await updateNews(id, formData);
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/news/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(newsData)
+            });
+            const result = await res.json();
 
-            if (result.success) {
+            if (res.ok) {
                 setStatus("success");
                 setMessage("News post updated successfully!");
                 setTimeout(() => router.push('/admin/news'), 1500);

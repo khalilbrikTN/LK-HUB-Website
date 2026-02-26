@@ -1,26 +1,41 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getCareers, deleteCareer } from '@/app/actions/careers';
 
 export default function CareersDashboard() {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getCareers().then(data => {
-            setJobs(data);
-            setLoading(false);
-        });
+        fetch('/api/careers')
+            .then(res => res.json())
+            .then(data => {
+                setJobs(data.data || []);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error(error);
+                setLoading(false);
+            });
     }, []);
 
     const handleDelete = async (id) => {
         if (!confirm("Remove this job posting?")) return;
-        const res = await deleteCareer(id);
-        if (res.success) {
-            setJobs(jobs.filter(j => j.id !== id));
-        } else {
-            alert("Failed to delete.");
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/careers/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (res.ok) {
+                setJobs(jobs.filter(j => j.id !== id));
+            } else {
+                alert("Failed to delete.");
+            }
+        } catch (error) {
+            alert("Error deleting job.");
         }
     };
 

@@ -1,7 +1,6 @@
 "use client";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { loginLK } from '@/app/actions/authLK';
 
 export default function AdminLKLogin() {
     const [error, setError] = useState('');
@@ -13,15 +12,27 @@ export default function AdminLKLogin() {
         setLoading(true);
         setError('');
 
-        const formData = new FormData(event.target);
-        const result = await loginLK(formData);
+        const email = event.target.email.value;
+        const password = event.target.password.value;
 
-        if (result?.error) {
-            setError(result.error);
-            setLoading(false);
-        } else if (result?.success) {
-            router.push('/adminLK/ok');
-        } else {
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                // Store JWT token locally
+                localStorage.setItem('token', data.token);
+                router.push('/admin'); // Redirecting to standard admin dashboard instead of /adminLK/ok 
+            } else {
+                setError(data.message || 'Login failed');
+            }
+        } catch (err) {
+            setError('System error during login.');
+        } finally {
             setLoading(false);
         }
     }

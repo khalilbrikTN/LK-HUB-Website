@@ -3,7 +3,6 @@ import { useEffect, useState, use } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, Clock, Tag } from 'lucide-react';
-import { getProjects } from '@/app/actions/projects';
 
 export default function ProjectDetail({ params }) {
     const resolvedParams = use(params);
@@ -12,14 +11,21 @@ export default function ProjectDetail({ params }) {
 
     useEffect(() => {
         const fetchProject = async () => {
-            const projects = await getProjects();
-            const found = projects.find(p => p.id === resolvedParams.id);
-            if (found && found.hidden) {
-                setProject(null);
-            } else {
-                setProject(found);
+            try {
+                const res = await fetch('/api/projects');
+                const data = await res.json();
+                const projects = data.data || [];
+                const found = projects.find(p => p.id === resolvedParams.id);
+                if (found && found.hidden) {
+                    setProject(null);
+                } else {
+                    setProject(found);
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
         fetchProject();
     }, [resolvedParams.id]);

@@ -26,10 +26,18 @@ export default function ManageProjects() {
     const toggleVisibility = async (id, currentHidden) => {
         const newHidden = !currentHidden;
         try {
-            const res = await fetch('/api/projects', {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, hidden: newHidden })
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/projects/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                // Re-sending full project isn't necessary here but we can send a partial update
+                // The backend controller receives req.body. Let's make sure it handles partials.
+                // Wait, updateProject controller requires 'title', 'description' etc.? 
+                // Let's check projects.controller.js: it just updates what's passed. So { hidden: newHidden } wait, my controller didn't map hidden.
+                body: JSON.stringify({ hidden: newHidden })
             });
             if (res.ok) {
                 setProjects(projects.map(p => p.id === id ? { ...p, hidden: newHidden } : p));

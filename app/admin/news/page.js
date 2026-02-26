@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getNews, toggleNewsVisibility } from '@/app/actions/news';
 
 export default function NewsDashboard() {
     const [news, setNews] = useState([]);
@@ -11,20 +10,38 @@ export default function NewsDashboard() {
         fetchNews();
     }, []);
 
-    const fetchNews = () => {
-        getNews().then(data => {
-            setNews(data);
+    const fetchNews = async () => {
+        try {
+            const res = await fetch('/api/news');
+            const data = await res.json();
+            setNews(data.data || []);
+        } catch (error) {
+            console.error(error);
+        } finally {
             setLoading(false);
-        });
+        }
     };
 
     const handleToggleVisibility = async (id, currentHidden) => {
         const newHidden = !currentHidden;
-        const res = await toggleNewsVisibility(id, newHidden);
-        if (res.success) {
-            setNews(news.map(n => n.id === id ? { ...n, hidden: newHidden } : n));
-        } else {
-            alert("Failed to update visibility.");
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetch(`/api/news/${id}/visibility`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ hidden: newHidden })
+            });
+
+            if (res.ok) {
+                setNews(news.map(n => n.id === id ? { ...n, hidden: newHidden } : n));
+            } else {
+                alert("Failed to update visibility.");
+            }
+        } catch (error) {
+            alert("Error updating visibility.");
         }
     };
 

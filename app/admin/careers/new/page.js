@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { createCareer } from '@/app/actions/careers';
 
 export default function CreateCareerOpening() {
     const router = useRouter();
@@ -13,14 +12,31 @@ export default function CreateCareerOpening() {
         e.preventDefault();
         setStatus('submitting');
         const formData = new FormData(e.target);
-        const res = await createCareer(formData);
-        if (res.success) {
-            setStatus('success');
-            setMessage('Job posting published successfully!');
-            setTimeout(() => router.push('/admin/careers'), 1500);
-        } else {
+        const dataPayload = Object.fromEntries(formData.entries());
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/careers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(dataPayload)
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                setStatus('success');
+                setMessage('Job posting published successfully!');
+                setTimeout(() => router.push('/admin/careers'), 1500);
+            } else {
+                setStatus('error');
+                setMessage(data.message || 'Failed to create job posting.');
+            }
+        } catch (error) {
             setStatus('error');
-            setMessage(res.message || 'Failed to create job posting.');
+            setMessage('Network error preventing creation.');
         }
     };
 

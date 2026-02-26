@@ -30,8 +30,12 @@ export default function NewProject() {
         formData.append('folder', project.division || 'general');
 
         try {
+            const token = localStorage.getItem('token');
             const res = await fetch('/api/upload', {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formData
             });
             const data = await res.json();
@@ -62,9 +66,13 @@ export default function NewProject() {
         setStatus("submitting");
 
         try {
+            const token = localStorage.getItem('token');
             const res = await fetch('/api/projects', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(project)
             });
 

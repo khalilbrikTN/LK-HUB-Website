@@ -1,5 +1,7 @@
 import NewsClient from './NewsClient';
-import { getNews } from '@/app/actions/news';
+import prisma from '@/src/lib/db';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
     title: 'News | LK-HUB',
@@ -7,7 +9,11 @@ export const metadata = {
 };
 
 export default async function NewsPage() {
-    const allNews = await getNews();
-    const published = allNews.filter(n => n.status === 'Published');
-    return <NewsClient newsItems={published} />;
+    const dbNewsRaw = await prisma.news.findMany({
+        orderBy: { createdAt: 'desc' },
+        where: { status: 'Published' }
+    });
+
+    // We can just pass the raw data directly down assuming we didn't parse any JSON.
+    return <NewsClient newsItems={dbNewsRaw} />;
 }

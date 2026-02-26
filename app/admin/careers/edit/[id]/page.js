@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { getCareerById, updateCareer, deleteCareer } from '@/app/actions/careers';
 
 export default function EditCareer() {
     const { id } = useParams();
@@ -12,33 +11,63 @@ export default function EditCareer() {
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        getCareerById(id).then(data => {
-            if (data) setCareer(data);
-        });
+        fetch(`/api/careers/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.data) setCareer(data.data);
+            })
+            .catch(console.error);
     }, [id]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus('submitting');
         const formData = new FormData(e.target);
-        const res = await updateCareer(id, formData);
-        if (res.success) {
-            setStatus('success');
-            setMessage('Job posting updated successfully!');
-            setTimeout(() => router.push('/admin/careers'), 1500);
-        } else {
+        const dataPayload = Object.fromEntries(formData.entries());
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/careers/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(dataPayload)
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                setStatus('success');
+                setMessage('Job posting updated successfully!');
+                setTimeout(() => router.push('/admin/careers'), 1500);
+            } else {
+                setStatus('error');
+                setMessage(data.message || 'Failed to update job posting.');
+            }
+        } catch (error) {
             setStatus('error');
-            setMessage(res.message || 'Failed to update job posting.');
+            setMessage('Network error preventing update.');
         }
     };
 
     const handleDelete = async () => {
         if (!confirm('Delete this job posting? This cannot be undone.')) return;
-        const res = await deleteCareer(id);
-        if (res.success) {
-            router.push('/admin/careers');
-        } else {
-            alert(res.message || 'Failed to delete.');
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/careers/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (res.ok) {
+                router.push('/admin/careers');
+            } else {
+                const data = await res.json();
+                alert(data.message || 'Failed to delete.');
+            }
+        } catch (error) {
+            alert('Error deleting job posting.');
         }
     };
 

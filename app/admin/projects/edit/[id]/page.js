@@ -45,8 +45,12 @@ export default function EditProject({ params }) {
         formData.append('folder', project.division || 'general');
 
         try {
+            const token = localStorage.getItem('token');
             const res = await fetch('/api/upload', {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formData
             });
             const data = await res.json();
@@ -91,9 +95,13 @@ export default function EditProject({ params }) {
         };
 
         try {
-            const res = await fetch('/api/projects', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/projects/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(updatedData)
             });
 

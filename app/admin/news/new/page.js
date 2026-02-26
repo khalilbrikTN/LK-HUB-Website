@@ -3,7 +3,6 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import RichTextEditor from '@/src/components/admin/RichTextEditor';
-import { createNews } from '@/app/actions/news';
 
 export default function CreateNewsPost() {
     const router = useRouter();
@@ -30,8 +29,12 @@ export default function CreateNewsPost() {
         formData.append('folder', 'news');
 
         try {
+            const token = localStorage.getItem('token');
             const res = await fetch('/api/upload', {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formData
             });
             const data = await res.json();
@@ -53,21 +56,31 @@ export default function CreateNewsPost() {
         e.preventDefault();
         setStatus("submitting");
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('excerpt', excerpt);
-        formData.append('content', content);
-        formData.append('isFeatured', isFeatured);
-        formData.append('status', postStatus);
-        formData.append('author', author);
-        formData.append('date', date);
-        formData.append('category', category);
-        formData.append('image', featuredImage);
+        const newsData = {
+            title,
+            excerpt,
+            content,
+            isFeatured,
+            status: postStatus,
+            author,
+            date,
+            category,
+            image: featuredImage
+        };
 
         try {
-            const result = await createNews(formData);
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/news', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(newsData)
+            });
+            const result = await res.json();
 
-            if (result.success) {
+            if (res.ok) {
                 setStatus("success");
                 setMessage("News post published successfully!");
                 setTimeout(() => router.push('/admin/news'), 1500);
