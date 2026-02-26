@@ -2,36 +2,29 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-// Mock data until endpoints exist
-const mockNews = [
-    { id: 1, title: 'LK-HUB Receives Award', date: '2025-02-01', status: 'Published' },
-    { id: 2, title: 'New Sports Program Launch', date: '2025-01-28', status: 'Draft' },
-    { id: 3, title: 'Kids Camp Success', date: '2025-01-15', status: 'Published' }
-];
-
-const mockCareers = [
-    { id: 1, title: 'Senior Media Trainer', type: 'Full-time', applicants: 12 },
-    { id: 2, title: 'Video Editor', type: 'Contract', applicants: 5 }
-];
-
 export default function AdminDashboard() {
     const [projectsCount, setProjectsCount] = useState(0);
-    const [projectsLoading, setProjectsLoading] = useState(true);
+    const [news, setNews] = useState([]);
+    const [careers, setCareers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('/api/projects')
-            .then(res => res.json())
-            .then(data => {
-                setProjectsCount(Array.isArray(data) ? data.length : 0);
-                setProjectsLoading(false);
-            })
-            .catch(() => setProjectsLoading(false));
+        Promise.all([
+            fetch('/api/projects').then(r => r.json()).catch(() => []),
+            fetch('/api/news').then(r => r.json()).catch(() => []),
+            fetch('/api/careers').then(r => r.json()).catch(() => []),
+        ]).then(([projects, newsData, careersData]) => {
+            setProjectsCount(Array.isArray(projects) ? projects.length : 0);
+            setNews(Array.isArray(newsData) ? newsData.slice(0, 5) : []);
+            setCareers(Array.isArray(careersData) ? careersData : []);
+            setLoading(false);
+        });
     }, []);
 
     const statCards = [
-        { title: 'Total Projects', value: projectsLoading ? '...' : projectsCount, color: '#3d0000', bg: '#f8f5f2' },
-        { title: 'Published News', value: mockNews.length, color: '#3d0000', bg: '#f8f5f2' },
-        { title: 'Active Jobs', value: mockCareers.length, color: '#3d0000', bg: '#f8f5f2' },
+        { title: 'Total Projects', value: loading ? '...' : projectsCount },
+        { title: 'Published News', value: loading ? '...' : news.length },
+        { title: 'Active Jobs', value: loading ? '...' : careers.length },
     ];
 
     return (
@@ -40,7 +33,7 @@ export default function AdminDashboard() {
             {/* Stats Grid */}
             <div className="stats-grid">
                 {statCards.map((stat, i) => (
-                    <div key={i} className="stat-card" style={{ '--accent-color': stat.color, '--bg-color': stat.bg }}>
+                    <div key={i} className="stat-card">
                         <div className="stat-content">
                             <span className="stat-label">{stat.title}</span>
                             <span className="stat-value">{stat.value}</span>
@@ -67,7 +60,11 @@ export default function AdminDashboard() {
                             </tr>
                         </thead>
                         <tbody>
-                            {mockNews.map(item => (
+                            {loading ? (
+                                <tr><td colSpan={4} style={{ textAlign: 'center', color: '#999', padding: '2rem 0' }}>Loading...</td></tr>
+                            ) : news.length === 0 ? (
+                                <tr><td colSpan={4} style={{ textAlign: 'center', color: '#999', padding: '2rem 0' }}>No news yet</td></tr>
+                            ) : news.map(item => (
                                 <tr key={item.id}>
                                     <td>{item.title}</td>
                                     <td>{item.date}</td>
@@ -88,7 +85,11 @@ export default function AdminDashboard() {
                         <Link href="/admin/careers" className="view-all">Manage</Link>
                     </div>
                     <div className="list-activity">
-                        {mockCareers.map(job => (
+                        {loading ? (
+                            <p style={{ color: '#999', fontSize: '0.9rem' }}>Loading...</p>
+                        ) : careers.length === 0 ? (
+                            <p style={{ color: '#999', fontSize: '0.9rem' }}>No active openings</p>
+                        ) : careers.map(job => (
                             <div key={job.id} className="activity-item">
                                 <div className="activity-details">
                                     <h4>{job.title}</h4>
