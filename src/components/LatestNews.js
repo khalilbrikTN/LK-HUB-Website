@@ -50,6 +50,7 @@ export default function LatestNews() {
 
     // Helper to get circular slice
     const getVisibleItems = () => {
+        if (sortedNews.length === 0) return [];
         const items = [];
         for (let i = 0; i < itemsPerPage; i++) {
             const index = (currentIndex + i) % sortedNews.length;
