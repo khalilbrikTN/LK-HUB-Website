@@ -1,17 +1,6 @@
 "use client";
-import { useRouter } from 'next/navigation';
-import { logout } from '@/app/actions/auth';
 
 export default function AdminHeader() {
-    const router = useRouter();
-
-    const handleLogout = async () => {
-        if (confirm("Are you sure you want to sign out?")) {
-            await logout();
-            router.push('/admin/login');
-        }
-    };
-
     return (
         <header className="admin-header-bar">
             {/* Left: Search */}
@@ -25,7 +14,7 @@ export default function AdminHeader() {
                     <span className="status-indicator"></span>
                     System Online
                 </div>
-                <div className="profile-btn" onClick={handleLogout}>
+                <div className="profile-btn">
                     <div className="avatar pseudo-professional">AD</div>
                     <div className="profile-details">
                         <span className="username">Administrator</span>

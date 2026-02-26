@@ -1,39 +1,15 @@
 "use client";
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-    const [projectsCount, setProjectsCount] = useState(0);
-    const [newsCount, setNewsCount] = useState(0);
-    const [careersCount, setCareersCount] = useState(0);
-    const [news, setNews] = useState([]);
-    const [careers, setCareers] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        Promise.all([
-            fetch('/api/projects').then(r => r.json()).catch(() => []),
-            fetch('/api/news').then(r => r.json()).catch(() => []),
-            fetch('/api/careers').then(r => r.json()).catch(() => []),
-        ]).then(([projects, newsData, careersData]) => {
-            setProjectsCount(Array.isArray(projects) ? projects.length : 0);
-
-            const newsArray = Array.isArray(newsData) ? newsData : [];
-            setNewsCount(newsArray.length);
-            setNews(newsArray.slice(0, 5));
-
-            const careersArray = Array.isArray(careersData) ? careersData : [];
-            setCareersCount(careersArray.length);
-            setCareers(careersArray);
-
-            setLoading(false);
-        });
-    }, []);
+    const news = [];
+    const careers = [];
+    const loading = false;
 
     const statCards = [
-        { title: 'Total Projects', value: loading ? '...' : projectsCount },
-        { title: 'Published News', value: loading ? '...' : newsCount },
-        { title: 'Active Jobs', value: loading ? '...' : careersCount },
+        { title: 'Total Projects', value: 0 },
+        { title: 'Published News', value: 0 },
+        { title: 'Active Jobs', value: 0 },
     ];
 
     return (

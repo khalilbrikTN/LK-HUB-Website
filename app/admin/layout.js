@@ -1,16 +1,8 @@
 "use client";
 import AdminSidebar from '@/src/components/admin/AdminSidebar';
 import AdminHeader from '@/src/components/admin/AdminHeader';
-import { usePathname } from 'next/navigation';
 
 export default function AdminLayout({ children }) {
-    const pathname = usePathname();
-    const isLoginPage = pathname === '/admin/login';
-
-    if (isLoginPage) {
-        return <div className="admin-login-wrapper">{children}</div>;
-    }
-
     return (
         <div className="admin-root">
             <AdminSidebar />
