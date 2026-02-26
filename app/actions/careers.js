@@ -11,6 +11,15 @@ export async function getCareers() {
     }
 }
 
+export async function getCareerById(id) {
+    try {
+        return await prisma.career.findUnique({ where: { id } });
+    } catch (error) {
+        console.error("Error reading career:", error);
+        return null;
+    }
+}
+
 export async function deleteCareer(id) {
     try {
         await prisma.career.delete({ where: { id } });

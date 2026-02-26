@@ -1,39 +1,62 @@
 "use client";
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { createCareer } from '@/app/actions/careers';
+import { getCareerById, updateCareer, deleteCareer } from '@/app/actions/careers';
 
-export default function CreateCareerOpening() {
+export default function EditCareer() {
+    const { id } = useParams();
     const router = useRouter();
+    const [career, setCareer] = useState(null);
     const [status, setStatus] = useState('idle');
     const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        getCareerById(id).then(data => {
+            if (data) setCareer(data);
+        });
+    }, [id]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus('submitting');
         const formData = new FormData(e.target);
-        const res = await createCareer(formData);
+        const res = await updateCareer(id, formData);
         if (res.success) {
             setStatus('success');
-            setMessage('Job posting published successfully!');
+            setMessage('Job posting updated successfully!');
             setTimeout(() => router.push('/admin/careers'), 1500);
         } else {
             setStatus('error');
-            setMessage(res.message || 'Failed to create job posting.');
+            setMessage(res.message || 'Failed to update job posting.');
         }
     };
+
+    const handleDelete = async () => {
+        if (!confirm('Delete this job posting? This cannot be undone.')) return;
+        const res = await deleteCareer(id);
+        if (res.success) {
+            router.push('/admin/careers');
+        } else {
+            alert(res.message || 'Failed to delete.');
+        }
+    };
+
+    if (!career) return <div style={{ padding: '2rem', marginTop: '80px', textAlign: 'center', color: '#999' }}>Loading...</div>;
 
     return (
         <div className="admin-page-container">
             <header className="page-header">
                 <div>
                     <Link href="/admin/careers" className="back-link">Back to Careers</Link>
-                    <h1>Create Job Posting</h1>
+                    <h1>Edit Job Posting</h1>
                 </div>
                 <div className="actions">
-                    <button form="create-form" type="submit" className="btn btn-primary" disabled={status === 'submitting'}>
-                        {status === 'submitting' ? 'Publishing...' : 'Publish Opening'}
+                    <button type="button" onClick={handleDelete} className="btn btn-danger">
+                        Delete
+                    </button>
+                    <button form="edit-form" type="submit" className="btn btn-primary" disabled={status === 'submitting'}>
+                        {status === 'submitting' ? 'Saving...' : 'Save Changes'}
                     </button>
                 </div>
             </header>
@@ -41,14 +64,14 @@ export default function CreateCareerOpening() {
             {status === 'success' && <div className="alert success">{message}</div>}
             {status === 'error' && <div className="alert error">{message}</div>}
 
-            <form id="create-form" onSubmit={handleSubmit} className="edit-form">
+            <form id="edit-form" onSubmit={handleSubmit} className="edit-form">
                 <div className="form-group">
                     <label>Job Title</label>
                     <input
                         type="text"
                         name="title"
+                        defaultValue={career.title}
                         className="input-field input-title"
-                        placeholder="e.g. Senior Media Trainer"
                         required
                     />
                 </div>
@@ -59,9 +82,9 @@ export default function CreateCareerOpening() {
                         <input
                             type="text"
                             name="location"
+                            defaultValue={career.location}
                             className="input-field"
                             placeholder="e.g. Cairo, Egypt"
-                            defaultValue="Cairo, Egypt"
                         />
                     </div>
                     <div className="form-group">
@@ -69,6 +92,7 @@ export default function CreateCareerOpening() {
                         <input
                             type="text"
                             name="department"
+                            defaultValue={career.department}
                             className="input-field"
                             placeholder="e.g. LK-Education"
                         />
@@ -78,7 +102,7 @@ export default function CreateCareerOpening() {
                 <div className="two-col">
                     <div className="form-group">
                         <label>Employment Type</label>
-                        <select name="type" className="input-field">
+                        <select name="type" defaultValue={career.type} className="input-field">
                             <option value="Full-time">Full-time</option>
                             <option value="Part-time">Part-time</option>
                             <option value="Contract">Contract</option>
@@ -88,11 +112,18 @@ export default function CreateCareerOpening() {
                     </div>
                     <div className="form-group">
                         <label>Status</label>
-                        <select name="status" className="input-field">
+                        <select name="status" defaultValue={career.status} className="input-field">
                             <option value="Active">Active</option>
                             <option value="Closed">Closed</option>
                         </select>
                     </div>
+                </div>
+
+                <div className="meta-row">
+                    <span className="meta-label">Posted:</span>
+                    <span className="meta-value">{career.date_posted}</span>
+                    <span className="meta-label">Applicants:</span>
+                    <span className="meta-value">{career.applicants}</span>
                 </div>
             </form>
 
@@ -131,7 +162,11 @@ export default function CreateCareerOpening() {
                     margin: 0;
                 }
 
-                .actions { display: flex; gap: 0.75rem; align-items: center; }
+                .actions {
+                    display: flex;
+                    gap: 0.75rem;
+                    align-items: center;
+                }
 
                 .btn {
                     padding: 0.75rem 1.5rem;
@@ -144,9 +179,17 @@ export default function CreateCareerOpening() {
                     border: none;
                     transition: all 0.2s;
                 }
+
                 .btn-primary { background: #3d0000; color: white; }
                 .btn-primary:hover { background: #5c0000; }
                 .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+                .btn-danger {
+                    background: #ffebee;
+                    color: #c62828;
+                    border: 1px solid #ffcdd2;
+                }
+                .btn-danger:hover { background: #c62828; color: white; border-color: #c62828; }
 
                 .alert {
                     padding: 1rem 1.25rem;
@@ -165,7 +208,9 @@ export default function CreateCareerOpening() {
                     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
                 }
 
-                .form-group { margin-bottom: 1.75rem; }
+                .form-group {
+                    margin-bottom: 1.75rem;
+                }
 
                 .form-group label {
                     display: block;
@@ -199,6 +244,28 @@ export default function CreateCareerOpening() {
                     display: grid;
                     grid-template-columns: 1fr 1fr;
                     gap: 1.5rem;
+                }
+
+                .meta-row {
+                    display: flex;
+                    gap: 1rem;
+                    align-items: center;
+                    margin-top: 0.5rem;
+                    padding-top: 1.5rem;
+                    border-top: 1px solid #f5f5f5;
+                }
+                .meta-label {
+                    font-size: 0.75rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    color: #999;
+                    letter-spacing: 0.5px;
+                }
+                .meta-value {
+                    font-size: 0.9rem;
+                    color: #444;
+                    font-weight: 600;
+                    margin-right: 1rem;
                 }
 
                 @media (max-width: 600px) {

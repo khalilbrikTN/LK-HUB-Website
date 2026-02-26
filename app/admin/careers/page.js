@@ -66,7 +66,7 @@ export default function CareersDashboard() {
                                         </td>
                                         <td>
                                             <div className="action-buttons">
-                                                <button className="icon-btn edit">✏️</button>
+                                                <Link href={`/admin/careers/edit/${job.id}`} className="icon-btn edit">✏️</Link>
                                                 <button onClick={() => handleDelete(job.id)} className="icon-btn delete">🗑️</button>
                                             </div>
                                         </td>
