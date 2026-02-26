@@ -1,30 +1,31 @@
 import { NextResponse } from 'next/server';
-import { updateSession } from '@/src/lib/auth'; // We might need a refresh function later, but for now we just verify
+import { jwtVerify } from 'jose';
+
+const secretKey = new TextEncoder().encode(process.env.PAYLOAD_SECRET || 'fallback-secret-key-change-this');
 
 export async function middleware(request) {
-    // Only intercept requests to /admin
     if (request.nextUrl.pathname.startsWith('/admin')) {
-
-        // Allow access to the login page itself
         if (request.nextUrl.pathname === '/admin/login') {
             return NextResponse.next();
         }
 
-        // Check for session cookie
         const session = request.cookies.get('admin_session')?.value;
 
-        // If no session, redirect to login
         if (!session) {
             return NextResponse.redirect(new URL('/admin/login', request.url));
         }
 
-        // TODO: Verify JWT validity here if needed for strict security
-        // For now, presence of cookie is the basic check
+        try {
+            await jwtVerify(session, secretKey, { algorithms: ['HS256'] });
+        } catch (error) {
+            // Token is invalid/expired, redirect to login
+            return NextResponse.redirect(new URL('/admin/login', request.url));
+        }
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/admin/:path*'],
+    matcher: ['/admin', '/admin/:path*'],
 };

@@ -1,5 +1,4 @@
 "use server";
-import { redirect } from 'next/navigation';
 import { createSession, deleteSession } from '@/src/lib/auth';
 import prisma from '@/src/lib/db';
 
@@ -23,7 +22,7 @@ export async function login(formData) {
     }
 
     if (isSuccess) {
-        redirect('/admin');
+        return { success: true };
     }
 
     return { error: 'Invalid email or password' };
@@ -31,5 +30,5 @@ export async function login(formData) {
 
 export async function logout() {
     await deleteSession();
-    redirect('/admin/login');
+    return { success: true };
 }

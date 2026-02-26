@@ -1,12 +1,15 @@
 "use client";
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { login } from '@/app/actions/auth';
 
 export default function LoginPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [shake, setShake] = useState(false);
+
+    const router = useRouter();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -15,13 +18,17 @@ export default function LoginPage() {
         setShake(false);
 
         const formData = new FormData(event.target);
-        const result = await login(formData); // Assume login is imported from actions
+        const result = await login(formData);
 
         if (result?.error) {
             setError(result.error);
             setLoading(false);
             setShake(true);
             setTimeout(() => setShake(false), 500); // Reset shake after animation
+        } else if (result?.success) {
+            router.push('/admin');
+        } else {
+            setLoading(false);
         }
     }
 
