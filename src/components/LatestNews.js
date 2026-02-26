@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { getNews } from '@/app/actions/news';
 
 function formatDate(dateStr) {
     if (!dateStr) return '';
@@ -21,10 +20,14 @@ export default function LatestNews() {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
-        getNews().then(all => {
-            const published = all.filter(n => n.status === 'Published');
-            setSortedNews([...published].sort((a, b) => new Date(b.date) - new Date(a.date)));
-        });
+        fetch('/api/news')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    setSortedNews([...data].sort((a, b) => new Date(b.date) - new Date(a.date)));
+                }
+            })
+            .catch(err => console.error('LatestNews fetch error:', err));
     }, []);
     const itemsPerPage = 3;
 
