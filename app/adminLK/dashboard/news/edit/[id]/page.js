@@ -22,35 +22,35 @@ export default function EditNews({ params }) {
     const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                const res = await fetch('/api/news');
+                const data = await res.json();
+                const newsList = data.data || [];
+                const found = newsList.find(n => n.id === id);
+                if (found) {
+                    setTitle(found.title);
+                    setExcerpt(found.excerpt || '');
+                    setContent(found.content || '');
+                    setIsFeatured(found.isFeatured || false);
+                    setAuthor(found.author || 'LK-HUB Team');
+                    setDate(found.date || '');
+                    setCategory(found.category || 'News');
+                    setPostStatus(found.status || 'Draft');
+                    setFeaturedImage(found.image || '');
+                    setStatus("idle");
+                } else {
+                    setStatus("error");
+                    setMessage("News post not found.");
+                }
+            } catch {
+                setStatus("error");
+                setMessage("Failed to load news data.");
+            }
+        };
+
         fetchNews();
     }, [id]);
-
-    const fetchNews = async () => {
-        try {
-            const res = await fetch('/api/news');
-            const data = await res.json();
-            const newsList = data.data || [];
-            const found = newsList.find(n => n.id === id);
-            if (found) {
-                setTitle(found.title);
-                setExcerpt(found.excerpt || '');
-                setContent(found.content || '');
-                setIsFeatured(found.isFeatured || false);
-                setAuthor(found.author || 'LK-HUB Team');
-                setDate(found.date || '');
-                setCategory(found.category || 'News');
-                setPostStatus(found.status || 'Draft');
-                setFeaturedImage(found.image || '');
-                setStatus("idle");
-            } else {
-                setStatus("error");
-                setMessage("News post not found.");
-            }
-        } catch {
-            setStatus("error");
-            setMessage("Failed to load news data.");
-        }
-    };
 
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];

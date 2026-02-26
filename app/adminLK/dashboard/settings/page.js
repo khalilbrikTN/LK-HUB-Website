@@ -8,11 +8,6 @@ export default function SettingsPage() {
     const [msg, setMsg] = useState("");
     const formRef = useRef(null);
 
-    // Fetch users on mount
-    useEffect(() => {
-        loadUsers();
-    }, []);
-
     const loadUsers = async () => {
         setLoading(true);
         try {
@@ -27,6 +22,11 @@ export default function SettingsPage() {
         }
         setLoading(false);
     };
+
+    // Fetch users on mount
+    useEffect(() => {
+        loadUsers();
+    }, []);
 
     const handleCreateUser = async (e) => {
         e.preventDefault();

@@ -99,7 +99,7 @@ const MagazineQuote = ({ text, author, color }) => (
 
 // --- Hero Visual Frame ---
 const HeroVisual = ({ type, image, alt, color }) => {
-    const FrameDecoration = () => (
+    const frameDecoration = (
         <>
             <div style={{ position: 'absolute', inset: '-30px', border: `1px solid ${color}15`, borderRadius: 'inherit', pointerEvents: 'none', zIndex: -1 }} />
             <div style={{ position: 'absolute', inset: '-60px', border: `1px solid ${color}08`, borderRadius: 'inherit', pointerEvents: 'none', zIndex: -2 }} />
@@ -114,7 +114,7 @@ const HeroVisual = ({ type, image, alt, color }) => {
                         {image ? <Image src={image} alt={alt} fill style={{ objectFit: 'cover' }} priority /> : <div className="img-placeholder" />}
                     </div>
                 </div>
-                <FrameDecoration />
+                {frameDecoration}
             </div>
         );
     }
@@ -124,7 +124,7 @@ const HeroVisual = ({ type, image, alt, color }) => {
                 <div className="sports-ball-frame" style={{ boxShadow: `0 30px 100px ${color}33`, borderColor: color }}>
                     {image ? <Image src={image} alt={alt} fill style={{ objectFit: 'cover' }} priority /> : <div className="img-placeholder" />}
                 </div>
-                <FrameDecoration />
+                {frameDecoration}
             </div>
         );
     }
@@ -134,7 +134,7 @@ const HeroVisual = ({ type, image, alt, color }) => {
                 <div className="kids-blob-frame" style={{ boxShadow: `0 30px 100px ${color}22` }}>
                     {image ? <Image src={image} alt={alt} fill style={{ objectFit: 'cover' }} priority /> : <div className="img-placeholder" />}
                 </div>
-                <FrameDecoration />
+                {frameDecoration}
             </div>
         );
     }
@@ -143,7 +143,7 @@ const HeroVisual = ({ type, image, alt, color }) => {
             <div style={{ borderRadius: '2px', overflow: 'hidden', border: `1px solid ${color}33`, boxShadow: '0 40px 80px rgba(0,0,0,0.5)' }}>
                 {image ? <Image src={image} alt={alt} width={650} height={450} style={{ display: 'block' }} /> : <div className="img-placeholder" style={{ width: 650, height: 450, background: `${color}11` }} />}
             </div>
-            <FrameDecoration />
+            {frameDecoration}
         </div>
     );
 };

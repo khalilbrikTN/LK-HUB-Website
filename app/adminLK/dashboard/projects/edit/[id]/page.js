@@ -13,27 +13,27 @@ export default function EditProject({ params }) {
     const { id } = params;
 
     useEffect(() => {
+        const fetchProjects = () => {
+            fetch(`/api/projects`)
+                .then(res => res.json())
+                .then(json => {
+                    const found = Array.isArray(json.data) ? json.data.find(p => p.id === id) : null;
+                    if (found) {
+                        setProject(found);
+                        setStatus("idle");
+                    } else {
+                        setStatus("error");
+                        setMessage("Project not found.");
+                    }
+                })
+                .catch(() => {
+                    setStatus("error");
+                    setMessage("Failed to load project.");
+                });
+        };
+
         fetchProjects();
     }, [id]);
-
-    const fetchProjects = () => {
-        fetch(`/api/projects`)
-            .then(res => res.json())
-            .then(json => {
-                const found = Array.isArray(json.data) ? json.data.find(p => p.id === id) : null;
-                if (found) {
-                    setProject(found);
-                    setStatus("idle");
-                } else {
-                    setStatus("error");
-                    setMessage("Project not found.");
-                }
-            })
-            .catch(() => {
-                setStatus("error");
-                setMessage("Failed to load project.");
-            });
-    };
 
     const handleImageUpload = async (e, type = 'cover') => {
         const file = e.target.files[0];
